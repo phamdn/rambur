@@ -13,11 +13,11 @@ ic.multiday.plot(df)
 Intertidal chamber multiday profile visualization
 }
 \examples{
-control.setup <- data.frame(day = seq(0, 30),
-  mean.air.temp = 19,
-  mean.water.temp = 19)
+heatwave.setup <- data.frame(day = seq(0, 34),
+mean.air.temp =  c(rep(17, 7), seq(17, 29, 2), rep(31, 7), seq(29, 17, -2), rep(17, 7) ),
+mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep(19, 7) ) )
 
-rs <- ic.multiday(control.setup)
+rs <- ic.multiday(heatwave.setup)
 
 ic.multiday.plot(rs)
 }

@@ -11,7 +11,7 @@
 #' ic.diurnal.plot(rs)
 ic.diurnal.plot <- function(df){
 
-  temp.limits <- range(df$air.temp, df$water.temp) + c(-1, 1)
+  temp.breaks <- pretty(range(df$air.temp, df$water.temp))
 
   fig1 <- ggplot(data = df, aes(x = hour, y = light)) +
     geom_point() +
@@ -25,7 +25,7 @@ ic.diurnal.plot <- function(df){
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = seq(0, 24, 6)) +
-    scale_y_continuous(limits = temp.limits) +
+    scale_y_continuous(breaks = temp.breaks, limits = range(temp.breaks)) +
     labs(title = "Air temperature", y = "°C") +
     theme_cowplot()
 
@@ -33,7 +33,7 @@ ic.diurnal.plot <- function(df){
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = seq(0, 24, 6)) +
-    scale_y_continuous(limits = temp.limits) +
+    scale_y_continuous(breaks = temp.breaks, limits = range(temp.breaks)) +
     labs(title = "Water temperature", y = "°C") +
     theme_cowplot()
 
@@ -49,7 +49,7 @@ ic.diurnal.plot <- function(df){
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = seq(0, 24, 6)) +
-    scale_y_continuous(limits = temp.limits) +
+    scale_y_continuous(breaks = temp.breaks, limits = range(temp.breaks)) +
     labs(title = "Exposure temperature", y = "°C") +
     theme_cowplot()
 
