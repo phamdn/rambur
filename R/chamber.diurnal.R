@@ -3,7 +3,7 @@
 #' @param day
 #' @param time.step
 #' @param tidal.cycle
-#' @param tc.start.time
+#' @param tidal.start.time
 #' @param mean.air.temp
 #' @param range.air.temp
 #' @param mean.water.temp
@@ -18,18 +18,21 @@
 #'
 #' @examples
 #' # default
-#' ic.diurnal()
+#' chamber.diurnal()
 #'
 #' # custom
-#' ic.diurnal(time.step = 0.5,
-#'   tc.start.time = 2.5,
-#'   water.change.time = 15.5)
-ic.diurnal <- function(day = 0, time.step = 1,
+#' chamber.diurnal(day = -3, time.step = 0.5,
+#'   light.duration = 17, peak.light.time = 12,
+#'   mean.air.temp = 30, range.air.temp = 10,
+#'   mean.water.temp = 20, range.water.temp = 2, peak.temp.time = 14,
+#'   tidal.cycle =  c(0, 1), tidal.start.time = 2.5,
+#'   water.change.time = 16.5)
+#'
+chamber.diurnal <- function(day = 0, time.step = 1,
                        light.duration = 16, peak.light.time = 13,
                        mean.air.temp = 17, range.air.temp = 8,
-                       mean.water.temp = 19, range.water.temp = 1,
-                       peak.temp.time = 15,
-                       tidal.cycle =  c(0, 1, 0, 1), tc.start.time = 0,
+                       mean.water.temp = 19, range.water.temp = 1, peak.temp.time = 15,
+                       tidal.cycle =  c(0, 1, 0, 1), tidal.start.time = 0,
                        water.change.time = NA
 ){
 
@@ -46,7 +49,7 @@ ic.diurnal <- function(day = 0, time.step = 1,
 
   # light
   simulated.light <- dnorm(hour,
-                           mean = peak.light.time - time.step/2, # continuity correction
+                           mean = peak.light.time - time.step / 2, # continuity correction
                            sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
 
   light <- simulated.light / max(simulated.light) * 100 # unit %
@@ -68,8 +71,8 @@ ic.diurnal <- function(day = 0, time.step = 1,
 
   tide <- rep(tidal.cycle, each = steps.per.entry)
 
-  if (tc.start.time > 0) {
-    steps.shift <- tc.start.time / time.step
+  if (tidal.start.time > 0) {
+    steps.shift <- tidal.start.time / time.step
     tide <- c(
       tail(tide, steps.shift),
       head(tide, -steps.shift)
