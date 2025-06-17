@@ -4,7 +4,12 @@
 \alias{chamber.multiday}
 \title{Intertidal chamber multiday profile generation}
 \usage{
-chamber.multiday(setup, start.date = "2025-04-30", export = FALSE)
+chamber.multiday(
+  setup,
+  start.date = "2025-04-30",
+  export = FALSE,
+  folder = NULL
+)
 }
 \arguments{
 \item{start.date}{}

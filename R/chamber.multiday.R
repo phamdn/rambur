@@ -17,7 +17,8 @@
 #'
 chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
-                     export = FALSE
+                     export = FALSE,
+                     folder = NULL
                      ){
 
   multiday.list <- do.call(mapply, c(chamber.diurnal, setup, SIMPLIFY = FALSE))
@@ -51,14 +52,23 @@ chamber.multiday <- function(setup,
 
   # export
   if (export) {
+
+    if (is.null(folder)) {
+      folder <- getwd()
+    }
+
+    if (!dir.exists(folder)) {
+      dir.create(folder, recursive = TRUE)
+    }
+
     output.xlsx <- subset(output,
                           select = c(datetime, exp.temp, tide, light, wc, profile))
 
     output.txt <- output$profile
 
-    write_xlsx(output.xlsx, "Profile.xlsx")
+    write_xlsx(output.xlsx, file.path(folder, "Profile.xlsx"))
 
-    write.table(output.txt, "Profile.txt",
+    write.table(output.txt, file.path(folder, "Profile.txt"),
                 quote = FALSE,
                 row.names = FALSE,
                 col.names = FALSE)
