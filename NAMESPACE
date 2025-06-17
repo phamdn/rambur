@@ -2,8 +2,8 @@
 
 export(chamber.diurnal)
 export(chamber.diurnal.plot)
-export(ic.multiday)
-export(ic.multiday.plot)
+export(chamber.multiday)
+export(chamber.multiday.plot)
 import(cowplot)
 import(ggplot2)
 importFrom(dplyr,"%>%")

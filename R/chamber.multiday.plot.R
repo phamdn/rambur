@@ -10,16 +10,18 @@
 #' mean.air.temp =  c(rep(17, 7), seq(17, 29, 2), rep(31, 7), seq(29, 17, -2), rep(17, 7) ),
 #' mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep(19, 7) ) )
 #'
-#' rs <- ic.multiday(heatwave.setup)
+#' rs <- chamber.multiday(heatwave.setup, start.date = "2025-05-30")
 #'
-#' ic.multiday.plot(rs)
-ic.multiday.plot <- function(df){
+#' chamber.multiday.plot(rs)
+#'
+chamber.multiday.plot <- function(df){
 
   temp.breaks <- pretty(range(df$exp.temp))
+  temp.breaks.range <- range(temp.breaks)
 
   fig <- ggplot(df, aes(x = datetime, y = exp.temp)) +
     geom_line() +
-    scale_y_continuous(breaks = temp.breaks, limits = range(temp.breaks)) +
+    scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
     labs(title = "Exposure temperature", x = NULL, y = "°C") +
     theme_minimal_grid()
 

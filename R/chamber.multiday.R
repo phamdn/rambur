@@ -11,13 +11,16 @@
 #' mean.air.temp =  c(rep(17, 7), seq(17, 29, 2), rep(31, 7), seq(29, 17, -2), rep(17, 7) ),
 #' mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep(19, 7) ) )
 #'
-#' ic.multiday(heatwave.setup)
-ic.multiday <- function(setup,
+#' heatwave.setup
+#'
+#' chamber.multiday(heatwave.setup, start.date = "2025-05-30")
+#'
+chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
                      export = FALSE
                      ){
 
-  multiday.list <- do.call(mapply, c(ic.diurnal, setup, SIMPLIFY = FALSE))
+  multiday.list <- do.call(mapply, c(chamber.diurnal, setup, SIMPLIFY = FALSE))
 
   multiday.df <- do.call(rbind, multiday.list)
 
