@@ -13,10 +13,11 @@
 #'
 #' heatwave.setup
 #'
-#' chamber.multiday(heatwave.setup, start.date = "2025-05-30")
+#' chamber.multiday(heatwave.setup, start.date = "2025-05-30", show.input = TRUE)
 #'
 chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
+                     show.input = FALSE,
                      export = FALSE,
                      folder = NULL
                      ){
@@ -74,6 +75,13 @@ chamber.multiday <- function(setup,
                 col.names = FALSE)
   }
 
+  # show input
+  if (show.input) {
+    message("Input:")
+    setup$date <- as.POSIXct(start.date, tz = "UTC") + as.difftime(setup$day, units = "days")
+    print(setup)
+    message("Output:")
+  }
 
   output
 }
