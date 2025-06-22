@@ -1,4 +1,4 @@
-#' Intertidal chamber multiday profile generation
+#' Intertidal Chamber: Multiday Profile Generation
 #'
 #' @param setup
 #' @param start.date

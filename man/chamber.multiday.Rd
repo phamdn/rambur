@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.multiday.R
 \name{chamber.multiday}
 \alias{chamber.multiday}
-\title{Intertidal chamber multiday profile generation}
+\title{Intertidal Chamber: Multiday Profile Generation}
 \usage{
 chamber.multiday(
   setup,
@@ -15,7 +15,7 @@ chamber.multiday(
 \item{start.date}{}
 }
 \description{
-Intertidal chamber multiday profile generation
+Intertidal Chamber: Multiday Profile Generation
 }
 \examples{
 heatwave.setup <- data.frame(day = seq(0, 34),

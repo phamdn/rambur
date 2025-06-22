@@ -1,4 +1,4 @@
-#' Intertidal chamber diurnal profile visualization
+#' Intertidal Chamber: Diurnal Profile Visualization
 #'
 #' @param df
 #'

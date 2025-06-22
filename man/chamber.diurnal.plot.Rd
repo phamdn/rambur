@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.diurnal.plot.R
 \name{chamber.diurnal.plot}
 \alias{chamber.diurnal.plot}
-\title{Intertidal chamber diurnal profile visualization}
+\title{Intertidal Chamber: Diurnal Profile Visualization}
 \usage{
 chamber.diurnal.plot(df)
 }
@@ -10,7 +10,7 @@ chamber.diurnal.plot(df)
 \item{df}{}
 }
 \description{
-Intertidal chamber diurnal profile visualization
+Intertidal Chamber: Diurnal Profile Visualization
 }
 \examples{
 rs <- chamber.diurnal()

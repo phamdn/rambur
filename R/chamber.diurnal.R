@@ -1,4 +1,4 @@
-#' Intertidal chamber diurnal profile generation
+#' Intertidal Chamber: Diurnal Profile Generation
 #'
 #' @param day
 #' @param time.step
@@ -31,7 +31,8 @@
 chamber.diurnal <- function(day = 0, time.step = 1,
                        light.duration = 16, peak.light.time = 13,
                        mean.air.temp = 17, range.air.temp = 8,
-                       mean.water.temp = 19, range.water.temp = 1, peak.temp.time = 15,
+                       mean.water.temp = 19, range.water.temp = 1,
+                       peak.temp.time = 15,
                        tidal.cycle =  c(0, 1, 0, 1), tidal.start.time = 0,
                        water.change.time = NA
 ){
@@ -40,7 +41,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   steps <- 24 / time.step
 
   if (steps != round(steps)) {
-    stop("24 (h) divided by 'time.step' must result in a whole number.")
+    stop("24 (h) divided by 'time.step' must result in a natural number.")
   }
 
   hour <- seq(from = 0, by = time.step, length.out = steps)

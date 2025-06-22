@@ -1,4 +1,4 @@
-#' Intertidal chamber multiday profile visualization
+#' Intertidal Chamber: Multiday Profile Visualization
 #'
 #' @param df
 #'
