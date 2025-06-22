@@ -12,7 +12,7 @@
 #'
 #' rs <- chamber.multiday(heatwave.setup, start.date = "2025-05-30")
 #'
-#' chamber.multiday.plot(rs)
+#' chamber.multiday.plot(rs$output)
 #'
 chamber.multiday.plot <- function(df){
 
@@ -23,6 +23,9 @@ chamber.multiday.plot <- function(df){
     geom_line() +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
     labs(title = "Exposure temperature", x = NULL, y = "°C") +
+    scale_x_datetime(sec.axis = dup_axis(labels = function(x){
+      df$day.dec[match(x, df$datetime)]
+      })) +
     theme_minimal_grid()
 
   fig

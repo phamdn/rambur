@@ -7,7 +7,6 @@
 chamber.multiday(
   setup,
   start.date = "2025-04-30",
-  show.input = FALSE,
   export = FALSE,
   folder = NULL
 )
@@ -25,6 +24,6 @@ mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep
 
 heatwave.setup
 
-chamber.multiday(heatwave.setup, start.date = "2025-05-30", show.input = TRUE)
+chamber.multiday(heatwave.setup, start.date = "2025-05-30")
 
 }
