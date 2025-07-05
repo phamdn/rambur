@@ -16,7 +16,7 @@ chamber.diurnal.plot <- function(df){
   temp.breaks.range <- range(temp.breaks)
   hour.breaks <- seq(0, 24, 6)
 
-  fig1 <- ggplot(data = df, aes(x = hour, y = light)) +
+  fig1 <- ggplot(df, aes(x = hour, y = light)) +
     geom_point() +
     geom_step() +
     geom_line(linetype = 2) +
@@ -24,7 +24,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Light", y = "%") +
     theme_cowplot()
 
-  fig2 <- ggplot(data = df, aes(x = hour, y = air.temp)) +
+  fig2 <- ggplot(df, aes(x = hour, y = air.temp)) +
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
@@ -32,7 +32,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Air temperature", y = "°C") +
     theme_cowplot()
 
-  fig3 <- ggplot(data = df, aes(x = hour, y = water.temp)) +
+  fig3 <- ggplot(df, aes(x = hour, y = water.temp)) +
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
@@ -40,7 +40,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Water temperature", y = "°C") +
     theme_cowplot()
 
-  fig4 <- ggplot(data = df, aes(x = hour, y = tide)) +
+  fig4 <- ggplot(df, aes(x = hour, y = tide)) +
     geom_point() +
     geom_step() +
     scale_x_continuous(breaks = hour.breaks) +
@@ -48,7 +48,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Tide", y = NULL) +
     theme_cowplot()
 
-  fig5 <- ggplot(data = df, aes(x = hour, y = exp.temp)) +
+  fig5 <- ggplot(df, aes(x = hour, y = exp.temp)) +
     geom_point() +
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
@@ -56,7 +56,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Exposure temperature", y = "°C") +
     theme_cowplot()
 
-  fig6 <- ggplot(data = df, aes(x = hour, y = wc)) +
+  fig6 <- ggplot(df, aes(x = hour, y = wc)) +
     geom_point() +
     geom_step() +
     scale_x_continuous(breaks = hour.breaks) +
