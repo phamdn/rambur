@@ -18,15 +18,20 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
   }
 
   # get a list of all CSV files
-  files.chamber <- list.files(path = folder.path, pattern = ".CSV", full.names = TRUE)
+  chamber.files <- list.files(path = folder.path, pattern = ".CSV", full.names = TRUE)
 
   # read and merge to a single original dataframe
-  original.data <- read_csv(files.chamber, skip = metadata.lines,
+  original.data <- read_csv(chamber.files, skip = metadata.lines,
                              col_types = cols(`LED_intensity_%` = col_double())
                             # LED was character, e.g., "000"
   )
 
-  selected.data <- na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
+  # presence of "Reset" lines in CSV, i.e., when a chamber was reset
+  problems <- problems(original.data)
+
+  # retain only important columns and make some new columns
+  selected.data <-
+    na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     transmute(
       date = Date,
       time = Time,
@@ -43,11 +48,12 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
       actual.tide3 = WS3,
       actual.tide = as.double(WS1 | WS2 | WS3),
       light = `LED_intensity_%`,
-      outlet = Outlet_valve_state,
-      inlet = Inlet_valve_state
-  )
+      wc.out = Outlet_valve_state,
+      wc.in = Inlet_valve_state
+    )
 
   list(original.data = original.data,
+       problems = problems,
        selected.data = selected.data
        )
 }
