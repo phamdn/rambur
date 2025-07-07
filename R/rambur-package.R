@@ -4,7 +4,8 @@
 ## usethis namespace: start
 #' @import cowplot
 #' @import ggplot2
-#' @importFrom dplyr %>% mutate
+#' @importFrom dplyr %>% mutate transmute
+#' @importFrom readr read_csv cols col_double
 #' @importFrom stats dnorm
 #' @importFrom utils head tail write.table
 #' @importFrom writexl write_xlsx
