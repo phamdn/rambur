@@ -4,10 +4,10 @@
 \alias{chamber.read}
 \title{Intertidal Chamber: Read CSV Output}
 \usage{
-chamber.read(folder = NULL, metadata.lines = 16, timezone = "")
+chamber.read(folder.path = NULL, metadata.lines = 16, timezone = "")
 }
 \arguments{
-\item{timezone}{}
+\item{metadata.lines}{}
 }
 \description{
 Intertidal Chamber: Read CSV Output
@@ -15,4 +15,5 @@ Intertidal Chamber: Read CSV Output
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")
 chamber.read(folder)
+
 }

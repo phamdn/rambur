@@ -8,11 +8,11 @@ chamber.multiday(
   setup,
   start.date = "2025-04-30",
   export = FALSE,
-  folder = NULL
+  folder.path = NULL
 )
 }
 \arguments{
-\item{start.date}{}
+\item{folder.path}{}
 }
 \description{
 Intertidal Chamber: Multiday Profile Generation

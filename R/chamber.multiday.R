@@ -2,6 +2,8 @@
 #'
 #' @param setup
 #' @param start.date
+#' @param export
+#' @param folder.path
 #'
 #' @returns
 #' @export
@@ -18,7 +20,7 @@
 chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
                      export = FALSE,
-                     folder = NULL
+                     folder.path = NULL
                      ){
 
   multiday.list <- do.call(mapply, c(chamber.diurnal, setup, SIMPLIFY = FALSE))
@@ -53,12 +55,12 @@ chamber.multiday <- function(setup,
   # export
   if (export) {
 
-    if (is.null(folder)) {
-      folder <- getwd()
+    if (is.null(folder.path)) {
+      folder.path <- getwd()
     }
 
-    if (!dir.exists(folder)) {
-      dir.create(folder, recursive = TRUE)
+    if (!dir.exists(folder.path)) {
+      dir.create(folder.path, recursive = TRUE)
     }
 
     output.xlsx <- subset(output,
@@ -66,15 +68,15 @@ chamber.multiday <- function(setup,
 
     output.txt <- output$profile
 
-    write_xlsx(output.xlsx, file.path(folder, "Profile.xlsx"))
+    write_xlsx(output.xlsx, file.path(folder.path, "Profile.xlsx"))
 
-    write.table(output.txt, file.path(folder, "Profile.txt"),
+    write.table(output.txt, file.path(folder.path, "Profile.txt"),
                 quote = FALSE,
                 row.names = FALSE,
                 col.names = FALSE)
   }
 
-  # show input
+  # show input but with a new column for date
   setup$date <- as.POSIXct(start.date, tz = "UTC") + as.difftime(setup$day, units = "days")
 
   list(input = setup, output = output)
