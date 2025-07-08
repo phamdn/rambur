@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.multiday.plot.R
 \name{chamber.multiday.plot}
 \alias{chamber.multiday.plot}
-\title{Intertidal Chamber: Multiday Profile Visualization}
+\title{Intertidal Chamber: Multiday Profile Plotting}
 \usage{
 chamber.multiday.plot(df)
 }
@@ -10,7 +10,7 @@ chamber.multiday.plot(df)
 \item{df}{}
 }
 \description{
-Intertidal Chamber: Multiday Profile Visualization
+Intertidal Chamber: Multiday Profile Plotting
 }
 \examples{
 heatwave.setup <- data.frame(day = seq(0, 34),
