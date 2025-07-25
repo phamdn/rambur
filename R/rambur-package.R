@@ -9,5 +9,6 @@
 #' @importFrom stats dnorm
 #' @importFrom utils head tail write.table
 #' @importFrom writexl write_xlsx
+#' @importFrom hms as_hms
 ## usethis namespace: end
 NULL
