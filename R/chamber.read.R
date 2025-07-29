@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Reading of CSV Records
+#' Intertidal Chamber: Reading of Multiple CSV Records
 #'
 #' @param timezone
 #' @param folder.path
@@ -36,21 +36,30 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
       date = Date,
       time = Time,
       datetime = as.POSIXct(paste(Date, Time), tz = timezone),
+
       design.temp = Top_setpoint,
       actual.temp1 = T1,
       actual.temp2 = T2,
       actual.temp3 = T3,
-      actual.temp = Top_avg,
+      actual.temp = (T1 + T2 + T3)/3, # should be the same as Top_avg unless rounding issue
       room.temp = T6,
+
       design.tide = Tide,
       working.tide = Tide_pump_state,
       actual.tide1 = WS1,
       actual.tide2 = WS2,
       actual.tide3 = WS3,
-      actual.tide = as.double(WS1 | WS2 | WS3),
-      light = `LED_intensity_%`,
+      actual.tide = (WS1 + WS2 + WS3)/3,
+
+      water.min1 = WS6,
+      water.min2 = WS7,
+      water.min3 = WS8,
+      water.min = (WS6 + WS7 + WS8)/3,
       wc.out = Outlet_valve_state,
       wc.in = Inlet_valve_state,
+
+      light = `LED_intensity_%`,
+
       .keep = "unused", .before = 1
     )
 

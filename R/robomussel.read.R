@@ -1,4 +1,4 @@
-#' Robomussel: Reading of CSV Record
+#' Robomussel: Reading of Single CSV Record
 #'
 #' @param file.path
 #' @param metadata.lines

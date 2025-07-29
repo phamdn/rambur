@@ -2,7 +2,7 @@
 % Please edit documentation in R/robomussel.read.R
 \name{robomussel.read}
 \alias{robomussel.read}
-\title{Robomussel: Reading of CSV Record}
+\title{Robomussel: Reading of Single CSV Record}
 \usage{
 robomussel.read(file.path = NULL, metadata.lines = 21, timezone = "")
 }
@@ -10,7 +10,7 @@ robomussel.read(file.path = NULL, metadata.lines = 21, timezone = "")
 \item{timezone}{}
 }
 \description{
-Robomussel: Reading of CSV Record
+Robomussel: Reading of Single CSV Record
 }
 \examples{
 file <- system.file("extdata/robomussel/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
