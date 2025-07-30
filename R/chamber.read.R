@@ -51,10 +51,10 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
       actual.tide3 = WS3,
       actual.tide = (WS1 + WS2 + WS3)/3,
 
-      water.min1 = WS6,
-      water.min2 = WS7,
-      water.min3 = WS8,
-      water.min = (WS6 + WS7 + WS8)/3,
+      min.water1 = WS6,
+      min.water2 = WS7,
+      min.water3 = WS8,
+      min.water = (WS6 + WS7 + WS8)/3,
       wc.out = Outlet_valve_state,
       wc.in = Inlet_valve_state,
 
