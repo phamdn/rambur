@@ -11,7 +11,7 @@
 #' folder <- system.file("extdata/chamber", package = "rambur")
 #' chamber.read(folder)
 #'
-chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = ""){
+chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "", summary = "hour"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -42,6 +42,9 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
       actual.temp2 = T2,
       actual.temp3 = T3,
       actual.temp = (T1 + T2 + T3)/3, # should be the same as Top_avg unless rounding issue
+                                      # simply use mean() or sd() will not perform row-wise calculation
+      # actual.temp.sd = apply(across(T1:T3), 1, sd),
+      # actual.temp.diff = apply(across(T1:T3), 1, function(x) diff(range(x))),
       room.temp = T6,
 
       design.tide = Tide,
@@ -63,8 +66,14 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "")
       .keep = "unused", .before = 1
     )
 
+  summarized.data <- enhanced.data %>%
+    mutate(datetime = floor_date(datetime, summary)) %>%
+    group_by(datetime) %>%
+    summarize(across(where(is.numeric), mean, na.rm = TRUE), .groups = "drop")
+
   list(original.data = original.data,
        problems = problems,
-       enhanced.data = enhanced.data
+       enhanced.data = enhanced.data,
+       summarized.data = summarized.data
        )
 }

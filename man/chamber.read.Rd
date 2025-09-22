@@ -4,7 +4,12 @@
 \alias{chamber.read}
 \title{Intertidal Chamber: Reading of Multiple CSV Records}
 \usage{
-chamber.read(folder.path = NULL, metadata.lines = 16, timezone = "")
+chamber.read(
+  folder.path = NULL,
+  metadata.lines = 16,
+  timezone = "",
+  summary = "hour"
+)
 }
 \arguments{
 \item{metadata.lines}{}
