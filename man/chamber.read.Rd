@@ -2,10 +2,11 @@
 % Please edit documentation in R/chamber.read.R
 \name{chamber.read}
 \alias{chamber.read}
-\title{Intertidal Chamber: Reading of Multiple CSV Records}
+\title{Intertidal Chamber: Reading Multiple CSV Records}
 \usage{
 chamber.read(
   folder.path = NULL,
+  file.name = ".CSV",
   metadata.lines = 16,
   timezone = "",
   summary = "hour"
@@ -15,10 +16,10 @@ chamber.read(
 \item{metadata.lines}{}
 }
 \description{
-Intertidal Chamber: Reading of Multiple CSV Records
+Intertidal Chamber: Reading Multiple CSV Records
 }
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")
-chamber.read(folder)
-
+rs <- chamber.read(folder, timezone = "Europe/Berlin")
+rs
 }

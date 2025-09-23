@@ -1,4 +1,4 @@
-#' Robomussel: Reading of a CSV Record
+#' Robomussel: Reading a CSV Record
 #'
 #' @param file.path
 #' @param metadata.lines
@@ -8,9 +8,9 @@
 #' @export
 #'
 #' @examples
-#' file <- system.file("extdata/robomussel/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-#' robo.read(file)
-#'
+#' file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
+#' rs <- robo.read(file, timezone = "Europe/Berlin")
+#' rs
 robo.read <- function(file.path = NULL, metadata.lines = 21, timezone = "", summary = "hour"){
 
   original.data <- read_csv(file = file.path, skip = metadata.lines,
@@ -22,8 +22,8 @@ robo.read <- function(file.path = NULL, metadata.lines = 21, timezone = "", summ
     transmute(
               # datetime = format(time, tz = timezone), not working, just <chr> format
               datetime = as.POSIXct(time, tz = timezone),
-              date = as.Date(datetime), # as.Date is base R but as_hms is not
-              time = as_hms(datetime),
+              date = as.Date(datetime, tz = timezone),
+              time = as_hms(datetime), # as.Date is base R but as_hms is not
               body.temp = temp
               )
 

@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Reading of Multiple CSV Records
+#' Intertidal Chamber: Reading Multiple CSV Records
 #'
 #' @param timezone
 #' @param folder.path
@@ -9,21 +9,21 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/chamber", package = "rambur")
-#' chamber.read(folder)
-#'
-chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "", summary = "hour"){
+#' rs <- chamber.read(folder, timezone = "Europe/Berlin")
+#' rs
+chamber.read <- function(folder.path = NULL, file.name = ".CSV", metadata.lines = 16, timezone = "", summary = "hour"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
   }
 
   # get a list of all CSV files
-  chamber.files <- list.files(path = folder.path, pattern = ".CSV", full.names = TRUE)
+  chamber.files <- list.files(path = folder.path, pattern = file.name, full.names = TRUE)
 
   # read and merge to a single original dataframe
   original.data <- read_csv(chamber.files, skip = metadata.lines,
                              col_types = cols(`LED_intensity_%` = col_double())
-                            # LED was character, e.g., "000"
+                            # otherwise, LED was character, e.g., "000"
   )
 
   # presence of "Reset" lines in CSV, i.e., when a chamber was reset
@@ -33,9 +33,9 @@ chamber.read <- function(folder.path = NULL, metadata.lines = 16, timezone = "",
   enhanced.data <-
     na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     mutate(
+      datetime = as.POSIXct(paste(Date, Time), tz = timezone),
       date = Date,
       time = Time,
-      datetime = as.POSIXct(paste(Date, Time), tz = timezone),
 
       design.temp = Top_setpoint,
       actual.temp1 = T1,
