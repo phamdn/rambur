@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Diurnal Profile Generation
+#' Intertidal Chamber: Designing Diurnal Profile
 #'
 #' @param day
 #' @param time.step
@@ -18,7 +18,8 @@
 #'
 #' @examples
 #' # default
-#' chamber.diurnal()
+#' day0 <- chamber.diurnal()
+#' day0
 #'
 #' # custom
 #' chamber.diurnal(day = -3, time.step = 0.5,

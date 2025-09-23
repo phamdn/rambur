@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Multiday Profile Plotting
+#' Intertidal Chamber: Plotting Multiday Profile
 #'
 #' @param df
 #'
@@ -6,13 +6,14 @@
 #' @export
 #'
 #' @examples
-#' heatwave.setup <- data.frame(day = seq(0, 34),
-#' mean.air.temp =  c(rep(17, 7), seq(17, 29, 2), rep(31, 7), seq(29, 17, -2), rep(17, 7) ),
-#' mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep(19, 7) ) )
+#' # acclimation phase
+#' acclimation.setup <- data.frame(day = seq(0, 34),
+#' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' rs <- chamber.multiday(heatwave.setup, start.date = "2025-05-30")
+#' acclimation.profile <- chamber.multiday(acclimation.setup,
+#' start.date = "2025-05-15", export = FALSE)
 #'
-#' chamber.multiday.plot(rs$output)
+#' chamber.multiday.plot(acclimation.profile$output)
 #'
 chamber.multiday.plot <- function(df){
 

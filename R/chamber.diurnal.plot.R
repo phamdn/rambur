@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Diurnal Profile Plotting
+#' Intertidal Chamber: Plotting Diurnal Profile
 #'
 #' @param df
 #'
@@ -6,9 +6,9 @@
 #' @export
 #'
 #' @examples
-#' rs <- chamber.diurnal()
-#'
-#' chamber.diurnal.plot(rs)
+#' # default
+#' day0 <- chamber.diurnal()
+#' chamber.diurnal.plot(day0)
 #'
 chamber.diurnal.plot <- function(df){
 

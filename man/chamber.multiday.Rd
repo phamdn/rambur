@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.multiday.R
 \name{chamber.multiday}
 \alias{chamber.multiday}
-\title{Intertidal Chamber: Multiday Profile Generation}
+\title{Intertidal Chamber: Designing Multiday Profile}
 \usage{
 chamber.multiday(
   setup,
@@ -15,15 +15,17 @@ chamber.multiday(
 \item{folder.path}{}
 }
 \description{
-Intertidal Chamber: Multiday Profile Generation
+Intertidal Chamber: Designing Multiday Profile
 }
 \examples{
-heatwave.setup <- data.frame(day = seq(0, 34),
-mean.air.temp =  c(rep(17, 7), seq(17, 29, 2), rep(31, 7), seq(29, 17, -2), rep(17, 7) ),
-mean.water.temp = c(rep(19, 7), seq(19, 25, 1), rep(26, 7), seq(25, 19, -1), rep(19, 7) ) )
+# acclimation phase
+acclimation.setup <- data.frame(day = seq(0, 34),
+mean.air.temp = 17, mean.water.temp = 19)
 
-heatwave.setup
+acclimation.profile <- chamber.multiday(acclimation.setup,
+start.date = "2025-05-15", export = FALSE)
+## to save the output files, change 'export' to 'TRUE'.
 
-chamber.multiday(heatwave.setup, start.date = "2025-05-30")
+acclimation.profile
 
 }
