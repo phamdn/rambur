@@ -6,7 +6,7 @@
 \alias{rambur-package}
 \title{rambur: Research Assistant in Marine Biology at University of Rostock}
 \description{
-A toolkit to support your experimental work.
+A toolkit for your experimental work.
 }
 \author{
 \strong{Maintainer}: Duy Nghia Pham \email{nghiapham@yandex.com} (\href{https://orcid.org/0000-0003-1349-1710}{ORCID})

@@ -1,6 +1,6 @@
 #' Intertidal Chamber: Reading Multiple CSV Records
 #'
-#' @param timezone
+#' @param time.zone
 #' @param folder.path
 #' @param metadata.lines
 #'
@@ -9,9 +9,10 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/chamber", package = "rambur")
-#' rs <- chamber.read(folder, timezone = "Europe/Berlin")
+#' rs <- chamber.read(folder, time.zone = "Europe/Berlin")
 #' rs
-chamber.read <- function(folder.path = NULL, file.name = ".CSV", metadata.lines = 16, timezone = "", summary = "hour"){
+chamber.read <- function(folder.path = NULL, file.name = ".CSV",
+                         metadata.lines = 16, time.zone = "", summary.period = "hour"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -27,13 +28,15 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV", metadata.lines 
   )
 
   # presence of "Reset" lines in CSV, i.e., when a chamber was reset
-  problems <- problems(original.data)
+  # problems <- problems(original.data)
+  # warning(problems(original.data))
+  # print(problems(original.data))
 
   # make some new columns and retain all unused columns
   enhanced.data <-
     na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     mutate(
-      datetime = as.POSIXct(paste(Date, Time), tz = timezone),
+      datetime = as.POSIXct(paste(Date, Time), tz = time.zone),
       date = Date,
       time = Time,
 
@@ -67,12 +70,12 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV", metadata.lines 
     )
 
   summarized.data <- enhanced.data %>%
-    mutate(datetime = floor_date(datetime, summary)) %>%
+    mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     summarize(across(where(is.numeric), mean, na.rm = TRUE), .groups = "drop")
 
   list(original.data = original.data,
-       problems = problems,
+       # problems = problems,
        enhanced.data = enhanced.data,
        summarized.data = summarized.data
        )
