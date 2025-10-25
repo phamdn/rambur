@@ -7,9 +7,9 @@
 pulse.read(
   folder.path = NULL,
   file.name = "0000.CSV",
-  size = c(1e+06, 2e+06),
+  size.limits = c(1e+06, 2e+06),
   metadata.lines = 22,
-  timezone = ""
+  time.zone = ""
 )
 }
 \arguments{
