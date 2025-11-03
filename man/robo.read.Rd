@@ -5,20 +5,20 @@
 \title{Robomussel: Reading a CSV Record}
 \usage{
 robo.read(
-  file.path = NULL,
+  file.path,
   metadata.lines = 21,
-  time.zone = "",
+  timezone = "",
   summary.period = "hour"
 )
 }
 \arguments{
-\item{time.zone}{}
+\item{timezone}{}
 }
 \description{
 Robomussel: Reading a CSV Record
 }
 \examples{
 file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-rs <- robo.read(file, time.zone = "Europe/Berlin")
-rs
+robo.data <- robo.read(file, timezone = "Europe/Berlin")
+robo.data
 }

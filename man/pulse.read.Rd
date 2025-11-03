@@ -9,7 +9,7 @@ pulse.read(
   file.name = "0000.CSV",
   size.limits = c(1e+06, 2e+06),
   metadata.lines = 22,
-  time.zone = ""
+  timezone = ""
 )
 }
 \arguments{
@@ -20,6 +20,6 @@ Pulse: Reading Multiple CSV Records
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
-rs <- pulse.read(folder)
-rs
+pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
+pulse.data
 }

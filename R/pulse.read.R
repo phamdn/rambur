@@ -1,6 +1,6 @@
 #' Pulse: Reading Multiple CSV Records
 #'
-#' @param time.zone
+#' @param timezone
 #' @param folder.path
 #' @param metadata.lines
 #' @param file.name
@@ -11,11 +11,11 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
-#' rs <- pulse.read(folder)
-#' rs
+#' pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
+#' pulse.data
 pulse.read <- function(folder.path = NULL,
                        file.name = "0000.CSV", size.limits = c(1e6, 2e6),
-                       metadata.lines = 22, time.zone = ""){
+                       metadata.lines = 22, timezone = ""){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -31,7 +31,7 @@ pulse.read <- function(folder.path = NULL,
 
   # read and merge to a single original dataframe
   original.data <- read_csv(pulse.files, skip = metadata.lines,
-                            col_names = c("time", paste0("channel.", 1:10)),
+                            col_names = c("time", paste0("channel.", 1:10)), # need to improve to retain original sample names
                             # col_types = cols(time = col_datetime())
                             show_col_types = FALSE
                             )
@@ -41,12 +41,13 @@ pulse.read <- function(folder.path = NULL,
   enhanced.data <- original.data %>%
     mutate(
       datetime.UTC = time,
-      datetime = as.POSIXct(time, tz = time.zone),
-      date = as.Date(datetime, tz = time.zone),
+      datetime = as.POSIXct(time, tz = timezone),
+      date = as.Date(datetime, tz = timezone),
       time = as_hms(datetime), # as.Date is base R but as_hms is from hms package
       .keep = "unused", .before = 1
     )
 
+  # take too much space to return both
   # list(original.data = original.data,
   #      enhanced.data = enhanced.data
   # )

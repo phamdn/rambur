@@ -1,6 +1,6 @@
 #' Intertidal Chamber: Reading Multiple CSV Records
 #'
-#' @param time.zone
+#' @param timezone
 #' @param folder.path
 #' @param metadata.lines
 #'
@@ -9,10 +9,10 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/chamber", package = "rambur")
-#' rs <- chamber.read(folder, time.zone = "Europe/Berlin")
-#' rs
+#' chamber.data <- chamber.read(folder, timezone = "Europe/Berlin")
+#' chamber.data
 chamber.read <- function(folder.path = NULL, file.name = ".CSV",
-                         metadata.lines = 16, time.zone = "", summary.period = "hour"){
+                         metadata.lines = 16, timezone = "", summary.period = "hour"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -29,14 +29,12 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV",
 
   # presence of "Reset" lines in CSV, i.e., when a chamber was reset
   # problems <- problems(original.data)
-  # warning(problems(original.data))
-  # print(problems(original.data))
 
   # make some new columns and retain all unused columns
   enhanced.data <-
     na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     mutate(
-      datetime = as.POSIXct(paste(Date, Time), tz = time.zone),
+      datetime = as.POSIXct(paste(Date, Time), tz = timezone),
       date = Date,
       time = Time,
 
@@ -66,13 +64,18 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV",
 
       light = `LED_intensity_%`,
 
-      .keep = "unused", .before = 1
+      .keep = "unused", # can change to "none" to save space
+      .before = 1
     )
 
   summarized.data <- enhanced.data %>%
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
-    summarize(across(where(is.numeric), mean, na.rm = TRUE), .groups = "drop")
+    summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>%
+    mutate(date = as.Date(datetime, tz = timezone),
+           time = as_hms(datetime),
+           .after = datetime
+           )
 
   list(original.data = original.data,
        # problems = problems,

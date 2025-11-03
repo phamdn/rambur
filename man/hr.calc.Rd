@@ -2,7 +2,7 @@
 % Please edit documentation in R/hr.calc.R
 \name{hr.calc}
 \alias{hr.calc}
-\title{Pulse: Calculating Heart Rate}
+\title{Helper: Calculating Heart Rate}
 \usage{
 hr.calc(signal, sampling.rate = 5, threshold = 0.7)
 }
@@ -10,15 +10,5 @@ hr.calc(signal, sampling.rate = 5, threshold = 0.7)
 \item{threshold}{}
 }
 \description{
-Pulse: Calculating Heart Rate
-}
-\examples{
-library(dplyr)
-library(lubridate)
-folder <- system.file("extdata/pulse", package = "rambur")
-rs <- pulse.read(folder)
-enhanced.rs <- rs \%>\% transmute(datetime = floor_date(datetime, "minute"), across(channel.1:channel.10))
-hrrs <- enhanced.rs \%>\% group_by(datetime) \%>\% summarize( hr.1 = hr.calc(channel.1)$hr, quality = hr.calc(channel.1)$cor)
-plot(hrrs$hr.1)
-
+Helper: Calculating Heart Rate
 }

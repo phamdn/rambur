@@ -2,17 +2,17 @@
 #'
 #' @param file.path
 #' @param metadata.lines
-#' @param time.zone
+#' @param timezone
 #'
 #' @returns
 #' @export
 #'
 #' @examples
 #' file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-#' rs <- robo.read(file, time.zone = "Europe/Berlin")
-#' rs
-robo.read <- function(file.path = NULL,
-                      metadata.lines = 21, time.zone = "", summary.period = "hour"){
+#' robo.data <- robo.read(file, timezone = "Europe/Berlin")
+#' robo.data
+robo.read <- function(file.path,
+                      metadata.lines = 21, timezone = "", summary.period = "hour"){
 
   original.data <- read_csv(file = file.path, skip = metadata.lines,
                             show_col_types = FALSE)
@@ -21,19 +21,23 @@ robo.read <- function(file.path = NULL,
 
   enhanced.data <- original.data %>%
     transmute(datetime.UTC = time,
-              # datetime = format(time, tz = time.zone), not working, just <chr> format
-              datetime = as.POSIXct(time, tz = time.zone),
-              date = as.Date(datetime, tz = time.zone),
+              # datetime = format(time, tz = timezone), not working, just <chr> format
+              datetime = as.POSIXct(time, tz = timezone),
+              date = as.Date(datetime, tz = timezone),
               time = as_hms(datetime), # as.Date is base R but as_hms is not
               body.temp = temp
-           )
+           ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
 
   summarized.data <- enhanced.data %>%
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
-    summarize(across(where(is.numeric), mean, na.rm = TRUE), .groups = "drop")
+    summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
+    mutate(date = as.Date(datetime, tz = timezone),
+           time = as_hms(datetime),
+           .after = datetime
+    )
 
-  list(
+  list(original.data = original.data,
        enhanced.data = enhanced.data,
        summarized.data = summarized.data
   )
