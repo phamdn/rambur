@@ -4,10 +4,10 @@
 \alias{hr.calc}
 \title{Helper: Calculating Heart Rate}
 \usage{
-hr.calc(signal, sampling.rate = 5, threshold = 0.7)
+hr.calc(signal, sampling.rate = 5, cor.threshold = 0.7)
 }
 \arguments{
-\item{threshold}{}
+\item{cor.threshold}{}
 }
 \description{
 Helper: Calculating Heart Rate

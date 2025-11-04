@@ -2,13 +2,13 @@
 #'
 #' @param signal
 #' @param sampling.rate
-#' @param threshold
+#' @param cor.threshold
 #'
 #' @returns
 #' @export
 #'
 #' @examples
-hr.calc <- function(signal, sampling.rate = 5, threshold = 0.7){
+hr.calc <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
 
   # autocorrelation
   ac.list <- acf(signal,
@@ -26,7 +26,7 @@ hr.calc <- function(signal, sampling.rate = 5, threshold = 0.7){
   locmax <- ac[locmax.idx, ]
 
   # filter out qualified peaks using threshold
-  qualified <- subset(locmax, cor >= threshold)
+  qualified <- subset(locmax, cor >= cor.threshold)
   qualified.count <- nrow(qualified)
 
   # find "the" dominant peak

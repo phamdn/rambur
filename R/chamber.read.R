@@ -25,7 +25,7 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV",
   original.data <- read_csv(chamber.files, skip = metadata.lines,
                              col_types = cols(`LED_intensity_%` = col_double())
                             # otherwise, LED was character, e.g., "000"
-  )
+  ) # Note that Chamber records local time, not UTC like Pulse or Robo
 
   # presence of "Reset" lines in CSV, i.e., when a chamber was reset
   # problems <- problems(original.data)
@@ -35,7 +35,7 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV",
     na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     mutate(
       datetime = as.POSIXct(paste(Date, Time), tz = timezone),
-      date = Date,
+      date = Date, # just <date> character/format from original data in local time zone
       time = Time,
 
       design.temp = Top_setpoint,
@@ -72,7 +72,7 @@ chamber.read <- function(folder.path = NULL, file.name = ".CSV",
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>%
-    mutate(date = as.Date(datetime, tz = timezone),
+    mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
            time = as_hms(datetime),
            .after = datetime
            )

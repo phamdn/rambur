@@ -6,13 +6,14 @@
 \usage{
 pulse.extract(
   data,
+  sampling.rate = NULL,
+  cor.threshold = 0.7,
   time.window = "minute",
-  summary.period = "hour",
-  timezone = ""
+  summary.period = "hour"
 )
 }
 \arguments{
-\item{time.window}{}
+\item{cor.threshold}{}
 }
 \description{
 Pulse: Extracting Heart Rate
@@ -20,5 +21,5 @@ Pulse: Extracting Heart Rate
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
-pulse.extract(pulse.data, timezone = "Europe/Berlin")
+pulse.extract(pulse.data)
 }

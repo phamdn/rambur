@@ -23,8 +23,8 @@ robo.read <- function(file.path,
     transmute(datetime.UTC = time,
               # datetime = format(time, tz = timezone), not working, just <chr> format
               datetime = as.POSIXct(time, tz = timezone),
-              date = as.Date(datetime, tz = timezone),
-              time = as_hms(datetime), # as.Date is base R but as_hms is not
+              date = as_date(datetime),
+              time = as_hms(datetime), # as.Date is base R but as_date and as_hms is not
               body.temp = temp
            ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
 
@@ -32,7 +32,7 @@ robo.read <- function(file.path,
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
-    mutate(date = as.Date(datetime, tz = timezone),
+    mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime
     )

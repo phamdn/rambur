@@ -42,8 +42,8 @@ pulse.read <- function(folder.path = NULL,
     mutate(
       datetime.UTC = time,
       datetime = as.POSIXct(time, tz = timezone),
-      date = as.Date(datetime, tz = timezone),
-      time = as_hms(datetime), # as.Date is base R but as_hms is from hms package
+      date = as_date(datetime),
+      time = as_hms(datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
       .keep = "unused", .before = 1
     )
 
