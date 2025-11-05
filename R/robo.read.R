@@ -12,7 +12,14 @@
 #' robo.data <- robo.read(file, timezone = "Europe/Berlin")
 #' robo.data
 robo.read <- function(file.path,
-                      metadata.lines = 21, timezone = "", summary.period = "hour"){
+                      metadata.lines = 21,
+                      timezone = "",
+                      summary.period = "hour"){
+
+  # notice about time zone
+  if (timezone == "") {
+    message("using ", Sys.timezone(), " time zone")
+  }
 
   original.data <- read_csv(file = file.path, skip = metadata.lines,
                             show_col_types = FALSE)

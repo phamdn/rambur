@@ -7,7 +7,7 @@
 pulse.read(
   folder.path = NULL,
   file.name = "0000.CSV",
-  size.limits = c(1e+06, 2e+06),
+  size.limits = c(1e+06, 1500000),
   metadata.lines = 22,
   timezone = ""
 )

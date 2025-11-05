@@ -11,15 +11,31 @@
 #' folder <- system.file("extdata/chamber", package = "rambur")
 #' chamber.data <- chamber.read(folder, timezone = "Europe/Berlin")
 #' chamber.data
-chamber.read <- function(folder.path = NULL, file.name = ".CSV",
-                         metadata.lines = 16, timezone = "", summary.period = "hour"){
+chamber.read <- function(folder.path = NULL,
+                         file.name = "h.CSV", size.limits = c(0, Inf),
+                         metadata.lines = 16,
+                         timezone = "",
+                         summary.period = "hour"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
+    message("reading from the current working directory")
   }
 
   # get a list of all CSV files
   chamber.files <- list.files(path = folder.path, pattern = file.name, full.names = TRUE)
+
+  # size limit
+  chamber.files <- subset(chamber.files,
+                        file.size(chamber.files) > size.limits[1] &
+                          file.size(chamber.files) < size.limits[2])
+
+  message("importing ", length(chamber.files), " files")
+
+  # notice about time zone
+  if (timezone == "") {
+    message("using ", Sys.timezone(), " time zone")
+  }
 
   # read and merge to a single original dataframe
   original.data <- read_csv(chamber.files, skip = metadata.lines,

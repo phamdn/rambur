@@ -13,13 +13,14 @@
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
 #' pulse.extract(pulse.data)
-pulse.extract <- function(data, sampling.rate = NULL, cor.threshold = 0.7,
+pulse.extract <- function(data,
+                          sampling.rate = NULL, cor.threshold = 0.7,
                           time.window = "minute", summary.period = "hour"){
 
   # infer sampling rate Hz based on input data
   if (is.null(sampling.rate)) {
     sampling.rate <- round(1/median(as.numeric(diff(data$datetime))))
-    message("detected sampling rate: ", sampling.rate, " Hz")
+    message("using sampling rate of ", sampling.rate, " Hz")
   }
 
   # using non-overlapping (sequential) windows, not overlapping (sliding) windows

@@ -14,11 +14,13 @@
 #' pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
 #' pulse.data
 pulse.read <- function(folder.path = NULL,
-                       file.name = "0000.CSV", size.limits = c(1e6, 2e6),
-                       metadata.lines = 22, timezone = ""){
+                       file.name = "0000.CSV", size.limits = c(1000e3, 1500e3),
+                       metadata.lines = 22,
+                       timezone = ""){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
+    message("reading from the current working directory")
   }
 
   # get a list of all CSV files
@@ -28,6 +30,13 @@ pulse.read <- function(folder.path = NULL,
   pulse.files <- subset(pulse.files,
                         file.size(pulse.files) > size.limits[1] &
                           file.size(pulse.files) < size.limits[2])
+
+  message("importing ", length(pulse.files), " files")
+
+  # notice about time zone
+  if (timezone == "") {
+    message("using ", Sys.timezone(), " time zone")
+  }
 
   # read and merge to a single original dataframe
   original.data <- read_csv(pulse.files, skip = metadata.lines,
