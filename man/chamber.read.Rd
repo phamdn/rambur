@@ -21,6 +21,6 @@ Intertidal Chamber: Reading Multiple CSV Records
 }
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")
-chamber.data <- chamber.read(folder, timezone = "Europe/Berlin")
+chamber.data <- chamber.read(folder)
 chamber.data
 }

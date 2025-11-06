@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/chamber", package = "rambur")
-#' chamber.data <- chamber.read(folder, timezone = "Europe/Berlin")
+#' chamber.data <- chamber.read(folder)
 #' chamber.data
 chamber.read <- function(folder.path = NULL,
                          file.name = "h.CSV", size.limits = c(0, Inf),

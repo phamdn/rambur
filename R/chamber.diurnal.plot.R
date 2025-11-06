@@ -19,9 +19,9 @@ chamber.diurnal.plot <- function(df){
   fig1 <- ggplot(df, aes(x = hour, y = light)) +
     geom_point() +
     geom_step() +
-    geom_line(linetype = 2) +
+    # geom_line(linetype = 2) +
     scale_x_continuous(breaks = hour.breaks) +
-    labs(title = "Light", y = "%") +
+    labs(title = "Light", y = "%", x = "") +
     theme_minimal_grid()
 
   fig2 <- ggplot(df, aes(x = hour, y = air.temp)) +
@@ -29,7 +29,7 @@ chamber.diurnal.plot <- function(df){
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Air temperature", y = "°C") +
+    labs(title = "Air temperature", y = "°C", x = "") +
     theme_minimal_grid()
 
   fig3 <- ggplot(df, aes(x = hour, y = water.temp)) +
@@ -37,7 +37,7 @@ chamber.diurnal.plot <- function(df){
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Water temperature", y = "°C") +
+    labs(title = "Water temperature", y = "°C", x = "") +
     theme_minimal_grid()
 
   fig4 <- ggplot(df, aes(x = hour, y = tide)) +
@@ -45,7 +45,7 @@ chamber.diurnal.plot <- function(df){
     geom_step() +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Tide", y = NULL) +
+    labs(title = "Tide", y = NULL, x = "") +
     theme_minimal_grid()
 
   fig5 <- ggplot(df, aes(x = hour, y = exp.temp)) +
@@ -53,7 +53,7 @@ chamber.diurnal.plot <- function(df){
     geom_line() +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Exposure temperature", y = "°C") +
+    labs(title = "Exposure temperature", y = "°C", x = "Time of day (h)") +
     theme_minimal_grid()
 
   fig6 <- ggplot(df, aes(x = hour, y = wc)) +
@@ -61,7 +61,7 @@ chamber.diurnal.plot <- function(df){
     geom_step() +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Water change", y = NULL) +
+    labs(title = "Water change", y = NULL, x = "") +
     theme_minimal_grid()
 
   output <- plot_grid(fig1, fig2, fig3, fig4, fig5, fig6,

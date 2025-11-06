@@ -21,9 +21,15 @@
 #'
 chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
+                     timezone = "",
                      export = FALSE,
                      folder.path = NULL
                      ){
+
+  # notice about time zone
+  if (timezone == "") {
+    message("using ", Sys.timezone(), " time zone")
+  }
 
   multiday.list <- do.call(mapply, c(chamber.diurnal, setup, SIMPLIFY = FALSE))
 
@@ -42,7 +48,8 @@ chamber.multiday <- function(setup,
         sprintf("%03d", light),
         wc
       )
-    )
+    ) %>%
+    mutate(datetime = force_tz(datetime, tzone = timezone)) # chamber uses UTC timestamp but implements it as local time
 
   # check
   invalid <- which(nchar(output$profile) != 19)
@@ -79,7 +86,8 @@ chamber.multiday <- function(setup,
   }
 
   # show input but with a new column for date
-  setup$date <- as.POSIXct(start.date, tz = "UTC") + as.difftime(setup$day, units = "days")
+  setup$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(setup$day, units = "days")
+                # chamber use UTC timestamp but implement it as local time
 
   list(input = setup, output = output)
 }

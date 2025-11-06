@@ -11,10 +11,10 @@
 #'
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
-#' pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
+#' pulse.data <- pulse.read(folder)
 #' pulse.data
 pulse.read <- function(folder.path = NULL,
-                       file.name = "0000.CSV", size.limits = c(1000e3, 1500e3),
+                       file.name = "0000.CSV", size.limits = c(1000e3, 2000e3),
                        metadata.lines = 22,
                        timezone = ""){
 

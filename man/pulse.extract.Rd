@@ -20,6 +20,6 @@ Pulse: Extracting Heart Rate
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
-pulse.data <- pulse.read(folder, timezone = "Europe/Berlin")
+pulse.data <- pulse.read(folder)
 pulse.extract(pulse.data)
 }

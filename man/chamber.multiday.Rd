@@ -7,6 +7,7 @@
 chamber.multiday(
   setup,
   start.date = "2025-04-30",
+  timezone = "",
   export = FALSE,
   folder.path = NULL
 )

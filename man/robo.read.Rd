@@ -19,6 +19,6 @@ Robomussel: Reading a CSV Record
 }
 \examples{
 file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-robo.data <- robo.read(file, timezone = "Europe/Berlin")
+robo.data <- robo.read(file)
 robo.data
 }
