@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.multiday.plot.R
 \name{chamber.multiday.plot}
 \alias{chamber.multiday.plot}
-\title{Intertidal Chamber: Plotting Multiday Profile}
+\title{Chamber: Plotting Multiday Profile}
 \usage{
 chamber.multiday.plot(df)
 }
@@ -10,7 +10,7 @@ chamber.multiday.plot(df)
 \item{df}{}
 }
 \description{
-Intertidal Chamber: Plotting Multiday Profile
+Chamber: Plotting Multiday Profile
 }
 \examples{
 # acclimation phase

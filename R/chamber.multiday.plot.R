@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Plotting Multiday Profile
+#' Chamber: Plotting Multiday Profile
 #'
 #' @param df
 #'

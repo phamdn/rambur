@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-hr.calc <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
+pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
 
   # autocorrelation
   ac.list <- acf(signal,

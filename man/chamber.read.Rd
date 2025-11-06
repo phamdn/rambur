@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.read.R
 \name{chamber.read}
 \alias{chamber.read}
-\title{Intertidal Chamber: Reading Multiple CSV Records}
+\title{Chamber: Reading Multiple CSV Records}
 \usage{
 chamber.read(
   folder.path = NULL,
@@ -17,7 +17,7 @@ chamber.read(
 \item{metadata.lines}{}
 }
 \description{
-Intertidal Chamber: Reading Multiple CSV Records
+Chamber: Reading Multiple CSV Records
 }
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")

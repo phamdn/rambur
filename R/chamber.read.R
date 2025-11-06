@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Reading Multiple CSV Records
+#' Chamber: Reading Multiple CSV Records
 #'
 #' @param timezone
 #' @param folder.path

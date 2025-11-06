@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Designing Multiday Profile
+#' Chamber: Designing Multiday Profile
 #'
 #' @param setup
 #' @param start.date
@@ -15,7 +15,7 @@
 #'
 #' acc.profile <- chamber.multiday(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
-#' ## to save the output files, change 'export' to 'TRUE'.
+#' ## to save the output files, set 'export' to 'TRUE'.
 #'
 #' acc.profile
 #'
@@ -35,6 +35,7 @@ chamber.multiday <- function(setup,
 
   multiday.df <- do.call(rbind, multiday.list)
 
+  # chamber use UTC timestamp but implement it as local time
   output <- multiday.df %>%
     mutate(
       # datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day, how about as.difftime()

@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Plotting Diurnal Profile
+#' Chamber Helper: Plotting Diurnal Profile
 #'
 #' @param df
 #'

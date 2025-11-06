@@ -1,4 +1,4 @@
-#' Intertidal Chamber: Designing Diurnal Profile
+#' Chamber Helper: Designing Diurnal Profile
 #'
 #' @param day
 #' @param time.step

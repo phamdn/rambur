@@ -27,7 +27,7 @@ pulse.extract <- function(data,
   window.hr <- data %>%
     mutate(datetime = floor_date(datetime, time.window)) %>%
     group_by(datetime) %>%
-    summarize(across(where(is.numeric), function(x) hr.calc(x,
+    summarize(across(where(is.numeric), function(x) pulse.hr(x,
                                                             sampling.rate = sampling.rate,
                                                             cor.threshold = cor.threshold)$hr)) %>%
     mutate(date = as_date(datetime),

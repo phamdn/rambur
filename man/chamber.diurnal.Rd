@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.diurnal.R
 \name{chamber.diurnal}
 \alias{chamber.diurnal}
-\title{Intertidal Chamber: Designing Diurnal Profile}
+\title{Chamber Helper: Designing Diurnal Profile}
 \usage{
 chamber.diurnal(
   day = 0,
@@ -23,7 +23,7 @@ chamber.diurnal(
 \item{water.change.time}{}
 }
 \description{
-Intertidal Chamber: Designing Diurnal Profile
+Chamber Helper: Designing Diurnal Profile
 }
 \examples{
 # default

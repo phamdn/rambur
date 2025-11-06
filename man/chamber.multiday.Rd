@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.multiday.R
 \name{chamber.multiday}
 \alias{chamber.multiday}
-\title{Intertidal Chamber: Designing Multiday Profile}
+\title{Chamber: Designing Multiday Profile}
 \usage{
 chamber.multiday(
   setup,
@@ -16,7 +16,7 @@ chamber.multiday(
 \item{folder.path}{}
 }
 \description{
-Intertidal Chamber: Designing Multiday Profile
+Chamber: Designing Multiday Profile
 }
 \examples{
 # acclimation phase
@@ -25,7 +25,7 @@ mean.air.temp = 17, mean.water.temp = 19)
 
 acc.profile <- chamber.multiday(acc.setup,
 start.date = "2025-05-15", export = FALSE)
-## to save the output files, change 'export' to 'TRUE'.
+## to save the output files, set 'export' to 'TRUE'.
 
 acc.profile
 
