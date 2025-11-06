@@ -1,4 +1,4 @@
-#' Helper: Calculating Heart Rate
+#' Pulse Helper: Calculating Heart Rate
 #'
 #' @param signal
 #' @param sampling.rate

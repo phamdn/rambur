@@ -2,7 +2,7 @@
 % Please edit documentation in R/hr.calc.R
 \name{hr.calc}
 \alias{hr.calc}
-\title{Helper: Calculating Heart Rate}
+\title{Pulse Helper: Calculating Heart Rate}
 \usage{
 hr.calc(signal, sampling.rate = 5, cor.threshold = 0.7)
 }
@@ -10,5 +10,5 @@ hr.calc(signal, sampling.rate = 5, cor.threshold = 0.7)
 \item{cor.threshold}{}
 }
 \description{
-Helper: Calculating Heart Rate
+Pulse Helper: Calculating Heart Rate
 }

@@ -20,13 +20,13 @@ Intertidal Chamber: Designing Multiday Profile
 }
 \examples{
 # acclimation phase
-acclimation.setup <- data.frame(day = seq(0, 34),
+acc.setup <- data.frame(day = seq(0, 34),
 mean.air.temp = 17, mean.water.temp = 19)
 
-acclimation.profile <- chamber.multiday(acclimation.setup,
+acc.profile <- chamber.multiday(acc.setup,
 start.date = "2025-05-15", export = FALSE)
 ## to save the output files, change 'export' to 'TRUE'.
 
-acclimation.profile
+acc.profile
 
 }

@@ -10,14 +10,14 @@
 #'
 #' @examples
 #' # acclimation phase
-#' acclimation.setup <- data.frame(day = seq(0, 34),
+#' acc.setup <- data.frame(day = seq(0, 34),
 #' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' acclimation.profile <- chamber.multiday(acclimation.setup,
+#' acc.profile <- chamber.multiday(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #' ## to save the output files, change 'export' to 'TRUE'.
 #'
-#' acclimation.profile
+#' acc.profile
 #'
 chamber.multiday <- function(setup,
                      start.date = "2025-04-30",
@@ -37,7 +37,9 @@ chamber.multiday <- function(setup,
 
   output <- multiday.df %>%
     mutate(
-      datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day
+      # datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day, how about as.difftime()
+      # datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day.dec, units = "days"), # dont even need day decimal
+      datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day, units = "days") + as.difftime(hour, units = "hours"),
       timestamp = as.numeric(datetime),
       profile = paste0(
         format(timestamp, scientific = FALSE),
@@ -49,7 +51,11 @@ chamber.multiday <- function(setup,
         wc
       )
     ) %>%
-    mutate(datetime = force_tz(datetime, tzone = timezone)) # chamber uses UTC timestamp but implements it as local time
+    mutate(datetime = force_tz(datetime, tzone = timezone), # chamber uses UTC timestamp but implements it as local time
+           date = as_date(datetime),
+           time = as_hms(datetime),
+           .after = datetime
+           )
 
   # check
   invalid <- which(nchar(output$profile) != 19)
@@ -85,7 +91,7 @@ chamber.multiday <- function(setup,
                 col.names = FALSE)
   }
 
-  # show input but with a new column for date
+  # return input but with a new column for date
   setup$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(setup$day, units = "days")
                 # chamber use UTC timestamp but implement it as local time
 

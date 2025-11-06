@@ -7,20 +7,20 @@
 #'
 #' @examples
 #' # acclimation phase
-#' acclimation.setup <- data.frame(day = seq(0, 34),
+#' acc.setup <- data.frame(day = seq(0, 34),
 #' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' acclimation.profile <- chamber.multiday(acclimation.setup,
+#' acc.profile <- chamber.multiday(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #'
-#' chamber.multiday.plot(acclimation.profile$output)
+#' chamber.multiday.plot(acc.profile$output)
 #'
 chamber.multiday.plot <- function(df){
 
   temp.breaks <- pretty(range(df$exp.temp))
   temp.breaks.range <- range(temp.breaks)
-  upper.x.axis <- function(x){
-    df$day.dec[match(x, df$datetime)]
+  upper.x.axis <- function(x){ # x is datetime (the tick marks of the primary x-axis)
+    df$day[match(x, df$datetime)] # find the corresponding day of that datetime
   }
 
   fig1 <- ggplot(df, aes(x = datetime, y = light)) +

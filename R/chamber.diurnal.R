@@ -47,7 +47,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   hour <- seq(from = 0, by = time.step, length.out = steps)
 
-  day.dec <- day + hour / 24 # calculate day decimal
+  # day.dec <- day + hour / 24 # calculate day decimal
 
   # light
   simulated.light <- dnorm(hour,
@@ -92,7 +92,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # output
   output <- data.frame(day = day,
                        hour = hour,
-                       day.dec = day.dec,
+                       # day.dec = day.dec,
                        light = floor(light), # 0.6% will be 0%, not 1%
                        air.temp = round(air.temp, digits = 1),
                        water.temp = round(water.temp, digits = 1),
