@@ -1,6 +1,6 @@
 #' Chamber: Designing Multiday Profile
 #'
-#' @param setup
+#' @param multiday.setup
 #' @param start.date
 #' @param export
 #' @param folder.path
@@ -13,13 +13,13 @@
 #' acc.setup <- data.frame(day = seq(0, 34),
 #' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' acc.profile <- chamber.multiday(acc.setup,
+#' acc.profile <- chamber.design(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #' ## to save the output files, set 'export' to 'TRUE'.
 #'
 #' acc.profile
 #'
-chamber.multiday <- function(setup,
+chamber.design <- function(multiday.setup,
                      start.date = "2025-04-30",
                      timezone = "",
                      export = FALSE,
@@ -31,7 +31,7 @@ chamber.multiday <- function(setup,
     message("using ", Sys.timezone(), " time zone")
   }
 
-  multiday.list <- do.call(mapply, c(chamber.diurnal, setup, SIMPLIFY = FALSE))
+  multiday.list <- do.call(mapply, c(chamber.diurnal, multiday.setup, SIMPLIFY = FALSE))
 
   multiday.df <- do.call(rbind, multiday.list)
 
@@ -39,7 +39,7 @@ chamber.multiday <- function(setup,
   output <- multiday.df %>%
     mutate(
       # datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day, how about as.difftime()
-      # datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day.dec, units = "days"), # dont even need day decimal
+      # datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day.dec, units = "days"), # how about not even calling day decimal
       datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day, units = "days") + as.difftime(hour, units = "hours"),
       timestamp = as.numeric(datetime),
       profile = paste0(
@@ -93,8 +93,9 @@ chamber.multiday <- function(setup,
   }
 
   # return input but with a new column for date
-  setup$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(setup$day, units = "days")
+  multiday.setup$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(multiday.setup$day, units = "days")
                 # chamber use UTC timestamp but implement it as local time
 
-  list(input = setup, output = output)
+  # multiday setup to diurnal expansion
+  list(setup = multiday.setup, expansion = output)
 }

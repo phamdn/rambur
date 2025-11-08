@@ -10,12 +10,12 @@
 #' acc.setup <- data.frame(day = seq(0, 34),
 #' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' acc.profile <- chamber.multiday(acc.setup,
+#' acc.profile <- chamber.design(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #'
-#' chamber.multiday.plot(acc.profile$output)
+#' chamber.design.plot(acc.profile$expansion)
 #'
-chamber.multiday.plot <- function(df){
+chamber.design.plot <- function(df){
 
   temp.breaks <- pretty(range(df$exp.temp))
   temp.breaks.range <- range(temp.breaks)
@@ -25,43 +25,43 @@ chamber.multiday.plot <- function(df){
 
   fig1 <- ggplot(df, aes(x = datetime, y = light)) +
     geom_step() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
-    labs(title = "Light", x = "date", y = "%") +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
+    labs(title = "Light", x = NULL, y = "%") +
     theme_minimal_grid()
 
   fig2 <- ggplot(df, aes(x = datetime, y = air.temp)) +
     geom_line() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Air temperature", x = "date", y = "°C") +
+    labs(title = "Air temperature", x = NULL, y = "°C") +
     theme_minimal_grid()
 
   fig3 <- ggplot(df, aes(x = datetime, y = water.temp)) +
     geom_line() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Water temperature", x = "date", y = "°C") +
+    labs(title = "Water temperature", x = NULL, y = "°C") +
     theme_minimal_grid()
 
   fig4 <- ggplot(df, aes(x = datetime, y = tide)) +
     geom_step() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Tide", x = "date", y = NULL) +
+    labs(title = "Tide", x = NULL, y = NULL) +
     theme_minimal_grid()
 
   fig5 <- ggplot(df, aes(x = datetime, y = exp.temp)) +
     geom_line() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Exposure temperature", x = "date", y = "°C") +
+    labs(title = "Exposure temperature", x = NULL, y = "°C") +
     theme_minimal_grid()
 
   fig6 <- ggplot(df, aes(x = datetime, y = wc)) +
     geom_step() +
-    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "day")) +
+    scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Water change", x = "date", y = NULL) +
+    labs(title = "Water change", x = NULL, y = NULL) +
     theme_minimal_grid()
 
   output <- list(light = fig1,
