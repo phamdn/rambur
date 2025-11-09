@@ -17,15 +17,15 @@ chamber.diurnal.plot <- function(df){
   hour.breaks <- seq(0, 24, 6)
 
   fig1 <- ggplot(df, aes(x = hour, y = light)) +
-    geom_step(color = 8) +
+    geom_step(color = 1, linetype = 2) +
     geom_point(color = 7) +
-    # geom_line(linetype = 2) +
+    # geom_line(linetype = 2) + # normal curve
     scale_x_continuous(breaks = hour.breaks) +
     labs(title = "Light", y = "%", x = "") +
     theme_minimal_grid()
 
   fig2 <- ggplot(df, aes(x = hour, y = air.temp)) +
-    geom_line(color = 8) +
+    geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, shape = 17) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
@@ -33,7 +33,7 @@ chamber.diurnal.plot <- function(df){
     theme_minimal_grid()
 
   fig3 <- ggplot(df, aes(x = hour, y = water.temp)) +
-    geom_line(color = 8) +
+    geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, shape = 15) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
@@ -41,7 +41,7 @@ chamber.diurnal.plot <- function(df){
     theme_minimal_grid()
 
   fig4 <- ggplot(df, aes(x = hour, y = tide)) +
-    geom_step(color = 8) +
+    geom_step(color = 1, linetype = 2) +
     geom_point(color = 4) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
@@ -49,7 +49,7 @@ chamber.diurnal.plot <- function(df){
     theme_minimal_grid()
 
   fig5 <- ggplot(df, aes(x = hour, y = exp.temp)) +
-    geom_line(color = 8) +
+    geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, aes(shape = as.factor(tide))) +
     scale_shape_manual(values = c(17, 15)) +
     scale_x_continuous(breaks = hour.breaks) +
@@ -59,7 +59,7 @@ chamber.diurnal.plot <- function(df){
     theme(legend.position = "none")
 
   fig6 <- ggplot(df, aes(x = hour, y = wc)) +
-    geom_step(color = 8) +
+    geom_step(color = 1, linetype = 2) +
     geom_point(color = 8) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
