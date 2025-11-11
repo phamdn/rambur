@@ -5,7 +5,7 @@
 \title{Chamber: Designing Multiday Profile}
 \usage{
 chamber.design(
-  multiday.setup,
+  daily.settings,
   start.date = "2025-04-30",
   timezone = "",
   export = FALSE,
@@ -20,13 +20,13 @@ Chamber: Designing Multiday Profile
 }
 \examples{
 # acclimation phase
-acc.setup <- data.frame(day = seq(0, 34),
+acc.daily.settings <- data.frame(day = seq(0, 34),
 mean.air.temp = 17, mean.water.temp = 19)
 
-acc.profile <- chamber.design(acc.setup,
+acc <- chamber.design(acc.daily.settings,
 start.date = "2025-05-15", export = FALSE)
 ## to save the output files, set 'export' to 'TRUE'.
 
-acc.profile
+acc
 
 }

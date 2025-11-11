@@ -1,6 +1,6 @@
 #' Chamber: Designing Multiday Profile
 #'
-#' @param multiday.setup
+#' @param daily.settings
 #' @param start.date
 #' @param export
 #' @param folder.path
@@ -10,16 +10,16 @@
 #'
 #' @examples
 #' # acclimation phase
-#' acc.setup <- data.frame(day = seq(0, 34),
+#' acc.daily.settings <- data.frame(day = seq(0, 34),
 #' mean.air.temp = 17, mean.water.temp = 19)
 #'
-#' acc.profile <- chamber.design(acc.setup,
+#' acc <- chamber.design(acc.daily.settings,
 #' start.date = "2025-05-15", export = FALSE)
 #' ## to save the output files, set 'export' to 'TRUE'.
 #'
-#' acc.profile
+#' acc
 #'
-chamber.design <- function(multiday.setup,
+chamber.design <- function(daily.settings,
                      start.date = "2025-04-30",
                      timezone = "",
                      export = FALSE,
@@ -31,12 +31,12 @@ chamber.design <- function(multiday.setup,
     message("using ", Sys.timezone(), " time zone")
   }
 
-  multiday.list <- do.call(mapply, c(chamber.diurnal, multiday.setup, SIMPLIFY = FALSE))
+  multiday.list <- do.call(mapply, c(chamber.diurnal, daily.settings, SIMPLIFY = FALSE))
 
   multiday.df <- do.call(rbind, multiday.list)
 
   # chamber use UTC timestamp but implement it as local time
-  output <- multiday.df %>%
+  design <- multiday.df %>%
     mutate(
       # datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day, how about as.difftime()
       # datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day.dec, units = "days"), # how about not even calling day decimal
@@ -59,7 +59,7 @@ chamber.design <- function(multiday.setup,
            )
 
   # check
-  invalid <- which(nchar(output$profile) != 19)
+  invalid <- which(nchar(design$profile) != 19)
   if (length(invalid) > 0) {
     warning(
       paste("Line(s)", paste(invalid, collapse = " "),
@@ -79,23 +79,23 @@ chamber.design <- function(multiday.setup,
       dir.create(folder.path, recursive = TRUE)
     }
 
-    output.xlsx <- subset(output,
+    design.xlsx <- subset(design,
                           select = c(datetime, exp.temp, tide, light, wc, profile))
 
-    output.txt <- output$profile
+    design.txt <- design$profile
 
-    write_xlsx(output.xlsx, file.path(folder.path, "Profile.xlsx"))
+    write_xlsx(design.xlsx, file.path(folder.path, "Profile.xlsx"))
 
-    write.table(output.txt, file.path(folder.path, "Profile.txt"),
+    write.table(design.txt, file.path(folder.path, "Profile.txt"),
                 quote = FALSE,
                 row.names = FALSE,
                 col.names = FALSE)
   }
 
-  # return input but with a new column for date
-  multiday.setup$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(multiday.setup$day, units = "days")
+  # return input but with a new column for date, maybe should not use <<- to change the input globally
+  daily.settings$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(daily.settings$day, units = "days")
                 # chamber use UTC timestamp but implement it as local time
 
-  # multiday setup to diurnal expansion
-  list(setup = multiday.setup, expansion = output)
+  # apply diurnal expansion to daily.settings to get expanded design
+  list(daily.settings = daily.settings, design = design)
 }
