@@ -1,4 +1,4 @@
-#' Chamber: Checking Compliance
+#' Chamber: Checking Performance
 #'
 #' @param design
 #' @param actual
@@ -18,7 +18,7 @@
 #' folder <- system.file("extdata/chamber", package = "rambur")
 #' chamber.data <- chamber.read(folder)
 #'
-#' chamber.check(acc.profile$expansion, chamber.data$enhanced.data)
+#' chamber.check(acc.profile$expansion, chamber.data$enhanced.data, time.range = c("2025-05-15", "2025-05-20"))
 #'
 chamber.check <- function(design, actual,
                           time.range = c(NA, NA)){
@@ -47,8 +47,11 @@ chamber.check <- function(design, actual,
     geom_line(data = actual, aes(y = actual.temp), color = 2) +
     scale_x_datetime(limits = as.POSIXct(time.range)) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    labs(title = "Temperature", x = NULL, y = "°C") +
-    theme_minimal_grid()
+    labs(title = "Exposure temperature", x = NULL, y = "°C", subtitle = "Room temperature") +
+    theme_minimal_grid() +
+    theme(
+      plot.subtitle = element_text(color = 3, hjust = 0)
+    )
 
   output <- plot_grid(fig1, fig2, fig3,
                              ncol = 1, rel_heights = c(1, 1, 2),

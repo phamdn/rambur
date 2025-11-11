@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.check.R
 \name{chamber.check}
 \alias{chamber.check}
-\title{Chamber: Checking Compliance}
+\title{Chamber: Checking Performance}
 \usage{
 chamber.check(design, actual, time.range = c(NA, NA))
 }
@@ -10,7 +10,7 @@ chamber.check(design, actual, time.range = c(NA, NA))
 \item{robo}{}
 }
 \description{
-Chamber: Checking Compliance
+Chamber: Checking Performance
 }
 \examples{
 
@@ -23,6 +23,6 @@ acc.profile <- chamber.design(acc.setup,
 folder <- system.file("extdata/chamber", package = "rambur")
 chamber.data <- chamber.read(folder)
 
-chamber.check(acc.profile$expansion, chamber.data$enhanced.data)
+chamber.check(acc.profile$expansion, chamber.data$enhanced.data, time.range = c("2025-05-15", "2025-05-20"))
 
 }
