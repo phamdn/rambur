@@ -4,7 +4,12 @@
 \alias{pulse.hr}
 \title{Pulse Helper: Calculating Heart Rate}
 \usage{
-pulse.hr(signal, sampling.rate = 5, cor.threshold = 0.7)
+pulse.hr(
+  signal,
+  sampling.rate = 5,
+  cor.threshold = 0.7,
+  ratio.thredshold = 0.95
+)
 }
 \arguments{
 \item{cor.threshold}{}

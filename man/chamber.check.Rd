@@ -4,7 +4,13 @@
 \alias{chamber.check}
 \title{Chamber: Checking Performance}
 \usage{
-chamber.check(design, actual, time.range = c(NA, NA))
+chamber.check(
+  design,
+  actual,
+  dttm.limits = c(NA, NA),
+  dttm.breaks = waiver(),
+  dttm.labels = waiver()
+)
 }
 \arguments{
 \item{robo}{}
@@ -14,15 +20,15 @@ Chamber: Checking Performance
 }
 \examples{
 
-acc.setup <- data.frame(day = seq(0, 34),
+acc.daily.settings <- data.frame(day = seq(0, 34),
 mean.air.temp = 17, mean.water.temp = 19)
 
-acc.profile <- chamber.design(acc.setup,
+acc <- chamber.design(acc.daily.settings,
                               start.date = "2025-05-15", export = FALSE)
 
 folder <- system.file("extdata/chamber", package = "rambur")
 chamber.data <- chamber.read(folder)
 
-chamber.check(acc.profile$expansion, chamber.data$enhanced.data, time.range = c("2025-05-15", "2025-05-20"))
+chamber.check(acc$design, chamber.data$enhanced.data, dttm.limits = c("2025-05-15", "2025-05-20"))
 
 }

@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
+pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7, ratio.thredshold = 0.95){
 
   # autocorrelation
   ac.list <- acf(signal,
@@ -45,10 +45,10 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
       dominant <- qualified[1, ]
     } else {
       ratio <- qualified$cor[1:(highest.idx - 1)] / max(qualified$cor)
-      if (all(ratio < 0.95)) { # 0.95 as heuristic threshold
+      if (all(ratio < ratio.thredshold)) { # heuristic threshold
         dominant <- qualified[highest.idx, ]
       } else { # similar in strength, choose the earliest
-        dominant <- qualified[which(ratio >= 0.95)[1], ]
+        dominant <- qualified[which(ratio >= ratio.thredshold)[1], ]
       }
     }
   }
