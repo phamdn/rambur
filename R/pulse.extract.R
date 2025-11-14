@@ -29,7 +29,10 @@ pulse.extract <- function(data,
     group_by(datetime) %>%
     summarize(across(where(is.numeric), function(x) pulse.hr(x,
                                                             sampling.rate = sampling.rate,
-                                                            cor.threshold = cor.threshold)$hr)) %>%
+                                                            cor.threshold = cor.threshold,
+                                                            intermediate = FALSE
+                                                            )
+                     )) %>%
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime

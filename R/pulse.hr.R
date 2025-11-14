@@ -8,7 +8,9 @@
 #' @export
 #'
 #' @examples
-pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4){
+pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
+                     intermediate = TRUE
+                     ){
 
   # autocorrelation
   ac.list <- acf(signal,
@@ -94,12 +96,16 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4){
   }
 
   # calculate heart rate
-  dominant$hr <- 60 / (dominant$lag / sampling.rate)
+  hr <- 60 / (dominant$lag / sampling.rate)
 
   ### diagnostic
   # print(dominant)
   ###
 
+  # result as a numeric
+  if (!intermediate) {
+    return(hr)
+  }
 
   # results as a list
   list(ac.list = ac.list,
@@ -107,5 +113,5 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4){
        locmax = locmax,
        qualified = qualified,
        dominant = dominant,
-       hr = dominant$hr)
+       hr = hr)
 }
