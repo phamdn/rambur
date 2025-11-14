@@ -8,12 +8,12 @@
 #' @export
 #'
 #' @examples
-pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
+pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4){
 
   # autocorrelation
   ac.list <- acf(signal,
-                 lag.max = 0.5 * 60 * sampling.rate, # half a minute (min detectable hr = 2 bpm)
-                 ### archive
+                 lag.max = 1/2 * 60 * sampling.rate,
+                 # data points in half a minute (min detectable hr = 2 bpm)
                  # lag.max = min(c(NROW(signal) / 2, 1 * 60 * sampling.rate)),
                  # half of the signal length but no more than 1 minute (min detectable hr = 1 bpm)
                  # use NROW instead of length() to suit 1 column matrix or dataframe
@@ -27,23 +27,17 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
   locmax.idx <- which(diff(sign(diff(ac$cor))) == -2) + 1
   locmax <- ac[locmax.idx, ]
 
-  ### troubleshoot
-  plot(locmax)
-  lines(locmax)
-  lines(subset(locmax, cor >= cor.threshold), col = "blue")
-  abline(h = cor.threshold, col = "green", lty = 2)
-  abline(h = 0, col = "red", lty = 2)
+  ### diagnostic
+  # plot(locmax)
+  # lines(locmax)
+  # lines(subset(locmax, cor >= cor.threshold), col = "blue")
+  # abline(h = cor.threshold, col = "green", lty = 2)
+  # abline(h = 0, col = "red", lty = 2)
   ###
 
   # filter out qualified peaks using threshold
   qualified <- subset(locmax, cor >= cor.threshold)
   qualified.count <- nrow(qualified)
-
-  ### troubleshoot
-  # print(qualified.analysis)
-  # print(mean(qualified.analysis == -1)*100)
-  # print(diff(qualified.analysis))
-  ###
 
   # find "the" dominant peak
   if (qualified.count == 0) {
@@ -51,6 +45,7 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
     # dominant[1, ] <- c(NA, NA)
     # dominant <- qualified[1, ] # will also return a row of NAs if count = 0
     dominant <- qualified[NA_integer_, ] # clearer way to return NAs
+    # message("threshold not met")
   }
 
   if (qualified.count == 1) {
@@ -63,7 +58,7 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
   # }
 
   if (qualified.count >= 2) {
-    ### archive
+    ### old method
     # highest.idx <- which.max(qualified$cor) # which.max always returns one index despite multiple equal maxs
     # if (highest.idx == 1) {
     #   dominant <- qualified[1, ]
@@ -75,15 +70,15 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
     #     dominant <- qualified[which(ratio >= 0.95)[1], ]
     #   }
     # }
-    ### archive
+
     qualified.trend <- sign(diff(qualified$cor))
-    print(qualified.trend)
-    if (all(qualified.trend %in% c(-1, 0))) {
+    # print(qualified.trend)
+    if (all(qualified.trend %in% c(-1, 0))) { # monotonically decreasing
       dominant <- qualified[1, ]
     } else {
       # dominant <- qualified[1 + qualified.count, ] # a non-existent row, will output a row of NA
       dominant <- qualified[NA_integer_, ]
-      message("non-monotonic")
+      # message("non-monotone")
     }
 
   }
@@ -94,15 +89,15 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.7){
     if (all(segment$cor >= 0)) { # in case no negative correlation occur before the dominant peak
       # dominant[1, ] <- c(NA, NA)
       dominant <- qualified[NA_integer_, ]
-      message("trivial rhythms")
+      # message("trivial rhythms")
     }
   }
 
   # calculate heart rate
   dominant$hr <- 60 / (dominant$lag / sampling.rate)
 
-  ### troubleshoot
-  print(dominant)
+  ### diagnostic
+  # print(dominant)
   ###
 
 

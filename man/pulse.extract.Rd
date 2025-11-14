@@ -7,7 +7,7 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
-  cor.threshold = 0.7,
+  cor.threshold = 0.4,
   time.window = "minute",
   summary.period = "hour"
 )

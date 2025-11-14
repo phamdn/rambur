@@ -14,7 +14,7 @@
 #' pulse.data <- pulse.read(folder)
 #' pulse.extract(pulse.data, cor.threshold = 0.4, summary.period = "30 minutes")
 pulse.extract <- function(data,
-                          sampling.rate = NULL, cor.threshold = 0.7,
+                          sampling.rate = NULL, cor.threshold = 0.4,
                           time.window = "minute", summary.period = "hour"){
 
   # infer sampling rate Hz based on input data
@@ -38,7 +38,7 @@ pulse.extract <- function(data,
   summarized.hr <- window.hr %>%
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
-    summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>%
+    summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime
