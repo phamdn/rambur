@@ -12,9 +12,9 @@
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
-#' pulse.extract(pulse.data, summary.period = "30 minutes")
+#' pulse.extract(pulse.data, cor.threshold = 0.4, summary.period = "30 minutes")
 pulse.extract <- function(data,
-                          sampling.rate = NULL, cor.threshold = 0.7, ratio.thredshold = 0.95,
+                          sampling.rate = NULL, cor.threshold = 0.7,
                           time.window = "minute", summary.period = "hour"){
 
   # infer sampling rate Hz based on input data
@@ -29,8 +29,7 @@ pulse.extract <- function(data,
     group_by(datetime) %>%
     summarize(across(where(is.numeric), function(x) pulse.hr(x,
                                                             sampling.rate = sampling.rate,
-                                                            cor.threshold = cor.threshold,
-                                                            ratio.thredshold = ratio.thredshold)$hr)) %>%
+                                                            cor.threshold = cor.threshold)$hr)) %>%
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime
