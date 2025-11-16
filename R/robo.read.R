@@ -1,4 +1,4 @@
-#' Robomussel: Reading a CSV Record
+#' Robomussel: Reading a Single CSV Record
 #'
 #' @param file.path
 #' @param metadata.lines
@@ -8,8 +8,8 @@
 #' @export
 #'
 #' @examples
-#' file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-#' robo.data <- robo.read(file)
+#' robo.file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
+#' robo.data <- robo.read(robo.file)
 #' robo.data
 robo.read <- function(file.path,
                       metadata.lines = 21,
@@ -44,7 +44,8 @@ robo.read <- function(file.path,
            .after = datetime
     )
 
-  list(original.data = original.data,
+  list(
+    # original.data = original.data,
        enhanced.data = enhanced.data,
        summarized.data = summarized.data
   )
