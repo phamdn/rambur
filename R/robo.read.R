@@ -3,6 +3,7 @@
 #' @param file.path
 #' @param metadata.lines
 #' @param timezone
+#' @param summary.period
 #'
 #' @returns
 #' @export

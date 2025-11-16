@@ -94,7 +94,7 @@ chamber.read <- function(folder.path = NULL,
            .after = datetime
            )
 
-  list(original.data = original.data,
+  list(original.data = original.data, # keep to understand NA problems
        # problems = problems,
        enhanced.data = enhanced.data,
        summarized.data = summarized.data

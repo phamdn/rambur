@@ -66,7 +66,7 @@ robo.read2 <- function(folder.path = NULL,
   #   df
   # })
 
-  combined.data <- imap(enhanced.data, \(x, idx) {
+  synchronized.data <- imap(enhanced.data, \(x, idx) {
     x %>%
       transmute(
         datetime = floor_date(datetime, "minute"),
@@ -91,7 +91,7 @@ robo.read2 <- function(folder.path = NULL,
 
 
 
-  summarized.data <- combined.data %>%
+  summarized.data <- synchronized.data %>%
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
@@ -103,7 +103,7 @@ robo.read2 <- function(folder.path = NULL,
   list(
     # original.data = original.data,
        enhanced.data = enhanced.data,
-       combined.data = combined.data,
+       synchronized.data = synchronized.data,
        summarized.data = summarized.data
   )
 

@@ -18,7 +18,7 @@ chamber.diurnal.plot <- function(df){
 
   fig1 <- ggplot(df, aes(x = hour, y = light)) +
     geom_step(color = 1, linetype = 2) +
-    geom_point(color = 7) +
+    geom_point(color = 7) + # color = 7
     # geom_line(linetype = 2) + # normal curve
     scale_x_continuous(breaks = hour.breaks) +
     labs(title = "Light", y = "%", x = "") +
@@ -26,7 +26,7 @@ chamber.diurnal.plot <- function(df){
 
   fig2 <- ggplot(df, aes(x = hour, y = air.temp)) +
     geom_line(color = 1, linetype = 2) +
-    geom_point(color = 2, shape = 17) +
+    geom_point(color = 2, shape = 17) + # color = 2
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
     labs(title = "Air temperature", y = "°C", x = "") +
@@ -34,7 +34,7 @@ chamber.diurnal.plot <- function(df){
 
   fig3 <- ggplot(df, aes(x = hour, y = water.temp)) +
     geom_line(color = 1, linetype = 2) +
-    geom_point(color = 2, shape = 15) +
+    geom_point(color = 2, shape = 15) + #color = 2
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
     labs(title = "Water temperature", y = "°C", x = "") +
@@ -42,7 +42,7 @@ chamber.diurnal.plot <- function(df){
 
   fig4 <- ggplot(df, aes(x = hour, y = tide)) +
     geom_step(color = 1, linetype = 2) +
-    geom_point(color = 4) +
+    geom_point(color = 4) + #color = 4
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
     labs(title = "Tide", y = NULL, x = "") +
@@ -50,7 +50,7 @@ chamber.diurnal.plot <- function(df){
 
   fig5 <- ggplot(df, aes(x = hour, y = exp.temp)) +
     geom_line(color = 1, linetype = 2) +
-    geom_point(color = 2, aes(shape = as.factor(tide))) +
+    geom_point(color = 2, aes(shape = as.factor(tide))) + #color = 2
     scale_shape_manual(values = c(17, 15)) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
@@ -60,7 +60,7 @@ chamber.diurnal.plot <- function(df){
 
   fig6 <- ggplot(df, aes(x = hour, y = wc)) +
     geom_step(color = 1, linetype = 2) +
-    geom_point(color = 8) +
+    geom_point(color = 1) + #color = 8
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
     labs(title = "Water change", y = NULL, x = "") +

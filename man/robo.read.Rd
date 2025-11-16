@@ -12,7 +12,7 @@ robo.read(
 )
 }
 \arguments{
-\item{timezone}{}
+\item{summary.period}{}
 }
 \description{
 Robomussel: Reading a Single CSV Record

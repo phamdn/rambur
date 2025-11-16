@@ -22,5 +22,4 @@ Robomussels: Reading Multiple CSV Records
 robo.folder <- system.file("extdata/robo", package = "rambur")
 robo.data2 <- robo.read2(robo.folder)
 robo.data2
-str(robo.data2)
 }
