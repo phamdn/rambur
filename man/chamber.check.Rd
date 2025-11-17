@@ -7,6 +7,7 @@
 chamber.check(
   design,
   actual,
+  robo = NULL,
   dttm.limits = c(NA, NA),
   dttm.breaks = waiver(),
   dttm.labels = waiver()
