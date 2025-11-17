@@ -3,6 +3,9 @@
 #' @param design
 #' @param actual
 #' @param robo
+#' @param dttm.limits
+#' @param dttm.breaks
+#' @param dttm.labels
 #'
 #' @returns
 #' @export
@@ -23,55 +26,47 @@
 chamber.check <- function(design, actual, robo = NULL,
                           dttm.limits = c(NA, NA), dttm.breaks = waiver(), dttm.labels = waiver()){
 
-  fig1 <- ggplot(data = design, aes(x = datetime, y = light)) +
+  fig1 <- ggplot(data = design, aes(x = datetime, y = light, color = "Design")) +
     geom_step(linetype = 2) +
-    geom_step(data = actual, color = 7, alpha = 0.8) +
+    geom_step(data = actual, aes(color = "Actual"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
-    labs(title = "Light", x = NULL, y = "%") +
-    theme_minimal_grid()
+    scale_color_manual(values = c("Design" = 1, "Actual" = 7), breaks = c("Design", "Actual")) +
+    labs(title = "Light", x = NULL, y = "%", color = NULL) +
+    theme_minimal_grid() +
+    theme(legend.position = "top")
 
-  fig2 <- ggplot(data = design, aes(x = datetime, y = tide)) +
+  fig2 <- ggplot(data = design, aes(x = datetime, y = tide, color = "Design")) +
     geom_step(linetype = 2) +
-    geom_step(data = actual, aes(y = actual.tide), color = 4, alpha = 0.8) +
+    geom_step(data = actual, aes(y = actual.tide, color = "Actual"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Tide", x = NULL, y = NULL) +
-    theme_minimal_grid()
+    scale_color_manual(values = c("Design" = 1, "Actual" = 4), breaks = c("Design", "Actual")) +
+    labs(title = "Tide", x = NULL, y = NULL, color = NULL) +
+    theme_minimal_grid() +
+    theme(legend.position = "top")
 
   temp.breaks <- pretty(range(design$exp.temp, actual$actual.temp, actual$room.temp, robo$body.temp))
   temp.breaks.range <- range(temp.breaks)
 
-  fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp)) +
-    geom_line(data = actual, aes(y = room.temp), color = 3, alpha = 0.8) + # plot room temp first as background
+  fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp, color = "Design")) +
+    geom_line(data = actual, aes(y = room.temp, color = "Room"), alpha = 0.8) + # plot room temp first as background
     geom_line(linetype = 2) +
-    geom_line(data = actual, aes(y = actual.temp), color = 2, alpha = 0.8) +
+    geom_line(data = actual, aes(y = actual.temp, color = "Actual"), alpha = 0.8) +
     {
       if (!is.null(robo))
-        geom_line(data = robo, aes(y = body.temp), color = 8, alpha = 0.8) # plot body temp last
+        geom_line(data = robo, aes(y = body.temp, color = "Body"), alpha = 0.8) # plot body temp last
     } +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    {
-      if (is.null(robo))
-        labs(title = "Exposure temperature", x = NULL, y = "°C", subtitle = "Room temperature")
-      else
-        labs(title = "Exposure temperature", x = NULL, y = "°C",
-                subtitle = "<span style='color:#61D04F;'>Room</span> |
-                <span style='color:#9E9E9E;'>Body</span>")
-      } +
+    scale_color_manual(values = c("Design" = 1, "Actual" = 2,
+                                  "Room" = 3, "Body" = 8),
+                       breaks = c("Design", "Actual", "Room", "Body")) +
+    labs(title = "Exposure temperature", x = NULL, y = "°C", color = NULL) +
     theme_minimal_grid() +
-    {
-      if (is.null(robo))
-        theme(
-      plot.subtitle = element_text(color = 3, hjust = 1)
-    ) else
-      theme(
-        plot.subtitle = element_markdown(hjust = 1)
-      )
-      }
+    theme(legend.position = "top")
 
   output <- plot_grid(fig1, fig2, fig3,
                              ncol = 1, rel_heights = c(1, 1, 2),
