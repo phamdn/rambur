@@ -51,7 +51,7 @@ chamber.check <- function(design, actual, robo = NULL,
   temp.breaks.range <- range(temp.breaks)
 
   fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp, color = "Design")) +
-    geom_line(data = actual, aes(y = room.temp, color = "Room"), alpha = 0.8) + # plot room temp first as background
+    geom_line(data = actual, aes(y = room.temp, color = "Room temperature"), alpha = 0.8) + # plot room temp first as background
     geom_line(linetype = 2) +
     geom_line(data = actual, aes(y = actual.temp, color = "Actual"), alpha = 0.8) +
     {
@@ -62,8 +62,8 @@ chamber.check <- function(design, actual, robo = NULL,
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
     scale_color_manual(values = c("Design" = 1, "Actual" = 2,
-                                  "Room" = 3, "Body" = 8),
-                       breaks = c("Design", "Actual", "Room", "Body")) +
+                                  "Body" = 8, "Room temperature" = 3),
+                       breaks = c("Design", "Actual", "Body", "Room temperature")) +
     labs(title = "Exposure temperature", x = NULL, y = "°C", color = NULL) +
     theme_minimal_grid() +
     theme(legend.position = "top")

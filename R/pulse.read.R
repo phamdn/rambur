@@ -30,6 +30,7 @@ pulse.read <- function(folder.path = NULL,
   pulse.files <- subset(pulse.files,
                         file.size(pulse.files) > size.limits[1] &
                           file.size(pulse.files) < size.limits[2])
+  # print(pulse.files) to diagnose
 
   message("importing ", length(pulse.files), " files")
 

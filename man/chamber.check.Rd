@@ -14,7 +14,7 @@ chamber.check(
 )
 }
 \arguments{
-\item{robo}{}
+\item{dttm.labels}{}
 }
 \description{
 Chamber: Checking Performance
