@@ -4,7 +4,13 @@
 \alias{pulse.check}
 \title{Pulse: Checking Photoplethysmogram (PPG) Signal}
 \usage{
-pulse.check(data, channel, dttm.limits = c(NA, NA))
+pulse.check(
+  data,
+  channel,
+  dttm.limits = c(NA, NA),
+  sampling.rate = NULL,
+  cor.threshold = 0.4
+)
 }
 \arguments{
 \item{dttm.limits}{}
