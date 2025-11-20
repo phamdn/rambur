@@ -12,3 +12,8 @@ pulse.hr(signal, sampling.rate = 5, cor.threshold = 0.4, intermediate = TRUE)
 \description{
 Pulse Helper: Calculating Heart Rate
 }
+\examples{
+folder <- system.file("extdata/pulse", package = "rambur")
+pulse.data <- pulse.read(folder)
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:00:00" & datetime <= "2025-05-21 00:01:00", channel.1, drop = TRUE))
+}

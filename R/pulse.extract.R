@@ -42,6 +42,10 @@ pulse.extract <- function(data,
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
+    # summarize(across(where(is.numeric),
+    #                  # ~ ifelse(sum(!is.na(.x)) > 10, median(.x, na.rm = TRUE), NA_real_)
+    #                  # ~ if (sum(!is.na(.x)) > 10) median(.x, na.rm = TRUE) else NA
+    #                  )) %>% # only calculate with enough observations
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime

@@ -8,9 +8,16 @@
 #' @export
 #'
 #' @examples
+#' folder <- system.file("extdata/pulse", package = "rambur")
+#' pulse.data <- pulse.read(folder)
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:00:00" & datetime <= "2025-05-21 00:01:00", channel.1, drop = TRUE))
 pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
                      intermediate = TRUE
                      ){
+
+  if (intermediate) {
+    plot(signal, type = "l")
+  }
 
   # autocorrelation
   ac.list <- acf(signal,
@@ -19,7 +26,7 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
                  # lag.max = min(c(NROW(signal) / 2, 1 * 60 * sampling.rate)),
                  # half of the signal length but no more than 1 minute (min detectable hr = 1 bpm)
                  # use NROW instead of length() to suit 1 column matrix or dataframe
-                 plot = FALSE
+                 plot = intermediate
                  )
 
   ac <- data.frame(lag = ac.list$lag,
@@ -29,17 +36,16 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
   locmax.idx <- which(diff(sign(diff(ac$cor))) == -2) + 1
   locmax <- ac[locmax.idx, ]
 
-  ### diagnostic
-  # plot(locmax)
-  # lines(locmax)
-  # lines(subset(locmax, cor >= cor.threshold), col = "blue")
-  # abline(h = cor.threshold, col = "green", lty = 2)
-  # abline(h = 0, col = "red", lty = 2)
-  ###
-
   # filter out qualified peaks using threshold
   qualified <- subset(locmax, cor >= cor.threshold)
   qualified.count <- nrow(qualified)
+
+  if (intermediate) {
+    plot(locmax, type = "o")
+    lines(qualified, col = 4)
+    abline(h = cor.threshold, col = 3, lty = 2)
+    abline(h = 0, col = 2, lty = 2)
+  }
 
   # find "the" dominant peak
   if (qualified.count == 0) {
@@ -108,7 +114,8 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
   }
 
   # results as a list
-  list(ac.list = ac.list,
+  list(
+    # ac.list = ac.list,
        # ac = ac,
        locmax = locmax,
        qualified = qualified,
