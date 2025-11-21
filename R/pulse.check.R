@@ -1,4 +1,4 @@
-#' Pulse: Checking Photoplethysmogram (PPG) Signal
+#' Pulse: Checking Photoplethysmography (PPG) Signal
 #'
 #' @param data
 #' @param channel

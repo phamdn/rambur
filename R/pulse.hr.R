@@ -10,14 +10,10 @@
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
-#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:00:00" & datetime <= "2025-05-21 00:01:00", channel.1, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" & datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
 pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
                      intermediate = TRUE
                      ){
-
-  if (intermediate) {
-    plot(signal, type = "l")
-  }
 
   # autocorrelation
   ac.list <- acf(signal,
@@ -26,7 +22,7 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
                  # lag.max = min(c(NROW(signal) / 2, 1 * 60 * sampling.rate)),
                  # half of the signal length but no more than 1 minute (min detectable hr = 1 bpm)
                  # use NROW instead of length() to suit 1 column matrix or dataframe
-                 plot = intermediate
+                 plot = FALSE # will plot manually below if needed
                  )
 
   ac <- data.frame(lag = ac.list$lag,
@@ -41,7 +37,9 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
   qualified.count <- nrow(qualified)
 
   if (intermediate) {
-    plot(locmax, type = "o")
+    plot(signal, type = "l", main = "Photoplethysmogram", ylab = "IR signal")
+    plot(ac.list, main = "Autocorrelogram")
+    plot(locmax, type = "o", main = "Local maxima", xlab = "Lag", ylab = "Pearson correlation", ylim = c(-0.1, 1))
     lines(qualified, col = 4)
     abline(h = cor.threshold, col = 3, lty = 2)
     abline(h = 0, col = 2, lty = 2)
@@ -49,16 +47,16 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
 
   # find "the" dominant peak
   if (qualified.count == 0) {
+    dominant <- qualified[NA_integer_, ] # clearer way to return NAs
     # dominant <- qualified
     # dominant[1, ] <- c(NA, NA)
     # dominant <- qualified[1, ] # will also return a row of NAs if count = 0
-    dominant <- qualified[NA_integer_, ] # clearer way to return NAs
     # message("threshold not met")
   }
 
   if (qualified.count == 1) {
-    # dominant <- qualified[1, ] # same effect as the below
     dominant <- qualified
+    # dominant <- qualified[1, ] # same effect as the below
   }
 
   # if (qualified.count <= 1) { # combine both cases of 0 and 1
@@ -80,12 +78,12 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
     # }
 
     qualified.trend <- sign(diff(qualified$cor))
-    # print(qualified.trend)
+
     if (all(qualified.trend %in% c(-1, 0))) { # monotonically decreasing
       dominant <- qualified[1, ]
     } else {
-      # dominant <- qualified[1 + qualified.count, ] # a non-existent row, will output a row of NA
       dominant <- qualified[NA_integer_, ]
+      # dominant <- qualified[1 + qualified.count, ] # a non-existent row, will output a row of NA
       # message("non-monotone")
     }
 
@@ -95,18 +93,14 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
   if (!is.na(dominant$lag)) {
     segment <- subset(ac, lag < dominant$lag) # segment preceding the dominant peak
     if (all(segment$cor >= 0)) { # in case no negative correlation occur before the dominant peak
-      # dominant[1, ] <- c(NA, NA)
       dominant <- qualified[NA_integer_, ]
+      # dominant[1, ] <- c(NA, NA)
       # message("trivial rhythms")
     }
   }
 
   # calculate heart rate
   hr <- 60 / (dominant$lag / sampling.rate)
-
-  ### diagnostic
-  # print(dominant)
-  ###
 
   # result as a numeric
   if (!intermediate) {
@@ -115,7 +109,7 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
 
   # results as a list
   list(
-    # ac.list = ac.list,
+      # ac.list = ac.list,
        # ac = ac,
        locmax = locmax,
        qualified = qualified,

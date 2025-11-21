@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse.check.R
 \name{pulse.check}
 \alias{pulse.check}
-\title{Pulse: Checking Photoplethysmogram (PPG) Signal}
+\title{Pulse: Checking Photoplethysmography (PPG) Signal}
 \usage{
 pulse.check(
   data,
@@ -16,5 +16,5 @@ pulse.check(
 \item{dttm.limits}{}
 }
 \description{
-Pulse: Checking Photoplethysmogram (PPG) Signal
+Pulse: Checking Photoplethysmography (PPG) Signal
 }
