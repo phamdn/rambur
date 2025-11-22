@@ -13,7 +13,7 @@ A toolkit for your lab experiments.
 
 Other contributors:
 \itemize{
-  \item Inna M. Sokolova (\href{https://orcid.org/0000-0002-2068-4302}{ORCID}) [thesis advisor]
+  \item Inna M. Sokolova (\href{https://orcid.org/0000-0002-2068-4302}{ORCID}) [contributor]
 }
 
 }

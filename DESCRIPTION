@@ -1,10 +1,10 @@
 Package: rambur
 Title: Research Assistant in Marine Biology at University of Rostock
-Version: 0.0.35
+Version: 0.0.36
 Authors@R: c(
     person("Duy Nghia", "Pham", email = "nghiapham@yandex.com", 
     role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1349-1710")),
-    person("Inna M.", "Sokolova", role = "ths",
+    person("Inna M.", "Sokolova", role = "ctb",
     comment = c(ORCID = "0000-0002-2068-4302"))
     )
 Description: A toolkit for your lab experiments.
