@@ -54,7 +54,7 @@ chamber.read <- function(folder.path = NULL,
       date = Date, # just <date> character/format from original data in local time zone
       time = Time,
 
-      design.temp = Top_setpoint,
+      designed.temp = Top_setpoint,
       actual.temp1 = T1,
       actual.temp2 = T2,
       actual.temp3 = T3,
@@ -64,7 +64,7 @@ chamber.read <- function(folder.path = NULL,
       # actual.temp.diff = apply(across(T1:T3), 1, function(x) diff(range(x))),
       room.temp = T6,
 
-      design.tide = Tide,
+      designed.tide = Tide,
       working.tide = Tide_pump_state,
       actual.tide1 = WS1,
       actual.tide2 = WS2,
@@ -78,7 +78,7 @@ chamber.read <- function(folder.path = NULL,
       wc.out = Outlet_valve_state,
       wc.in = Inlet_valve_state,
 
-      light = `LED_intensity_%`,
+      working.light = `LED_intensity_%`,
 
       .keep = "unused", # can change to "none" to save space
       .before = 1
@@ -87,8 +87,8 @@ chamber.read <- function(folder.path = NULL,
   summarized.data <- enhanced.data %>%
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
-    # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as design.temp, which is meaningless
-    summarize(across(c(actual.temp, room.temp, actual.tide, light), mean, na.rm = TRUE)) %>% # better to be more selective here
+    # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
+    summarize(across(c(actual.temp, room.temp, working.tide, actual.tide, working.light), mean, na.rm = TRUE)) %>% # better to be more selective here
     mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
            time = as_hms(datetime),
            .after = datetime

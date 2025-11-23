@@ -26,23 +26,23 @@
 chamber.check <- function(design, actual, robo = NULL,
                           dttm.limits = c(NA, NA), dttm.breaks = waiver(), dttm.labels = waiver()){
 
-  fig1 <- ggplot(data = design, aes(x = datetime, y = light, color = "Design")) +
+  fig1 <- ggplot(data = design, aes(x = datetime, y = light, color = "Designed")) +
     geom_step(linetype = 2) +
-    geom_step(data = actual, aes(color = "Actual"), alpha = 0.8) +
+    geom_step(data = actual, aes(y = working.light, color = "Working"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
-    scale_color_manual(values = c("Design" = 1, "Actual" = 7), breaks = c("Design", "Actual")) +
+    scale_color_manual(values = c("Designed" = 1, "Working" = 7), breaks = c("Designed", "Working")) +
     labs(title = "Light", x = NULL, y = "%", color = NULL) +
     theme_minimal_grid() +
     theme(legend.position = "top")
 
-  fig2 <- ggplot(data = design, aes(x = datetime, y = tide, color = "Design")) +
+  fig2 <- ggplot(data = design, aes(x = datetime, y = tide, color = "Designed")) +
     geom_step(linetype = 2) +
     geom_step(data = actual, aes(y = actual.tide, color = "Actual"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    scale_color_manual(values = c("Design" = 1, "Actual" = 4), breaks = c("Design", "Actual")) +
+    scale_color_manual(values = c("Designed" = 1, "Actual" = 4), breaks = c("Designed", "Actual")) +
     labs(title = "Tide", x = NULL, y = NULL, color = NULL) +
     theme_minimal_grid() +
     theme(legend.position = "top")
@@ -50,7 +50,7 @@ chamber.check <- function(design, actual, robo = NULL,
   temp.breaks <- pretty(range(design$exp.temp, actual$actual.temp, actual$room.temp, robo$body.temp))
   temp.breaks.range <- range(temp.breaks)
 
-  fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp, color = "Design")) +
+  fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp, color = "Designed")) +
     geom_line(data = actual, aes(y = room.temp, color = "Room temperature"), alpha = 0.8) + # plot room temp first as background
     geom_line(linetype = 2) +
     geom_line(data = actual, aes(y = actual.temp, color = "Actual"), alpha = 0.8) +
@@ -61,10 +61,10 @@ chamber.check <- function(design, actual, robo = NULL,
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
-    scale_color_manual(values = c("Design" = 1, "Actual" = 2,
+    scale_color_manual(values = c("Designed" = 1, "Actual" = 2,
                                   "Body" = 8, "Room temperature" = 3),
-                       breaks = c("Design", "Actual", "Body", "Room temperature")) +
-    labs(title = "Exposure temperature", x = NULL, y = "°C", color = NULL) +
+                       breaks = c("Designed", "Actual", "Body", "Room temperature")) +
+    labs(title = "Temperature", x = NULL, y = "°C", color = NULL) + # title = "Exposure temperature"
     theme_minimal_grid() +
     theme(legend.position = "top")
 
