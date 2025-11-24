@@ -6,8 +6,8 @@
 \usage{
 chamber.check(
   design,
-  actual,
-  robo = NULL,
+  chamber.data,
+  robo.data = NULL,
   dttm.limits = c(NA, NA),
   dttm.breaks = waiver(),
   dttm.labels = waiver()
