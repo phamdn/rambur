@@ -28,10 +28,10 @@ chamber.check <- function(design, chamber.data, robo.data = NULL,
 
   fig1 <- ggplot(data = design, aes(x = datetime, y = light, color = "Designed")) +
     geom_step(linetype = 2) +
-    geom_step(data = chamber.data, aes(y = executed.light, color = "Executed"), alpha = 0.8) +
+    geom_step(data = chamber.data, aes(y = actual.light, color = "Actual"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
-    scale_color_manual(values = c("Designed" = 1, "Executed" = 7), breaks = c("Designed", "Executed")) +
+    scale_color_manual(values = c("Designed" = 1, "Actual" = 7), breaks = c("Designed", "Actual")) +
     labs(title = "Light", x = NULL, y = "%", color = NULL) +
     theme_minimal_grid() +
     theme(legend.position = "top")
