@@ -18,6 +18,7 @@ pulse.extract <- function(data,
                           time.window = "minute", summary.period = "hour"){
 
   # infer sampling rate Hz based on input data
+  # use median, as the diff bw 2 timestamps are sometimes higher than usual, e.g., 00.390 - 59.989 = 0.41 s, not 0.2 s as typical for 5 Hz
   if (is.null(sampling.rate)) {
     sampling.rate <- round(1/median(as.numeric(diff(data$datetime))))
     message("using sampling rate of ", sampling.rate, " Hz")
@@ -43,8 +44,8 @@ pulse.extract <- function(data,
     group_by(datetime) %>%
     # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
     summarize(across(where(is.numeric),
-                     ~ ifelse(mean(!is.na(.x)) > 0.1, median(.x, na.rm = TRUE), NA)
-                     )) %>% # only calculate with enough observations like 1/10 of all time
+                     ~ ifelse(mean(!is.na(.x)) >= 0.1, mean(.x, na.rm = TRUE), NA)
+                     )) %>% # or only calculate with enough observations like more than 1/10 non missing
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
            .after = datetime

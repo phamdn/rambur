@@ -88,7 +88,7 @@ chamber.read <- function(folder.path = NULL,
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(actual.temp, room.temp, actual.tide, actual.light), mean, na.rm = TRUE)) %>% # better to be more selective here
+    summarize(across(c(actual.temp, actual.tide, actual.light), mean, na.rm = TRUE)) %>% # better to be more selective in what to summarize here
     mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
            time = as_hms(datetime),
            .after = datetime
