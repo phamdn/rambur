@@ -9,7 +9,8 @@ pulse.extract(
   sampling.rate = NULL,
   cor.threshold = 0.4,
   time.window = "minute",
-  summary.period = "hour"
+  summary.period = "hour",
+  summary.fun = "median"
 )
 }
 \arguments{
