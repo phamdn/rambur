@@ -10,7 +10,8 @@ pulse.extract(
   cor.threshold = 0.4,
   time.window = "minute",
   summary.period = NULL,
-  summary.fun = "median"
+  summary.fun = "median",
+  nonNA.threshold = 0.1
 )
 }
 \arguments{
