@@ -11,13 +11,13 @@
 #'
 #' @examples
 #' robo.folder <- system.file("extdata/robo", package = "rambur")
-#' robo.data2 <- robo.read2(robo.folder)
-#' robo.data2
+#' robo.read2(robo.folder)
+#' robo.read2(robo.folder, summary.period = "hour")
 robo.read2 <- function(folder.path = NULL,
                        file.name = ".csv",
                       metadata.lines = 21,
                       timezone = "",
-                      summary.period = "hour"){
+                      summary.period = NULL){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -53,6 +53,8 @@ robo.read2 <- function(folder.path = NULL,
       ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
   })
 
+  # resolve the clock drift issue
+
   # synchronized.data <- lapply(enhanced.data, function(x){
   #   x %>%
   #     transmute(datetime = floor_date(datetime, "minute"),
@@ -82,29 +84,25 @@ robo.read2 <- function(folder.path = NULL,
       body.temp = rowMeans(across(starts_with("body.temp")), na.rm = TRUE)
     )
 
-
-  # combined.data <- imap(synchronized.data, ~ {
-  #   rename(.x, !!paste0("body.temp", .y) := body.temp)
-  # }) %>%
-  #   reduce(full_join, by = "datetime")
-
-
-
-
-  summarized.data <- synchronized.data %>%
-    mutate(datetime = floor_date(datetime, summary.period)) %>%
-    group_by(datetime) %>%
-    summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
-    mutate(date = as_date(datetime),
-           time = as_hms(datetime),
-           .after = datetime
-    )
-
-  list(
+  output <- list(
     # original.data = original.data,
-       enhanced.data = enhanced.data,
-       synchronized.data = synchronized.data,
-       summarized.data = summarized.data
+    enhanced.data = enhanced.data,
+    synchronized.data = synchronized.data
   )
 
+  if (!is.null(summary.period)) {
+    summarized.data <- synchronized.data %>%
+      mutate(datetime = floor_date(datetime, summary.period)) %>%
+      group_by(datetime) %>%
+      summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
+      mutate(date = as_date(datetime),
+             time = as_hms(datetime),
+             .after = datetime
+      )
+
+
+    output$summarized.data <- summarized.data
+  }
+
+  output
 }

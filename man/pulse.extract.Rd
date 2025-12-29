@@ -14,7 +14,7 @@ pulse.extract(
 )
 }
 \arguments{
-\item{cor.threshold}{}
+\item{summary.fun}{}
 }
 \description{
 Pulse: Extracting Heart Rate

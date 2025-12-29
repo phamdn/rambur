@@ -53,7 +53,9 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   simulated.light <- dnorm(hour,
                            mean = peak.light.time - time.step / 2, # continuity correction
                            sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
-
+    # importance of continuity correction in SD? round(light) and floor(light) both result in correct light.duration
+    # without it: only floor(light) result in correct light.duration, round(light) increases light.duration
+    # consider using round(light) in future versions
   light <- simulated.light / max(simulated.light) * 100 # unit %
 
   # air and water temperature

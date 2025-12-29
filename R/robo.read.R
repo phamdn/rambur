@@ -10,12 +10,12 @@
 #'
 #' @examples
 #' robo.file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-#' robo.data <- robo.read(robo.file)
-#' robo.data
+#' robo.read(robo.file)
+#' robo.read(robo.file, summary.period = "hour")
 robo.read <- function(file.path,
                       metadata.lines = 21,
                       timezone = "",
-                      summary.period = "hour"){
+                      summary.period = NULL){
 
   # notice about time zone
   if (timezone == "") {
@@ -36,19 +36,25 @@ robo.read <- function(file.path,
               body.temp = temp
            ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
 
-  summarized.data <- enhanced.data %>%
-    mutate(datetime = floor_date(datetime, summary.period)) %>%
-    group_by(datetime) %>%
-    summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
-    mutate(date = as_date(datetime),
-           time = as_hms(datetime),
-           .after = datetime
-    )
-
-  list(
+  output <-   list(
     # original.data = original.data,
-       enhanced.data = enhanced.data,
-       summarized.data = summarized.data
+    enhanced.data = enhanced.data
   )
+
+  if (!is.null(summary.period)) {
+    summarized.data <- enhanced.data %>%
+      mutate(datetime = floor_date(datetime, summary.period)) %>%
+      group_by(datetime) %>%
+      summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
+      mutate(date = as_date(datetime),
+             time = as_hms(datetime),
+             .after = datetime
+      )
+
+    output$summarized.data <- summarized.data
+
+  }
+
+  output
 
 }

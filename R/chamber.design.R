@@ -53,7 +53,7 @@ chamber.design <- function(daily.settings,
       )
     ) %>%
     mutate(datetime = force_tz(datetime, tzone = timezone), # chamber uses UTC timestamp but implements it as local time
-           date = as_date(datetime),
+           date = as_date(datetime), # better than base R as.Date() in preserving correct time zone
            time = as_hms(datetime),
            .after = datetime
            )

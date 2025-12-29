@@ -9,7 +9,7 @@ robo.read2(
   file.name = ".csv",
   metadata.lines = 21,
   timezone = "",
-  summary.period = "hour"
+  summary.period = NULL
 )
 }
 \arguments{
@@ -20,6 +20,6 @@ Robomussels: Reading Multiple CSV Records
 }
 \examples{
 robo.folder <- system.file("extdata/robo", package = "rambur")
-robo.data2 <- robo.read2(robo.folder)
-robo.data2
+robo.read2(robo.folder)
+robo.read2(robo.folder, summary.period = "hour")
 }

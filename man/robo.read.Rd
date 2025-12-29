@@ -4,12 +4,7 @@
 \alias{robo.read}
 \title{Robomussel: Reading a Single CSV Record}
 \usage{
-robo.read(
-  file.path,
-  metadata.lines = 21,
-  timezone = "",
-  summary.period = "hour"
-)
+robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 }
 \arguments{
 \item{summary.period}{}
@@ -19,6 +14,6 @@ Robomussel: Reading a Single CSV Record
 }
 \examples{
 robo.file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
-robo.data <- robo.read(robo.file)
-robo.data
+robo.read(robo.file)
+robo.read(robo.file, summary.period = "hour")
 }
