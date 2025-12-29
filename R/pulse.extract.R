@@ -13,11 +13,12 @@
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
+#' pulse.extract(pulse.data)
 #' pulse.extract(pulse.data, cor.threshold = 0.4, summary.period = "30 minutes")
 pulse.extract <- function(data,
                           sampling.rate = NULL, cor.threshold = 0.4,
                           time.window = "minute",
-                          summary.period = "hour", summary.fun = "median"){
+                          summary.period = NULL, summary.fun = "median"){
 
   # infer sampling rate Hz based on input data
   # use median, as the diff bw 2 timestamps are sometimes higher than usual, e.g., 00.390 - 59.989 = 0.41 s, not 0.2 s as typical for 5 Hz
@@ -41,30 +42,35 @@ pulse.extract <- function(data,
            .after = datetime
     )
 
-  # helper for central tendency
-  central <- function(x,
-                      na.rm,
-                     type = c("median", "mean")) {
-    type <- match.arg(type)
-    switch(type,
-           mean = mean(x, na.rm = na.rm),
-           median = median(x, na.rm = na.rm)
-           )
+  output <- list(window.hr = window.hr)
+
+  if (!is.null(summary.period)) {
+    # helper for central tendency
+    central <- function(x,
+                        na.rm,
+                        type = c("median", "mean")) {
+      type <- match.arg(type)
+      switch(type,
+             mean = mean(x, na.rm = na.rm),
+             median = median(x, na.rm = na.rm)
+      )
+    }
+
+    summarized.hr <- window.hr %>%
+      mutate(datetime = floor_date(datetime, summary.period)) %>%
+      group_by(datetime) %>%
+      # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
+      summarize(across(where(is.numeric),
+                       ~ ifelse(mean(!is.na(.x)) >= 0.1, central(.x, na.rm = TRUE, type = summary.fun), NA)
+      )) %>% # or only calculate with enough observations like more than 1/10 non missing
+      mutate(date = as_date(datetime),
+             time = as_hms(datetime),
+             .after = datetime
+      )
+
+    output$summarized.hr <- summarized.hr
+
   }
 
-  summarized.hr <- window.hr %>%
-    mutate(datetime = floor_date(datetime, summary.period)) %>%
-    group_by(datetime) %>%
-    # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
-    summarize(across(where(is.numeric),
-                     ~ ifelse(mean(!is.na(.x)) >= 0.1, central(.x, na.rm = TRUE, type = summary.fun), NA)
-                     )) %>% # or only calculate with enough observations like more than 1/10 non missing
-    mutate(date = as_date(datetime),
-           time = as_hms(datetime),
-           .after = datetime
-    )
-
-
-  list(window.hr = window.hr,
-       summarized.hr = summarized.hr)
+  output
 }

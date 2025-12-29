@@ -9,7 +9,7 @@ pulse.extract(
   sampling.rate = NULL,
   cor.threshold = 0.4,
   time.window = "minute",
-  summary.period = "hour",
+  summary.period = NULL,
   summary.fun = "median"
 )
 }
@@ -22,5 +22,6 @@ Pulse: Extracting Heart Rate
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
+pulse.extract(pulse.data)
 pulse.extract(pulse.data, cor.threshold = 0.4, summary.period = "30 minutes")
 }
