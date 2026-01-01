@@ -88,11 +88,23 @@ chamber.read <- function(folder.path = NULL,
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(actual.temp, actual.tide, actual.light), mean, na.rm = TRUE)) %>% # better to be more selective in what to summarize here
+    summarize(across(c(actual.light, actual.tide, actual.temp), mean, na.rm = TRUE)) %>% # better to be more selective in what to summarize here
     mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
            time = as_hms(datetime),
            .after = datetime
-           )
+           ) %>%
+    mutate(
+      tide.trend = c(sign(diff(actual.tide)), NA), #forward-looking trend
+      tide.state = case_when(
+        actual.tide == 0 ~ "Low",
+        actual.tide == 1 ~ "High",
+        tide.trend == 1 ~ "Flood",
+        tide.trend == -1 ~ "Ebb",
+        TRUE ~ NA),
+      state.steps = sequence(rle(tide.state)$lengths),
+      .after = actual.tide,
+      tide.trend = NULL # remove afterward
+    )
 
   list(original.data = original.data, # keep to understand NA problems
        # problems = problems,
