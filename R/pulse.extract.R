@@ -14,11 +14,12 @@
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
 #' pulse.extract(pulse.data)
-#' pulse.extract(pulse.data, cor.threshold = 0.4, summary.period = "30 minutes")
+#' pulse.extract(pulse.data, summary.period = "30 minutes")
+#' pulse.extract(pulse.data, summary.period = "30 minutes", summary.fun = "median")
 pulse.extract <- function(data,
                           sampling.rate = NULL, cor.threshold = 0.4,
                           time.window = "minute",
-                          summary.period = NULL, summary.fun = "median",
+                          summary.period = NULL, summary.fun = "mean",
                           nonNA.threshold = 0.1){
 
   # infer sampling rate Hz based on input data
