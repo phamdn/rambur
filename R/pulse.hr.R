@@ -11,14 +11,19 @@
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
 #' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" & datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
-                     intermediate = TRUE
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" & datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" & datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+#'
+pulse.hr <- function(signal, sampling.rate = 5,
+                     score.exponents = c(2, 1), cor.threshold = 0.4,
+                     diagnostics = TRUE
                      ){
 
   # autocorrelation
+  lag.max <- 1/2 * 60 * sampling.rate # No. data points in half a minute (min detectable hr = 2 bpm)
+
   ac.list <- acf(signal,
-                 lag.max = 1/2 * 60 * sampling.rate,
-                 # data points in half a minute (min detectable hr = 2 bpm)
+                 lag.max = lag.max,
                  # lag.max = min(c(NROW(signal) / 2, 1 * 60 * sampling.rate)),
                  # half of the signal length but no more than 1 minute (min detectable hr = 1 bpm)
                  # use NROW instead of length() to suit 1 column matrix or dataframe
@@ -32,87 +37,55 @@ pulse.hr <- function(signal, sampling.rate = 5, cor.threshold = 0.4,
   locmax.idx <- which(diff(sign(diff(ac$cor))) == -2) + 1
   locmax <- ac[locmax.idx, ]
 
-  # filter out qualified peaks using threshold
-  qualified <- subset(locmax, cor >= cor.threshold)
-  qualified.count <- nrow(qualified)
+  # compute score and hr
+  locmax$score <- ifelse(locmax$cor <= 0, # only calculate score for positive cor
+                         NA,
+                         (locmax$cor)^score.exponents[1] / (locmax$lag)^score.exponents[2]
+                         )
 
-  if (intermediate) {
+  locmax$hr <- 60 / (locmax$lag / sampling.rate) #beats per minute
+
+  # best candidate
+  highest.score <- locmax[which.max(locmax$score), ]
+
+  # quality check for cor
+  qualified.cor <- highest.score$cor >= cor.threshold
+
+  # quality check for lag
+  # trivial rhythms: no negative correlation occur before the dominant peak
+  segment <- subset(ac, lag < highest.score$lag) # segment preceding the dominant peak
+  qualified.lag <- any(segment$cor < 0)
+
+  # final hr
+  if (qualified.cor & qualified.lag) {
+    hr <- highest.score$hr
+  }
+  else hr <- NA
+
+  # output list
+  output <- list(
+    # ac.list = ac.list,
+    # ac = ac,
+    locmax = locmax,
+    highest.score = highest.score,
+    qualified.cor = qualified.cor,
+    qualified.lag = qualified.lag,
+    hr = hr)
+
+  # diagnostics
+  if (diagnostics) {
     plot(signal, type = "l", main = "Photoplethysmogram", ylab = "IR signal")
     plot(ac.list, main = "Autocorrelogram")
-    plot(locmax, type = "o", main = "Local maxima", xlab = "Lag", ylab = "Pearson correlation", ylim = c(-0.1, 1))
-    lines(qualified, col = 4)
-    abline(h = cor.threshold, col = 3, lty = 2)
-    abline(h = 0, col = 2, lty = 2)
+    plot(locmax$lag, locmax$cor, type = "o",
+         main = "Local maxima", xlab = "Lag", ylab = "Pearson correlation",
+         xlim = c(0, lag.max), ylim = c(0, 1))
+    points(highest.score$lag, highest.score$cor, col = 2, cex = 3)
+    text(highest.score$lag, highest.score$cor, labels = paste("HR =", round(highest.score$hr, 1), "bpm"),
+         pos = 3, offset = 1, col = 2)
+    abline(h = cor.threshold, col = 4, lty = 2)
+    # abline(h = 0, col = 2, lty = 2)
+    print(output)
   }
 
-  # find "the" dominant peak
-  if (qualified.count == 0) {
-    dominant <- qualified[NA_integer_, ] # clearer way to return NAs
-    # dominant <- qualified
-    # dominant[1, ] <- c(NA, NA)
-    # dominant <- qualified[1, ] # will also return a row of NAs if count = 0
-    # message("threshold not met")
-  }
-
-  if (qualified.count == 1) {
-    dominant <- qualified
-    # dominant <- qualified[1, ] # same effect as the below
-  }
-
-  # if (qualified.count <= 1) { # combine both cases of 0 and 1
-  #   dominant <- qualified[1, ]
-  # }
-
-  if (qualified.count >= 2) {
-    ### old method
-    # highest.idx <- which.max(qualified$cor) # which.max always returns one index despite multiple equal maxs
-    # if (highest.idx == 1) {
-    #   dominant <- qualified[1, ]
-    # } else {
-    #   ratio <- qualified$cor[1:(highest.idx - 1)] / max(qualified$cor)
-    #   if (all(ratio < 0.95)) { # heuristic threshold
-    #     dominant <- qualified[highest.idx, ]
-    #   } else { # similar in strength, choose the earliest
-    #     dominant <- qualified[which(ratio >= 0.95)[1], ]
-    #   }
-    # }
-
-    qualified.trend <- sign(diff(qualified$cor))
-
-    if (all(qualified.trend %in% c(-1, 0))) { # monotonically decreasing
-      dominant <- qualified[1, ]
-    } else {
-      dominant <- qualified[NA_integer_, ]
-      # dominant <- qualified[1 + qualified.count, ] # a non-existent row, will output a row of NA
-      # message("non-monotone")
-    }
-
-  }
-
-  # check for trivial rhythms
-  if (!is.na(dominant$lag)) {
-    segment <- subset(ac, lag < dominant$lag) # segment preceding the dominant peak
-    if (all(segment$cor >= 0)) { # in case no negative correlation occur before the dominant peak
-      dominant <- qualified[NA_integer_, ]
-      # dominant[1, ] <- c(NA, NA)
-      # message("trivial rhythms")
-    }
-  }
-
-  # calculate heart rate
-  hr <- 60 / (dominant$lag / sampling.rate)
-
-  # result as a numeric
-  if (!intermediate) {
-    return(hr)
-  }
-
-  # results as a list
-  list(
-      # ac.list = ac.list,
-       # ac = ac,
-       locmax = locmax,
-       qualified = qualified,
-       dominant = dominant,
-       hr = hr)
+  output
 }

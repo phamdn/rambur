@@ -4,7 +4,13 @@
 \alias{pulse.hr}
 \title{Pulse Helper: Calculating Heart Rate}
 \usage{
-pulse.hr(signal, sampling.rate = 5, cor.threshold = 0.4, intermediate = TRUE)
+pulse.hr(
+  signal,
+  sampling.rate = 5,
+  score.exponents = c(2, 1),
+  cor.threshold = 0.4,
+  diagnostics = TRUE
+)
 }
 \arguments{
 \item{cor.threshold}{}
@@ -16,4 +22,7 @@ Pulse Helper: Calculating Heart Rate
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" & datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" & datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" & datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+
 }

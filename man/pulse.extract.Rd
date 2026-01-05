@@ -7,10 +7,12 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
+  score.exponents = c(2, 1),
   cor.threshold = 0.4,
+  diagnostics = FALSE,
   time.window = "minute",
   summary.period = NULL,
-  summary.fun = "mean",
+  summary.fun = "median",
   nonNA.threshold = 0.1
 )
 }
