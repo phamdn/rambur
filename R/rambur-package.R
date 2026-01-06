@@ -4,7 +4,7 @@
 ## usethis namespace: start
 #' @import cowplot
 #' @import ggplot2
-#' @importFrom dplyr %>% mutate transmute c_across select across summarize group_by relocate full_join case_when
+#' @importFrom dplyr %>% mutate transmute c_across select across summarize group_by relocate full_join case_when cur_group cur_column
 #' @importFrom ggtext element_markdown
 #' @importFrom hms as_hms
 #' @importFrom lubridate round_date floor_date as_date force_tz

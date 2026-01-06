@@ -34,12 +34,16 @@ pulse.extract <- function(data, sampling.rate = NULL,
   window.hr <- data %>%
     mutate(datetime = floor_date(datetime, time.window)) %>%
     group_by(datetime) %>%
-    summarize(across(where(is.numeric), function(x) pulse.hr(x,
-                                                            sampling.rate = sampling.rate,
-                                                            score.exponents = score.exponents,
-                                                            cor.threshold = cor.threshold,
-                                                            diagnostics = diagnostics
-                                                            )$hr
+    summarize(across(where(is.numeric), function(x) {
+      if (diagnostics) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
+
+      pulse.hr(x,
+               sampling.rate = sampling.rate,
+               score.exponents = score.exponents,
+               cor.threshold = cor.threshold,
+               diagnostics = diagnostics
+      )$hr
+    }
                      )) %>%
     mutate(date = as_date(datetime),
            time = as_hms(datetime),
