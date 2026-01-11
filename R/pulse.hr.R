@@ -16,7 +16,7 @@
 #' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" & datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 pulse.hr <- function(signal, sampling.rate = 5,
                      score.exponents = c(2, 1), cor.threshold = 0.4,
-                     diagnostics = TRUE
+                     diagnostics = TRUE, PPG.only = FALSE
                      ){
 
   # autocorrelation
@@ -80,18 +80,23 @@ pulse.hr <- function(signal, sampling.rate = 5,
     hr = hr)
 
   # diagnostics
+
   if (diagnostics) {
     plot(signal, type = "l", main = "Photoplethysmogram", ylab = "IR signal")
-    plot(ac.list, main = "Autocorrelogram")
-    plot(locmax$lag, locmax$cor, type = "o",
-         main = "Local maxima", xlab = "Lag", ylab = "Pearson correlation",
-         xlim = c(0, lag.max), ylim = c(0, 1))
-    points(highest.score$lag, highest.score$cor, col = 2, cex = 3)
-    text(highest.score$lag, highest.score$cor, labels = paste("HR =", round(highest.score$hr, 1), "bpm"),
-         pos = 3, offset = 1, col = 2)
-    abline(h = cor.threshold, col = 4, lty = 2)
-    # abline(h = 0, col = 2, lty = 2)
-    print(output)
+
+    if (!PPG.only) { #hide these diagnostics for objective human counting of hr
+      plot(ac.list, main = "Autocorrelogram")
+      plot(locmax$lag, locmax$cor, type = "o",
+           main = "Local maxima", xlab = "Lag", ylab = "Pearson correlation",
+           xlim = c(0, lag.max), ylim = c(0, 1))
+      points(highest.score$lag, highest.score$cor, col = 2, cex = 3)
+      text(highest.score$lag, highest.score$cor, labels = paste("HR =", round(highest.score$hr, 1), "bpm"),
+           pos = 3, offset = 1, col = 2)
+      abline(h = cor.threshold, col = 4, lty = 2)
+      # abline(h = 0, col = 2, lty = 2)
+      print(output)
+    }
+
   }
 
   output

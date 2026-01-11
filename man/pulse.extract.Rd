@@ -10,6 +10,7 @@ pulse.extract(
   score.exponents = c(2, 1),
   cor.threshold = 0.4,
   diagnostics = FALSE,
+  PPG.only = FALSE,
   time.window = "minute",
   summary.period = NULL,
   summary.fun = "median",

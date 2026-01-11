@@ -18,7 +18,7 @@
 #' pulse.extract(pulse.data, summary.period = "30 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
                           score.exponents = c(2, 1), cor.threshold = 0.4,
-                          diagnostics = FALSE,
+                          diagnostics = FALSE, PPG.only = FALSE,
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "median",
                           nonNA.threshold = 0.1){
@@ -41,7 +41,8 @@ pulse.extract <- function(data, sampling.rate = NULL,
                sampling.rate = sampling.rate,
                score.exponents = score.exponents,
                cor.threshold = cor.threshold,
-               diagnostics = diagnostics
+               diagnostics = diagnostics,
+               PPG.only = PPG.only
       )$hr
     }
                      )) %>%

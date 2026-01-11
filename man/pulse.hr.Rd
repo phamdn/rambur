@@ -9,7 +9,8 @@ pulse.hr(
   sampling.rate = 5,
   score.exponents = c(2, 1),
   cor.threshold = 0.4,
-  diagnostics = TRUE
+  diagnostics = TRUE,
+  PPG.only = FALSE
 )
 }
 \arguments{
