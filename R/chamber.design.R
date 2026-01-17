@@ -79,14 +79,17 @@ chamber.design <- function(daily.settings,
       dir.create(folder.path, recursive = TRUE)
     }
 
-    design.xlsx <- subset(design,
+    design.csv <- subset(design,
                           select = c(datetime, exp.temp, tide, light, wc, profile))
 
-    design.txt <- design$profile
+    Profile.txt <- design$profile
 
-    write_xlsx(design.xlsx, file.path(folder.path, "Profile.xlsx"))
+    # write_xlsx(design.xlsx, file.path(folder.path, "Profile.xlsx")) # datetime column in excel shows UTC time!
+    write.csv(design.csv, file.path(folder.path, "design.csv"),
+              quote = FALSE,
+              row.names = FALSE)
 
-    write.table(design.txt, file.path(folder.path, "Profile.txt"),
+    write.table(Profile.txt, file.path(folder.path, "Profile.txt"),
                 quote = FALSE,
                 row.names = FALSE,
                 col.names = FALSE)

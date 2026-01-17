@@ -11,7 +11,6 @@
 #' @importFrom purrr reduce imap
 #' @importFrom readr read_csv cols col_double col_datetime problems
 #' @importFrom stats dnorm
-#' @importFrom utils head tail write.table
-#' @importFrom writexl write_xlsx
+#' @importFrom utils head tail write.table write.csv
 ## usethis namespace: end
 NULL
