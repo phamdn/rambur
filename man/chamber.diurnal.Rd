@@ -20,10 +20,36 @@ chamber.diurnal(
 )
 }
 \arguments{
-\item{water.change.time}{}
+\item{day}{an integer, the day of experiment.}
+
+\item{time.step}{a numeric, the resolution of the profile in hours.}
+
+\item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
+
+\item{peak.light.time}{a numeric, time of day when light intensity peaks.}
+
+\item{mean.air.temp}{a numeric, the mean of air temperature during the day in °C.}
+
+\item{range.air.temp}{a numeric, the range of air temperature during the day in °C.}
+
+\item{mean.water.temp}{a numeric, the mean of water temperature during the day in °C.}
+
+\item{range.water.temp}{a numeric, the range of water temperature during the day in °C.}
+
+\item{peak.temp.time}{a numeric, time of day when temperature peaks.}
+
+\item{tidal.cycle}{a vector of 0 or 1, the tidal cycle (e.g., semi-diurnal)}
+
+\item{tidal.start.time}{a numeric, time of day when tidal cycle starts.}
+
+\item{water.change.time}{a numeric, time of day when automatic water change starts.}
+}
+\value{
+a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
+as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}
 }
 \description{
-Chamber Helper: Designing Diurnal Profile
+A helper function to design the diurnal patterns of environmental variables.
 }
 \examples{
 # default

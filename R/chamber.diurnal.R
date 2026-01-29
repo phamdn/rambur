@@ -1,19 +1,22 @@
 #' Chamber Helper: Designing Diurnal Profile
 #'
-#' @param day
-#' @param time.step
-#' @param tidal.cycle
-#' @param tidal.start.time
-#' @param mean.air.temp
-#' @param range.air.temp
-#' @param mean.water.temp
-#' @param range.water.temp
-#' @param peak.temp.time
-#' @param light.duration
-#' @param peak.light.time
-#' @param water.change.time
+#' A helper function to design the diurnal patterns of environmental variables.
 #'
-#' @returns
+#' @param day an integer, the day of experiment.
+#' @param time.step a numeric, the resolution of the profile in hours.
+#' @param light.duration a numeric, light duration (photoperiod) in hours, with light intensity of at least 1%.
+#' @param peak.light.time a numeric, time of day when light intensity peaks.
+#' @param mean.air.temp a numeric, the mean of air temperature during the day in °C.
+#' @param range.air.temp a numeric, the range of air temperature during the day in °C.
+#' @param mean.water.temp a numeric, the mean of water temperature during the day in °C.
+#' @param range.water.temp a numeric, the range of water temperature during the day in °C.
+#' @param peak.temp.time a numeric, time of day when temperature peaks.
+#' @param tidal.cycle a vector of 0 or 1, the tidal cycle (e.g., semi-diurnal)
+#' @param tidal.start.time a numeric, time of day when tidal cycle starts.
+#' @param water.change.time a numeric, time of day when automatic water change starts.
+#'
+#' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
+#' as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}
 #' @export
 #'
 #' @examples

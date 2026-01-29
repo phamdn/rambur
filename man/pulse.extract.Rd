@@ -14,7 +14,7 @@ pulse.extract(
   time.window = "minute",
   summary.period = NULL,
   summary.fun = "median",
-  nonNA.threshold = 0.1
+  nonNA.threshold = 0
 )
 }
 \arguments{
@@ -27,6 +27,6 @@ Pulse: Extracting Heart Rate
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 pulse.extract(pulse.data)
-pulse.extract(pulse.data, summary.period = "30 minutes")
-pulse.extract(pulse.data, summary.period = "30 minutes", summary.fun = "median")
+pulse.extract(pulse.data, summary.period = "15 minutes")
+pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "mean")
 }
