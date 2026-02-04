@@ -81,19 +81,19 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   tide <- rep(tidal.cycle, each = steps.per.entry) # has the length of lunar.steps NOT solar.steps
 
-  # if (tidal.start.time > 0) {
-    steps.shift <- tidal.start.time / time.step
+  # if (tidal.start.time > 0) { # not needed anymore
+    steps.shift <- round(tidal.start.time / time.step) #add round to fix floating-point precision
 
-    if (steps.shift != round(steps.shift)) {
-      stop("'tidal.start.time' divided by 'time.step' must result in a natural number.")
-    }
+    # if (steps.shift != round(steps.shift)) {
+    #   stop("'tidal.start.time' divided by 'time.step' must result in a natural number.")
+    # } dont use, cause error due to floating-point precision, consider all.equal in future
 
-    tide <- c( # NOW has the length of solar.steps
+    tide <- c(
       tail(tide, steps.shift), # take some tail values and put forward
       head(tide, solar.steps - steps.shift) # take the head values and move behind
       # head(tide, - steps.shift) works in case of 24h lunar day but looks confusing
       # not work for tidal.start.time = 0 or lunar day > 24h
-    )
+    ) # NOW has the length of solar.steps
   # }
 
   # exposure temperature
