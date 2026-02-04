@@ -37,18 +37,20 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        mean.air.temp = 17, range.air.temp = 8,
                        mean.water.temp = 19, range.water.temp = 1,
                        peak.temp.time = 15,
-                       tidal.cycle =  c(0, 1, 0, 1), tidal.start.time = 0,
+                       tidal.cycle =  c(0, 1, 0, 1),
+                       lunar.day = 24, tidal.start.time = 0,
                        water.change.time = NA
 ){
 
   # set time
-  steps <- 24 / time.step
+  solar.day <- 24
+  solar.steps <- solar.day / time.step
 
-  if (steps != round(steps)) {
+  if (solar.steps != round(solar.steps)) {
     stop("24 (h) divided by 'time.step' must result in a natural number.")
   }
 
-  hour <- seq(from = 0, by = time.step, length.out = steps)
+  hour <- seq(from = 0, by = time.step, length.out = solar.steps)
 
   # day.dec <- day + hour / 24 # calculate day decimal
 
@@ -70,27 +72,35 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   water.temp <- (mean.water.temp - range.water.temp/2) + simulated.temperature * range.water.temp
 
   # tide
-  steps.per.entry <- steps / length(tidal.cycle)
+  lunar.steps <- lunar.day / time.step
+  steps.per.entry <- lunar.steps / length(tidal.cycle)
 
   if (steps.per.entry != round(steps.per.entry)) {
     stop("The length of 'tidal.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal).")
   }
 
-  tide <- rep(tidal.cycle, each = steps.per.entry)
+  tide <- rep(tidal.cycle, each = steps.per.entry) # has the length of lunar.steps NOT solar.steps
 
-  if (tidal.start.time > 0) {
+  # if (tidal.start.time > 0) {
     steps.shift <- tidal.start.time / time.step
-    tide <- c(
-      tail(tide, steps.shift),
-      head(tide, -steps.shift)
+
+    if (steps.shift != round(steps.shift)) {
+      stop("'tidal.start.time' divided by 'time.step' must result in a natural number.")
+    }
+
+    tide <- c( # NOW has the length of solar.steps
+      tail(tide, steps.shift), # take some tail values and put forward
+      head(tide, solar.steps - steps.shift) # take the head values and move behind
+      # head(tide, - steps.shift) works in case of 24h lunar day but looks confusing
+      # not work for tidal.start.time = 0 or lunar day > 24h
     )
-  }
+  # }
 
   # exposure temperature
   exp.temp <- ifelse(tide == 0, air.temp, water.temp)
 
   # water change
-  wc <- rep(0, steps) # no water change as default
+  wc <- rep(0, solar.steps) # no water change as default
 
   if (!is.na(water.change.time)) wc[hour == water.change.time] <- 1
 

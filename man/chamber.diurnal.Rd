@@ -15,6 +15,7 @@ chamber.diurnal(
   range.water.temp = 1,
   peak.temp.time = 15,
   tidal.cycle = c(0, 1, 0, 1),
+  lunar.day = 24,
   tidal.start.time = 0,
   water.change.time = NA
 )
