@@ -58,12 +58,21 @@ chamber.design <- function(daily.settings,
            .after = datetime
            )
 
-  # check
+  # check profile: length of each line
   invalid <- which(nchar(design$profile) != 19)
   if (length(invalid) > 0) {
     warning(
       paste("Line(s)", paste(invalid, collapse = " "),
             "of 'profile' are not 19 characters long"
+      )
+    )
+  }
+
+  # check profile: no. of lines
+  if (nrow(design) > 1000) {
+    warning(
+      paste("'profile' has", paste(nrow(design), collapse = " "),
+            "lines. The current limit is 1000 lines."
       )
     )
   }
