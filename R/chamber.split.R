@@ -21,8 +21,7 @@ chamber.split <- function(file.path,
   end.lines <- start.lines + max.lines - 1
   end.lines[end.lines > total.lines] <- total.lines
 
-  message("Read '", basename(file.path), "' with ", total.lines, " lines.")
-  message("Splitting into ...")
+  message("splitting '", basename(file.path), "' with ", total.lines, " lines into:")
 
   for (i in 1:length(start.lines)){
 
@@ -31,7 +30,11 @@ chamber.split <- function(file.path,
 
     sub.profile <- profile[start.line:end.line]
 
-    sub.folder.path <- file.path(folder.path, sprintf("part-%02d", i))
+    start.time <- head(sub.profile, 1) %>% substr(1, 10) %>% as.numeric %>% as.POSIXct(tz = "UTC") %>% format("%Y%m%d_%H%M")
+    end.time <- tail(sub.profile, 1) %>% substr(1, 10) %>% as.numeric %>% as.POSIXct(tz = "UTC") %>% format("%Y%m%d_%H%M")
+
+    # sub.folder.path <- file.path(folder.path, sprintf("part-%02d", i))
+    sub.folder.path <- file.path(folder.path, paste0(start.time, "_to_", end.time)) #more informative sub folder names
 
     if (!dir.exists(sub.folder.path)) {
       dir.create(sub.folder.path, recursive = TRUE)
@@ -42,7 +45,7 @@ chamber.split <- function(file.path,
                 row.names = FALSE,
                 col.names = FALSE)
 
-    message(sprintf("%s/Profile.txt (Lines %d - %d)",
+    message(sprintf("%s/Profile.txt (lines %d - %d)",
                     sub.folder.path, start.line, end.line))
 
   }
