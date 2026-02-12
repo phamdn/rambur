@@ -4,7 +4,7 @@
 \name{rambur-package}
 \alias{rambur}
 \alias{rambur-package}
-\title{rambur: Research Assistant in Marine Biology at University of Rostock}
+\title{rambur: Research Assistant in Marine Biology at the University of Rostock}
 \description{
 A toolkit for your intertidal experiments.
 }

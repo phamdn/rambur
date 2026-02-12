@@ -33,6 +33,7 @@
 #'   water.change.time = 16.5)
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
+                       light.pattern = "normal.100", light.max = 100,
                        light.duration = 16, peak.light.time = 13,
                        mean.air.temp = 17, range.air.temp = 8,
                        mean.water.temp = 19, range.water.temp = 1,
@@ -55,13 +56,29 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # day.dec <- day + hour / 24 # calculate day decimal
 
   # light
+  if (light.pattern == "normal.100"){ # to be deprecated in future versions
+  ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
   simulated.light <- dnorm(hour,
                            mean = peak.light.time - time.step / 2, # continuity correction
                            sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
-    # importance of continuity correction in SD? round(light) and floor(light) both result in correct light.duration
-    # without it: only floor(light) result in correct light.duration, round(light) increases light.duration
-    # consider using round(light) in future versions
   light <- simulated.light / max(simulated.light) * 100 # unit %
+  light <- floor(light) # 0.6% will be 0%, not 1%
+  }
+
+  if (light.pattern == "normal"){
+    simulated.light <- dnorm(hour,
+                             mean = peak.light.time - time.step / 2,
+                             sd = (light.duration - time.step) / 6)
+
+    strong.light <- simulated.light / max(simulated.light) * 100
+    strong.light <- floor(strong.light)
+
+    reduced.light <- strong.light * (light.max / 100)
+    reduced.light <- floor(reduced.light)
+
+    light <- ifelse(strong.light >= 1 & reduced.light == 0, 1, reduced.light)
+  }
+
 
   # air and water temperature
   simulated.temperature <-
@@ -108,7 +125,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   output <- data.frame(day = day,
                        hour = hour,
                        # day.dec = day.dec,
-                       light = floor(light), # 0.6% will be 0%, not 1%
+                       light = light,
                        air.temp = round(air.temp, digits = 1),
                        water.temp = round(water.temp, digits = 1),
                        tide = tide,

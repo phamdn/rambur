@@ -7,6 +7,8 @@
 chamber.diurnal(
   day = 0,
   time.step = 1,
+  light.pattern = "normal.100",
+  light.max = 100,
   light.duration = 16,
   peak.light.time = 13,
   mean.air.temp = 17,
