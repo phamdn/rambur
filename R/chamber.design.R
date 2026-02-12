@@ -61,20 +61,12 @@ chamber.design <- function(daily.settings,
   # check profile: length of each line
   invalid <- which(nchar(design$profile) != 19)
   if (length(invalid) > 0) {
-    warning(
-      paste("Line(s)", paste(invalid, collapse = " "),
-            "of 'profile' are not 19 characters long"
-      )
-    )
+    warning("Line(s) ", paste(invalid, collapse = " "), " of the profile are not 19 characters long")
   }
 
   # check profile: no. of lines
   if (nrow(design) > 1000) {
-    warning(
-      paste("'profile' has", paste(nrow(design), collapse = " "),
-            "lines. The current limit is 1000 lines."
-      )
-    )
+    warning("The profile has ", nrow(design), " lines, which exceeds the 1000-line limit (firmware v8.09). Please use chamber.split()")
   }
 
   # export
@@ -108,6 +100,6 @@ chamber.design <- function(daily.settings,
   daily.settings$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(daily.settings$day, units = "days")
                 # chamber use UTC timestamp but implement it as local time
 
-  # apply diurnal expansion to daily.settings to get expanded design
+  # essentially, apply diurnal expansion to daily.settings to get expanded design
   list(daily.settings = daily.settings, design = design)
 }

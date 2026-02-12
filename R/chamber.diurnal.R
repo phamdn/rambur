@@ -38,8 +38,9 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        mean.air.temp = 17, range.air.temp = 8,
                        mean.water.temp = 19, range.water.temp = 1,
                        peak.temp.time = 15,
+                       lunar.day = 24,
                        tidal.cycle =  c(0, 1, 0, 1),
-                       lunar.day = 24, tidal.start.time = 0,
+                       tidal.start.time = 0,
                        water.change.time = NA
 ){
 
