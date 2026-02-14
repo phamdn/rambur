@@ -64,8 +64,13 @@ chamber.read <- function(folder.path = NULL,
       # actual.temp.diff = apply(across(T1:T3), 1, function(x) diff(range(x))),
       room.temp = T6,
 
+      storage.target.temp = Base_setpoint,
+      storage.actual.temp1 = T4,
+      storage.actual.temp2 = T5,
+      storage.actual.temp = (T4 + T5)/2,
+
       target.tide = Tide,
-      working.tide = Tide_pump_state,
+      tide.pump = Tide_pump_state,
       actual.tide1 = WS1,
       actual.tide2 = WS2,
       actual.tide3 = WS3,
@@ -75,10 +80,19 @@ chamber.read <- function(folder.path = NULL,
       min.water2 = WS7,
       min.water3 = WS8,
       min.water = (WS6 + WS7 + WS8)/3,
+      max.water.upper = WS4,
+      max.water.lower = WS5,
       wc.out = Outlet_valve_state,
       wc.in = Inlet_valve_state,
 
       actual.light = `LED_intensity_%`,
+
+      heat.lamps = `Heat_Lamps_%`,
+      circulation.fan = Circle_fan_state,
+      exhaust.fan = Cool_fan_state,
+      water.heater = Water_Heater_state,
+      water.cooler = Water_Cooler_state,
+      cooler.pump = Cooler_pump_state,
 
       .keep = "unused", # can change to "none" to save disk space
       .before = 1
@@ -88,7 +102,7 @@ chamber.read <- function(folder.path = NULL,
     mutate(datetime = floor_date(datetime, summary.period)) %>%
     group_by(datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(actual.light, working.tide, actual.tide, actual.temp), mean, na.rm = TRUE)) %>% # better to be more selective in what to summarize here
+    summarize(across(c(actual.light, tide.pump, actual.tide, actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
     mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
            time = as_hms(datetime),
            .after = datetime
