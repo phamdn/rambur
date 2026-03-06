@@ -38,11 +38,12 @@ chamber.check <- function(design, chamber.data, robo.data = NULL,
 
   fig2 <- ggplot(data = design, aes(x = datetime, y = tide, color = "Designed")) +
     geom_step(linetype = 2) +
+    geom_step(data = chamber.data, aes(y = tide.pump, color = "Pump"), alpha = 0.5) +
     geom_step(data = chamber.data, aes(y = actual.tide, color = "Actual"), alpha = 0.8) +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    scale_color_manual(values = c("Designed" = 1, "Actual" = 4), breaks = c("Designed", "Actual")) +
+    scale_color_manual(values = c("Designed" = 1, "Actual" = 4, "Pump" = 6), breaks = c("Designed", "Actual", "Pump")) +
     labs(title = "Tide", x = NULL, y = NULL, color = NULL) +
     theme_minimal_grid() +
     theme(legend.position = "top")
