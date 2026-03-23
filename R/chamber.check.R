@@ -48,7 +48,11 @@ chamber.check <- function(design, chamber.data, robo.data = NULL,
     theme_minimal_grid() +
     theme(legend.position = "top")
 
-  temp.breaks <- pretty(range(design$exp.temp, chamber.data$actual.temp, chamber.data$room.temp, robo.data$body.temp))
+  temp.breaks <- pretty(range(design$exp.temp,
+                              chamber.data$actual.temp,
+                              chamber.data$room.temp,
+                              robo.data$body.temp,
+                              na.rm = TRUE))
   temp.breaks.range <- range(temp.breaks)
 
   fig3 <- ggplot(data = design, aes(x = datetime, y = exp.temp, color = "Designed")) +
