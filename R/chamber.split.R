@@ -1,8 +1,11 @@
-#' @param file.path
+#' Chamber: Splitting Profile
 #'
-#' @param max.lines
-#' @param overlap.lines
-#' @param folder.path
+#' A function to split the "Profile.txt" with more than 1000 lines into smaller files.
+#'
+#' @param file.path a character string, path to the original "Profile.txt" file.
+#' @param max.lines an integer, number of lines in new files.
+#' @param overlap.lines an integer, number of lines shared between two consecutive files.
+#' @param folder.path a character string, path to the new files after splitting.
 #'
 #' @export
 chamber.split <- function(file.path,

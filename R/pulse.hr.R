@@ -1,19 +1,28 @@
 #' Pulse Helper: Calculating Heart Rate
 #'
-#' @param signal
-#' @param sampling.rate
-#' @param cor.threshold
+#' A helper function to calculate heart rate
 #'
-#' @returns
+#' @param signal an integer vector, infrared signal from pulse device.
+#' @param sampling.rate an integer, sampling rate in Hz.
+#' @param cor.threshold a numeric, the correlation threshold for qualified signal.
+#' @param score.exponents a vector of two integers, exponents for the score.
+#' @param diagnostics a logical, whether to plot diagnostics.
+#' @param PPG.only a logical, whether to display only PPG, which is useful for data training.
+#'
+#' @returns a mixed list, \code{locmax} for local maxima, \code{highest.score} for the best peak, \code{qualified.cor} and \code{qualified.lag} for quality control, and \code{hr} for final heart rate.
 #' @export
 #'
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
-#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" & datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" & datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
-#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" & datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
-#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" & datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
+#' datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
+#' datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
+#' datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
+#' pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
+#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 pulse.hr <- function(signal, sampling.rate = 5,
                      score.exponents = c(2, 1), cor.threshold = 0.4,
                      diagnostics = TRUE, PPG.only = FALSE
@@ -59,7 +68,8 @@ pulse.hr <- function(signal, sampling.rate = 5,
 
     # quality check for lag
     # trivial rhythms: no negative correlation occur before the dominant peak
-    segment <- subset(ac, lag < highest.score$lag) # segment preceding the dominant peak
+    # segment <- subset(ac, lag < highest.score$lag) # segment preceding the dominant peak
+    segment <- ac[ac$lag < highest.score$lag, ] # to fix no visible binding for global variable issue caused by subset()
     qualified.lag <- any(segment$cor < 0)
 
     # final hr

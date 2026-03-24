@@ -13,20 +13,41 @@ pulse.extract(
   PPG.only = FALSE,
   time.window = "minute",
   summary.period = NULL,
-  summary.fun = "median",
+  summary.fun = "mean",
   nonNA.threshold = 0
 )
 }
 \arguments{
-\item{summary.fun}{}
+\item{data}{a data frame, records of signal. Use output of \code{\link{pulse.read}}.}
+
+\item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
+
+\item{score.exponents}{a vector of two integers, exponents for the score.}
+
+\item{cor.threshold}{a numeric, the correlation threshold for qualified signal.}
+
+\item{diagnostics}{a logical, whether to plot diagnostics.}
+
+\item{PPG.only}{a logical, whether to display only PPG, which is useful for data training.}
+
+\item{time.window}{a character string, window duration extract heart rate.}
+
+\item{summary.period}{a character string, duration to summarize the mean or median of the records.}
+
+\item{summary.fun}{a character string, central tendancy to summarize.}
+
+\item{nonNA.threshold}{a numeric, only summarize when the proportion of non missing values exceeds this threshold.}
+}
+\value{
+a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
 }
 \description{
-Pulse: Extracting Heart Rate
+A function to extract heart rate from records of pulse devices.
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 pulse.extract(pulse.data)
 pulse.extract(pulse.data, summary.period = "15 minutes")
-pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "mean")
+pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 }

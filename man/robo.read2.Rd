@@ -13,10 +13,21 @@ robo.read2(
 )
 }
 \arguments{
-\item{summary.period}{}
+\item{folder.path}{a character string, path to the folder.}
+
+\item{file.name}{a character string, filter the file name.}
+
+\item{metadata.lines}{an integer, number of lines to skip in the header.}
+
+\item{timezone}{a character string, time zone.}
+
+\item{summary.period}{a character string, duration to summarize the mean of the records. Optional.}
+}
+\value{
+a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{summarized.data} for enhanced, synchronized, and summarized records, respectively.
 }
 \description{
-Robomussels: Reading Multiple CSV Records
+A function to read the CSV Records of multiple robomussels.
 }
 \examples{
 robo.folder <- system.file("extdata/robo", package = "rambur")

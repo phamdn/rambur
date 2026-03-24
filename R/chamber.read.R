@@ -1,10 +1,15 @@
 #' Chamber: Reading Multiple CSV Records
 #'
-#' @param timezone
-#' @param folder.path
-#' @param metadata.lines
+#' A function to read the CSV records of intertidal chambers.
 #'
-#' @returns
+#' @param timezone a character string, time zone.
+#' @param folder.path a character string, path to the folder of CSV records.
+#' @param metadata.lines an integer, number of lines to skip in the header.
+#' @param file.name a character string, filter the file name.
+#' @param size.limits a vector of two numerics, minimum and maximum size in bytes.
+#' @param summary.period a character string, duration to summarize the mean of the records.
+#'
+#' @returns a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{summarized.data} for original, enhanced, and summarized records, respectively.
 #' @export
 #'
 #' @examples
@@ -50,62 +55,62 @@ chamber.read <- function(folder.path = NULL,
   enhanced.data <-
     na.omit(original.data) %>% # remove Reset lines otherwise as.POSIXct() returns error
     mutate(
-      datetime = as.POSIXct(paste(Date, Time), tz = timezone),
-      date = Date, # just <date> character/format from original data in local time zone
-      time = Time,
+      datetime = as.POSIXct(paste(.data$Date, .data$Time), tz = timezone),
+      date = .data$Date, # just <date> character/format from original data in local time zone
+      time = .data$Time,
 
-      target.temp = Top_setpoint,
-      actual.temp1 = T1,
-      actual.temp2 = T2,
-      actual.temp3 = T3,
-      actual.temp = (T1 + T2 + T3)/3, # should be the same as Top_avg unless rounding issue
+      target.temp = .data$Top_setpoint,
+      actual.temp1 = .data$T1,
+      actual.temp2 = .data$T2,
+      actual.temp3 = .data$T3,
+      actual.temp = (.data$T1 + .data$T2 + .data$T3)/3, # should be the same as Top_avg unless rounding issue
                                       # simply use mean() or sd() will not perform row-wise calculation
       # actual.temp.sd = apply(across(T1:T3), 1, sd),
       # actual.temp.diff = apply(across(T1:T3), 1, function(x) diff(range(x))),
-      room.temp = T6,
+      room.temp = .data$T6,
 
-      storage.target.temp = Base_setpoint,
-      storage.actual.temp1 = T4,
-      storage.actual.temp2 = T5,
-      storage.actual.temp = (T4 + T5)/2,
+      storage.target.temp = .data$Base_setpoint,
+      storage.actual.temp1 = .data$T4,
+      storage.actual.temp2 = .data$T5,
+      storage.actual.temp = (.data$T4 + .data$T5)/2,
 
-      target.tide = Tide,
-      tide.pump = Tide_pump_state,
-      actual.tide1 = WS1,
-      actual.tide2 = WS2,
-      actual.tide3 = WS3,
-      actual.tide = (WS1 + WS2 + WS3)/3,
+      target.tide = .data$Tide,
+      tide.pump = .data$Tide_pump_state,
+      actual.tide1 = .data$WS1,
+      actual.tide2 = .data$WS2,
+      actual.tide3 = .data$WS3,
+      actual.tide = (.data$WS1 + .data$WS2 + .data$WS3)/3,
 
-      min.water1 = WS6,
-      min.water2 = WS7,
-      min.water3 = WS8,
-      min.water = (WS6 + WS7 + WS8)/3,
-      max.water.upper = WS4,
-      max.water.lower = WS5,
-      wc.out = Outlet_valve_state,
-      wc.in = Inlet_valve_state,
+      min.water1 = .data$WS6,
+      min.water2 = .data$WS7,
+      min.water3 = .data$WS8,
+      min.water = (.data$WS6 + .data$WS7 + .data$WS8)/3,
+      max.water.upper = .data$WS4,
+      max.water.lower = .data$WS5,
+      wc.out = .data$Outlet_valve_state,
+      wc.in = .data$Inlet_valve_state,
 
-      actual.light = `LED_intensity_%`,
+      actual.light = .data$`LED_intensity_%`,
 
-      heat.lamps = `Heat_Lamps_%`,
-      circulation.fan = Circle_fan_state,
-      exhaust.fan = Cool_fan_state,
-      water.heater = Water_Heater_state,
-      water.cooler = Water_Cooler_state,
-      cooler.pump = Cooler_pump_state,
+      heat.lamps = .data$`Heat_Lamps_%`,
+      circulation.fan = .data$Circle_fan_state,
+      exhaust.fan = .data$Cool_fan_state,
+      water.heater = .data$Water_Heater_state,
+      water.cooler = .data$Water_Cooler_state,
+      cooler.pump = .data$Cooler_pump_state,
 
       .keep = "unused", # can change to "none" to save disk space
       .before = 1
     )
 
   summarized.data <- enhanced.data %>%
-    mutate(datetime = floor_date(datetime, summary.period)) %>%
-    group_by(datetime) %>%
+    mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+    group_by(.data$datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(actual.light, tide.pump, actual.tide, actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
-    mutate(date = as_date(datetime), # better than as.Date(datetime, tz = timezone)
-           time = as_hms(datetime),
-           .after = datetime
+    summarize(across(c(.data$actual.light, .data$tide.pump, .data$actual.tide, .data$actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
+    mutate(date = as_date(.data$datetime), # better than as.Date(datetime, tz = timezone)
+           time = as_hms(.data$datetime),
+           .after = .data$datetime
            )
 
   list(original.data = original.data, # keep to understand NA problems

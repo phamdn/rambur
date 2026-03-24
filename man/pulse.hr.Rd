@@ -14,16 +14,33 @@ pulse.hr(
 )
 }
 \arguments{
-\item{cor.threshold}{}
+\item{signal}{an integer vector, infrared signal from pulse device.}
+
+\item{sampling.rate}{an integer, sampling rate in Hz.}
+
+\item{score.exponents}{a vector of two integers, exponents for the score.}
+
+\item{cor.threshold}{a numeric, the correlation threshold for qualified signal.}
+
+\item{diagnostics}{a logical, whether to plot diagnostics.}
+
+\item{PPG.only}{a logical, whether to display only PPG, which is useful for data training.}
+}
+\value{
+a mixed list, \code{locmax} for local maxima, \code{highest.score} for the best peak, \code{qualified.cor} and \code{qualified.lag} for quality control, and \code{hr} for final heart rate.
 }
 \description{
-Pulse Helper: Calculating Heart Rate
+A helper function to calculate heart rate
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" & datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" & datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" & datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" & datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
+datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
+datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
+datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
+pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
+datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 }

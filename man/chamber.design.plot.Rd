@@ -7,10 +7,13 @@
 chamber.design.plot(df)
 }
 \arguments{
-\item{df}{}
+\item{df}{a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.}
+}
+\value{
+a list of six plots of environmental variables.
 }
 \description{
-Chamber: Plotting Multiday Profile
+A helper function to plot the multiday patterns of environmental variables.
 }
 \examples{
 # acclimation phase
@@ -20,6 +23,6 @@ mean.air.temp = 17, mean.water.temp = 19)
 acc.profile <- chamber.design(acc.setup,
 start.date = "2025-05-15", export = FALSE)
 
-chamber.design.plot(acc.profile$expansion)
+chamber.design.plot(acc.profile$design)
 
 }

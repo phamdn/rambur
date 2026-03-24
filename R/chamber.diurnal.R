@@ -11,12 +11,15 @@
 #' @param mean.water.temp a numeric, the mean of water temperature during the day in °C.
 #' @param range.water.temp a numeric, the range of water temperature during the day in °C.
 #' @param peak.temp.time a numeric, time of day when temperature peaks.
-#' @param tidal.cycle a vector of 0 or 1, the tidal cycle (e.g., semi-diurnal)
+#' @param tidal.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
 #' @param tidal.start.time a numeric, time of day when tidal cycle starts.
 #' @param water.change.time a numeric, time of day when automatic water change starts.
+#' @param light.pattern a character string, pattern of light. Default to "normal.100", indicating normal distribution with the maximum intensity of 100%.
+#' @param light.max a numeric, maximum light intensity.
+#' @param lunar.day a numeric, lunar day duration in hours. Default to 24, same as the solar day.
 #'
 #' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-#' as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}
+#' as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}.
 #' @export
 #'
 #' @examples

@@ -7,10 +7,13 @@
 chamber.diurnal.plot(df)
 }
 \arguments{
-\item{df}{}
+\item{df}{a data frame, output of \code{\link{chamber.diurnal}}.}
+}
+\value{
+a six-panel plot of environmental variables.
 }
 \description{
-Chamber Helper: Plotting Diurnal Profile
+A helper function to plot the diurnal patterns of environmental variables.
 }
 \examples{
 # default

@@ -13,10 +13,21 @@ chamber.design(
 )
 }
 \arguments{
-\item{folder.path}{}
+\item{daily.settings}{a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link{chamber.diurnal}}.}
+
+\item{start.date}{a character string, start date of the experiment.}
+
+\item{timezone}{a character string, time zone.}
+
+\item{export}{a logical, whether to export the output as files (e.g., Profile.txt).}
+
+\item{folder.path}{a character string, path to the export folder.}
+}
+\value{
+a list of two data frames, \code{daily.settings} as input but with an extra column \code{date}, and \code{design} of expanded multiday patterns.
 }
 \description{
-Chamber: Designing Multiday Profile
+A function to expand the diurnal patterns of environmental variables into multiday patterns.
 }
 \examples{
 # acclimation phase

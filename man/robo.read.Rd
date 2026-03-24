@@ -7,13 +7,22 @@
 robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 }
 \arguments{
-\item{summary.period}{}
+\item{file.path}{a character string, path to the file.}
+
+\item{metadata.lines}{an integer, number of lines to skip in the header.}
+
+\item{timezone}{a character string, time zone.}
+
+\item{summary.period}{a character string, duration to summarize the mean of the records. Optional.}
+}
+\value{
+a list of two data frames, \code{enhanced.data} and \code{summarized.data} for enhanced and summarized records, respectively.
 }
 \description{
-Robomussel: Reading a Single CSV Record
+A function to read the CSV Record of a single robomussel.
 }
 \examples{
-robo.file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
+robo.file <- system.file("extdata/robo/RM1.csv", package = "rambur")
 robo.read(robo.file)
 robo.read(robo.file, summary.period = "hour")
 }

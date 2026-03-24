@@ -1,15 +1,17 @@
 #' Robomussel: Reading a Single CSV Record
 #'
-#' @param file.path
-#' @param metadata.lines
-#' @param timezone
-#' @param summary.period
+#' A function to read the CSV Record of a single robomussel.
 #'
-#' @returns
+#' @param file.path a character string, path to the file.
+#' @param metadata.lines an integer, number of lines to skip in the header.
+#' @param timezone a character string, time zone.
+#' @param summary.period a character string, duration to summarize the mean of the records. Optional.
+#'
+#' @returns a list of two data frames, \code{enhanced.data} and \code{summarized.data} for enhanced and summarized records, respectively.
 #' @export
 #'
 #' @examples
-#' robo.file <- system.file("extdata/robo/RM1-04FD 6E00 220E 03-20250616 152857.csv", package = "rambur")
+#' robo.file <- system.file("extdata/robo/RM1.csv", package = "rambur")
 #' robo.read(robo.file)
 #' robo.read(robo.file, summary.period = "hour")
 robo.read <- function(file.path,
@@ -28,12 +30,12 @@ robo.read <- function(file.path,
   # which is the correct tz of robomussel (always UTC+0000)
 
   enhanced.data <- original.data %>%
-    transmute(datetime.UTC = time,
+    transmute(datetime.UTC = .data$time,
               # datetime = format(time, tz = timezone), not working, just <chr> format
-              datetime = as.POSIXct(time, tz = timezone),
-              date = as_date(datetime),
-              time = as_hms(datetime), # as.Date is base R but as_date and as_hms is not
-              body.temp = temp
+              datetime = as.POSIXct(.data$time, tz = timezone),
+              date = as_date(.data$datetime),
+              time = as_hms(.data$datetime), # as.Date is base R but as_date and as_hms is not
+              body.temp = .data$temp
            ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
 
   output <-   list(
@@ -43,12 +45,12 @@ robo.read <- function(file.path,
 
   if (!is.null(summary.period)) {
     summarized.data <- enhanced.data %>%
-      mutate(datetime = floor_date(datetime, summary.period)) %>%
-      group_by(datetime) %>%
-      summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
-      mutate(date = as_date(datetime),
-             time = as_hms(datetime),
-             .after = datetime
+      mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+      group_by(.data$datetime) %>%
+      summarize(body.temp = mean(.data$body.temp, na.rm = TRUE)) %>%
+      mutate(date = as_date(.data$datetime),
+             time = as_hms(.data$datetime),
+             .after = .data$datetime
       )
 
     output$summarized.data <- summarized.data

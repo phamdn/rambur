@@ -14,10 +14,23 @@ chamber.read(
 )
 }
 \arguments{
-\item{metadata.lines}{}
+\item{folder.path}{a character string, path to the folder of CSV records.}
+
+\item{file.name}{a character string, filter the file name.}
+
+\item{size.limits}{a vector of two numerics, minimum and maximum size in bytes.}
+
+\item{metadata.lines}{an integer, number of lines to skip in the header.}
+
+\item{timezone}{a character string, time zone.}
+
+\item{summary.period}{a character string, duration to summarize the mean of the records.}
+}
+\value{
+a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{summarized.data} for original, enhanced, and summarized records, respectively.
 }
 \description{
-Chamber: Reading Multiple CSV Records
+A function to read the CSV records of intertidal chambers.
 }
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")

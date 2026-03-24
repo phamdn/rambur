@@ -1,13 +1,19 @@
 #' Pulse: Extracting Heart Rate
 #'
-#' @param data
-#' @param summary.period
-#' @param time.window
-#' @param sampling.rate
-#' @param cor.threshold
-#' @param summary.fun
+#' A function to extract heart rate from records of pulse devices.
 #'
-#' @returns
+#' @param data a data frame, records of signal. Use output of \code{\link{pulse.read}}.
+#' @param summary.period a character string, duration to summarize the mean or median of the records.
+#' @param time.window a character string, window duration extract heart rate.
+#' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
+#' @param cor.threshold a numeric, the correlation threshold for qualified signal.
+#' @param summary.fun a character string, central tendancy to summarize.
+#' @param score.exponents a vector of two integers, exponents for the score.
+#' @param diagnostics a logical, whether to plot diagnostics.
+#' @param PPG.only a logical, whether to display only PPG, which is useful for data training.
+#' @param nonNA.threshold a numeric, only summarize when the proportion of non missing values exceeds this threshold.
+#'
+#' @returns a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
 #' @export
 #'
 #' @examples
@@ -15,12 +21,12 @@
 #' pulse.data <- pulse.read(folder)
 #' pulse.extract(pulse.data)
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
-#' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "mean")
+#' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
                           score.exponents = c(2, 1), cor.threshold = 0.4,
                           diagnostics = FALSE, PPG.only = FALSE,
                           time.window = "minute",
-                          summary.period = NULL, summary.fun = "median",
+                          summary.period = NULL, summary.fun = "mean",
                           nonNA.threshold = 0){
 
   # infer sampling rate Hz based on input data
@@ -32,8 +38,8 @@ pulse.extract <- function(data, sampling.rate = NULL,
 
   # using non-overlapping (sequential) windows, not overlapping (sliding) windows
   window.hr <- data %>%
-    mutate(datetime = floor_date(datetime, time.window)) %>%
-    group_by(datetime) %>%
+    mutate(datetime = floor_date(.data$datetime, time.window)) %>%
+    group_by(.data$datetime) %>%
     summarize(across(where(is.numeric), function(x) {
       if (diagnostics) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
 
@@ -46,9 +52,9 @@ pulse.extract <- function(data, sampling.rate = NULL,
       )$hr
     }
                      )) %>%
-    mutate(date = as_date(datetime),
-           time = as_hms(datetime),
-           .after = datetime
+    mutate(date = as_date(.data$datetime),
+           time = as_hms(.data$datetime),
+           .after = .data$datetime
     )
 
   output <- list(window.hr = window.hr)
@@ -66,17 +72,17 @@ pulse.extract <- function(data, sampling.rate = NULL,
     }
 
     summarized.hr <- window.hr %>%
-      mutate(datetime = floor_date(datetime, summary.period)) %>%
-      group_by(datetime) %>%
+      mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+      group_by(.data$datetime) %>%
       # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
       summarize(across(where(is.numeric),
                        ~ ifelse(mean(!is.na(.x)) >= nonNA.threshold,
                                 central(.x, na.rm = TRUE, type = summary.fun),
                                 NA)
       )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
-      mutate(date = as_date(datetime),
-             time = as_hms(datetime),
-             .after = datetime
+      mutate(date = as_date(.data$datetime),
+             time = as_hms(.data$datetime),
+             .after = .data$datetime
       )
 
     output$summarized.hr <- summarized.hr

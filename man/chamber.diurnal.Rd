@@ -27,6 +27,10 @@ chamber.diurnal(
 
 \item{time.step}{a numeric, the resolution of the profile in hours.}
 
+\item{light.pattern}{a character string, pattern of light. Default to "normal.100", indicating normal distribution with the maximum intensity of 100\%.}
+
+\item{light.max}{a numeric, maximum light intensity.}
+
 \item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
 
 \item{peak.light.time}{a numeric, time of day when light intensity peaks.}
@@ -41,7 +45,9 @@ chamber.diurnal(
 
 \item{peak.temp.time}{a numeric, time of day when temperature peaks.}
 
-\item{tidal.cycle}{a vector of 0 or 1, the tidal cycle (e.g., semi-diurnal)}
+\item{lunar.day}{a numeric, lunar day duration in hours. Default to 24, same as the solar day.}
+
+\item{tidal.cycle}{a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)}
 
 \item{tidal.start.time}{a numeric, time of day when tidal cycle starts.}
 
@@ -49,7 +55,7 @@ chamber.diurnal(
 }
 \value{
 a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}
+as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}.
 }
 \description{
 A helper function to design the diurnal patterns of environmental variables.

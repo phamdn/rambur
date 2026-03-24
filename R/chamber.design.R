@@ -1,11 +1,14 @@
 #' Chamber: Designing Multiday Profile
 #'
-#' @param daily.settings
-#' @param start.date
-#' @param export
-#' @param folder.path
+#' A function to expand the diurnal patterns of environmental variables into multiday patterns.
 #'
-#' @returns
+#' @param daily.settings a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link{chamber.diurnal}}.
+#' @param start.date a character string, start date of the experiment.
+#' @param export a logical, whether to export the output as files (e.g., Profile.txt).
+#' @param folder.path a character string, path to the export folder.
+#' @param timezone a character string, time zone.
+#'
+#' @returns a list of two data frames, \code{daily.settings} as input but with an extra column \code{date}, and \code{design} of expanded multiday patterns.
 #' @export
 #'
 #' @examples
@@ -40,22 +43,22 @@ chamber.design <- function(daily.settings,
     mutate(
       # datetime = as.POSIXct(start.date, tz = "UTC") + day.dec * 24 * 60 * 60, # no. of seconds per day, how about as.difftime()
       # datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day.dec, units = "days"), # how about not even calling day decimal
-      datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(day, units = "days") + as.difftime(hour, units = "hours"),
-      timestamp = as.numeric(datetime),
+      datetime = as.POSIXct(start.date, tz = "UTC") + as.difftime(.data$day, units = "days") + as.difftime(.data$hour, units = "hours"),
+      timestamp = as.numeric(.data$datetime),
       profile = paste0(
-        format(timestamp, scientific = FALSE),
+        format(.data$timestamp, scientific = FALSE),
         # otherwise timestamp such as 1746000000 (2025-04-30 08:00:00) will become 1.746e+09
         "-",
-        sprintf("%03d", exp.temp * 10), # decimal integer, 3 digits, leading 0
-        tide,
-        sprintf("%03d", light),
-        wc
+        sprintf("%03d", .data$exp.temp * 10), # decimal integer, 3 digits, leading 0
+        .data$tide,
+        sprintf("%03d", .data$light),
+        .data$wc
       )
     ) %>%
-    mutate(datetime = force_tz(datetime, tzone = timezone), # chamber uses UTC timestamp but implements it as local time
-           date = as_date(datetime), # better than base R as.Date() in preserving correct time zone
-           time = as_hms(datetime),
-           .after = datetime
+    mutate(datetime = force_tz(.data$datetime, tzone = timezone), # chamber uses UTC timestamp but implements it as local time
+           date = as_date(.data$datetime), # better than base R as.Date() in preserving correct time zone
+           time = as_hms(.data$datetime),
+           .after = .data$datetime
            )
 
   # check profile: length of each line
@@ -81,7 +84,7 @@ chamber.design <- function(daily.settings,
     }
 
     design.csv <- subset(design,
-                          select = c(datetime, exp.temp, tide, light, wc, profile))
+                          select = c(.data$datetime, .data$exp.temp, .data$tide, .data$light, .data$wc, .data$profile))
 
     Profile.txt <- design$profile
 

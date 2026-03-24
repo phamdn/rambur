@@ -13,10 +13,21 @@ pulse.read(
 )
 }
 \arguments{
-\item{size}{}
+\item{folder.path}{a character string, path to the folder of CSV records.}
+
+\item{file.name}{a character string, filter the file name.}
+
+\item{size.limits}{a vector of two numerics, minimum and maximum size in bytes.}
+
+\item{metadata.lines}{an integer, number of lines to skip in the header.}
+
+\item{timezone}{a character string, time zone.}
+}
+\value{
+a data frame of enhanced records.
 }
 \description{
-Pulse: Reading Multiple CSV Records
+A function to read the CSV records of pulse devices.
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")

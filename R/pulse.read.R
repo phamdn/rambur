@@ -1,12 +1,14 @@
 #' Pulse: Reading Multiple CSV Records
 #'
-#' @param timezone
-#' @param folder.path
-#' @param metadata.lines
-#' @param file.name
-#' @param size
+#' A function to read the CSV records of pulse devices.
 #'
-#' @returns
+#' @param timezone a character string, time zone.
+#' @param folder.path a character string, path to the folder of CSV records.
+#' @param metadata.lines an integer, number of lines to skip in the header.
+#' @param size.limits a vector of two numerics, minimum and maximum size in bytes.
+#' @param file.name a character string, filter the file name.
+#'
+#' @returns a data frame of enhanced records.
 #' @export
 #'
 #' @examples
@@ -50,10 +52,10 @@ pulse.read <- function(folder.path = NULL,
 
   enhanced.data <- original.data %>%
     mutate(
-      datetime.UTC = time,
-      datetime = as.POSIXct(time, tz = timezone),
-      date = as_date(datetime),
-      time = as_hms(datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
+      datetime.UTC = .data$time,
+      datetime = as.POSIXct(.data$time, tz = timezone),
+      date = as_date(.data$datetime),
+      time = as_hms(.data$datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
       .keep = "unused", .before = 1
     )
 

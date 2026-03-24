@@ -1,12 +1,14 @@
 #' Robomussels: Reading Multiple CSV Records
 #'
-#' @param folder.path
-#' @param file.name
-#' @param metadata.lines
-#' @param timezone
-#' @param summary.period
+#' A function to read the CSV Records of multiple robomussels.
 #'
-#' @returns
+#' @param folder.path a character string, path to the folder.
+#' @param file.name a character string, filter the file name.
+#' @param metadata.lines an integer, number of lines to skip in the header.
+#' @param timezone a character string, time zone.
+#' @param summary.period a character string, duration to summarize the mean of the records. Optional.
+#'
+#' @returns a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{summarized.data} for enhanced, synchronized, and summarized records, respectively.
 #' @export
 #'
 #' @examples
@@ -44,12 +46,12 @@ robo.read2 <- function(folder.path = NULL,
 
   enhanced.data <- lapply(original.data, function(x){
     x %>%
-      transmute(datetime.UTC = time,
+      transmute(datetime.UTC = .data$time,
                 # datetime = format(time, tz = timezone), not working, just <chr> format
-                datetime = as.POSIXct(time, tz = timezone),
-                date = as_date(datetime),
-                time = as_hms(datetime), # as.Date is base R but as_date and as_hms is not
-                body.temp = temp
+                datetime = as.POSIXct(.data$time, tz = timezone),
+                date = as_date(.data$datetime),
+                time = as_hms(.data$datetime), # as.Date is base R but as_date and as_hms is not
+                body.temp = .data$temp
       ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
   })
 
@@ -71,14 +73,14 @@ robo.read2 <- function(folder.path = NULL,
   synchronized.data <- imap(enhanced.data, \(x, idx) {
     x %>%
       transmute(
-        datetime = floor_date(datetime, "minute"),
-        !!paste0("body.temp", idx) := body.temp
+        datetime = floor_date(.data$datetime, "minute"),
+        !!paste0("body.temp", idx) := .data$body.temp
       )
   }) %>%
     reduce(full_join, by = "datetime") %>%
-    mutate(date = as_date(datetime),
-           time = as_hms(datetime),
-           .after = datetime
+    mutate(date = as_date(.data$datetime),
+           time = as_hms(.data$datetime),
+           .after = .data$datetime
     ) %>%
     mutate(
       body.temp = rowMeans(across(starts_with("body.temp")), na.rm = TRUE)
@@ -92,12 +94,12 @@ robo.read2 <- function(folder.path = NULL,
 
   if (!is.null(summary.period)) {
     summarized.data <- synchronized.data %>%
-      mutate(datetime = floor_date(datetime, summary.period)) %>%
-      group_by(datetime) %>%
-      summarize(body.temp = mean(body.temp, na.rm = TRUE)) %>%
-      mutate(date = as_date(datetime),
-             time = as_hms(datetime),
-             .after = datetime
+      mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+      group_by(.data$datetime) %>%
+      summarize(body.temp = mean(.data$body.temp, na.rm = TRUE)) %>%
+      mutate(date = as_date(.data$datetime),
+             time = as_hms(.data$datetime),
+             .after = .data$datetime
       )
 
 

@@ -14,10 +14,23 @@ chamber.check(
 )
 }
 \arguments{
-\item{dttm.labels}{}
+\item{design}{a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.}
+
+\item{chamber.data}{a data frame, actual records of environmental variables. Use \code{enhanced.data} output of \code{\link{chamber.read}}.}
+
+\item{robo.data}{a data frame, actual records of robomussels. Optional.}
+
+\item{dttm.limits}{a vector of two character strings, limits of dates.}
+
+\item{dttm.breaks}{a character string, duration between date breaks.}
+
+\item{dttm.labels}{a character string, format of dates.}
+}
+\value{
+a three-panel plot of light, tide, and temperature.
 }
 \description{
-Chamber: Checking Performance
+A function to compare the design and the actual performance of the chamber.
 }
 \examples{
 
