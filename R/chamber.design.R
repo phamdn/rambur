@@ -83,8 +83,9 @@ chamber.design <- function(daily.settings,
       dir.create(folder.path, recursive = TRUE)
     }
 
-    design.csv <- subset(design,
-                          select = c(.data$datetime, .data$exp.temp, .data$tide, .data$light, .data$wc, .data$profile))
+    # design.csv <- subset(design,
+    #                       select = c(.data$datetime, .data$exp.temp, .data$tide, .data$light, .data$wc, .data$profile))
+    design.csv <- design[, c("datetime", "exp.temp", "tide", "light", "wc", "profile")]
 
     Profile.txt <- design$profile
 
