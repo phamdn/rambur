@@ -93,11 +93,11 @@ chamber.read <- function(folder.path = NULL,
       actual.light = .data$`LED_intensity_%`,
 
       heat.lamps = .data$`Heat_Lamps_%`,
-      circulation.fan = .data$Circle_fan_state,
-      exhaust.fan = .data$Cool_fan_state,
-      water.heater = .data$Water_Heater_state,
-      water.cooler = .data$Water_Cooler_state,
-      cooler.pump = .data$Cooler_pump_state,
+      circulation.fans = .data$Circle_fan_state,
+      exhaust.fans = .data$Cool_fan_state,
+      heating.rod = .data$Water_Heater_state,
+      water.chiller = .data$Water_Cooler_state,
+      chiller.pump = .data$Cooler_pump_state,
 
       .keep = "unused", # can change to "none" to save disk space
       .before = 1
