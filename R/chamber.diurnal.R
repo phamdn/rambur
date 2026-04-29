@@ -14,9 +14,9 @@
 #' @param tidal.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
 #' @param tidal.start.time a numeric, time of day when tidal cycle starts.
 #' @param water.change.time a numeric, time of day when automatic water change starts.
-#' @param light.pattern a character string, pattern of light. Default to "normal.100", indicating normal distribution with the maximum intensity of 100%.
+#' @param light.model a character string, pattern of light. Default to "gaussian.100", indicating gaussian distribution with the maximum intensity of 100%.
 #' @param light.max a numeric, maximum light intensity.
-#' @param lunar.day a numeric, lunar day duration in hours. Default to 24, same as the solar day.
+#' @param tidal.day a numeric, tidal day duration in hours. Default to 24, same as the solar day.
 #'
 #' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
 #' as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}.
@@ -36,12 +36,13 @@
 #'   water.change.time = 16.5)
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
-                       light.pattern = "normal.100", light.max = 100,
+                       light.model = "gaussian.100", light.max = 100,
                        light.duration = 16, peak.light.time = 13,
+                       temp.model = "sin",
                        mean.air.temp = 17, range.air.temp = 8,
                        mean.water.temp = 19, range.water.temp = 1,
                        peak.temp.time = 15,
-                       lunar.day = 24,
+                       tidal.day = 24,
                        tidal.cycle =  c(0, 1, 0, 1),
                        tidal.start.time = 0,
                        water.change.time = NA
@@ -60,7 +61,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # day.dec <- day + hour / 24 # calculate day decimal
 
   # light
-  if (light.pattern == "normal.100"){ # to be deprecated in future versions
+  if (light.model == "gaussian.100"){ # to be deprecated in future versions
   ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
   simulated.light <- dnorm(hour,
                            mean = peak.light.time - time.step / 2, # continuity correction
@@ -69,7 +70,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   light <- floor(light) # 0.6% will be 0%, not 1%
   }
 
-  if (light.pattern == "normal"){
+  if (light.model == "gaussian"){
     simulated.light <- dnorm(hour,
                              mean = peak.light.time - time.step / 2,
                              sd = (light.duration - time.step) / 6)
@@ -93,14 +94,14 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   water.temp <- (mean.water.temp - range.water.temp/2) + simulated.temperature * range.water.temp
 
   # tide
-  lunar.steps <- lunar.day / time.step
-  steps.per.entry <- lunar.steps / length(tidal.cycle)
+  tidal.steps <- tidal.day / time.step
+  steps.per.entry <- tidal.steps / length(tidal.cycle)
 
   if (steps.per.entry != round(steps.per.entry)) {
     stop("The length of 'tidal.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal).")
   }
 
-  tide <- rep(tidal.cycle, each = steps.per.entry) # has the length of lunar.steps NOT solar.steps
+  tide <- rep(tidal.cycle, each = steps.per.entry) # has the length of tidal.steps NOT solar.steps
 
   # if (tidal.start.time > 0) { # not needed anymore
     steps.shift <- round(tidal.start.time / time.step) #add round to fix floating-point precision
@@ -112,8 +113,8 @@ chamber.diurnal <- function(day = 0, time.step = 1,
     tide <- c(
       tail(tide, steps.shift), # take some tail values and put forward
       head(tide, solar.steps - steps.shift) # take the head values and move behind
-      # head(tide, - steps.shift) works in case of 24h lunar day but looks confusing
-      # not work for tidal.start.time = 0 or lunar day > 24h
+      # head(tide, - steps.shift) works in case of 24h tidal day but looks confusing
+      # not work for tidal.start.time = 0 or tidal day > 24h
     ) # NOW has the length of solar.steps
   # }
 

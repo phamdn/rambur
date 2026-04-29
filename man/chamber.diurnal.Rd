@@ -7,16 +7,17 @@
 chamber.diurnal(
   day = 0,
   time.step = 1,
-  light.pattern = "normal.100",
+  light.model = "gaussian.100",
   light.max = 100,
   light.duration = 16,
   peak.light.time = 13,
+  temp.model = "sin",
   mean.air.temp = 17,
   range.air.temp = 8,
   mean.water.temp = 19,
   range.water.temp = 1,
   peak.temp.time = 15,
-  lunar.day = 24,
+  tidal.day = 24,
   tidal.cycle = c(0, 1, 0, 1),
   tidal.start.time = 0,
   water.change.time = NA
@@ -27,7 +28,7 @@ chamber.diurnal(
 
 \item{time.step}{a numeric, the resolution of the profile in hours.}
 
-\item{light.pattern}{a character string, pattern of light. Default to "normal.100", indicating normal distribution with the maximum intensity of 100\%.}
+\item{light.model}{a character string, pattern of light. Default to "gaussian.100", indicating gaussian distribution with the maximum intensity of 100\%.}
 
 \item{light.max}{a numeric, maximum light intensity.}
 
@@ -45,7 +46,7 @@ chamber.diurnal(
 
 \item{peak.temp.time}{a numeric, time of day when temperature peaks.}
 
-\item{lunar.day}{a numeric, lunar day duration in hours. Default to 24, same as the solar day.}
+\item{tidal.day}{a numeric, tidal day duration in hours. Default to 24, same as the solar day.}
 
 \item{tidal.cycle}{a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)}
 
