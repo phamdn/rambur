@@ -84,6 +84,9 @@ chamber.diurnal <- function(day = 0, time.step = 1,
     light <- ifelse(strong.light >= 1 & reduced.light == 0, 1, reduced.light)
   }
 
+  if (light.model == "constant"){
+    light <- rep(floor(light.max), solar.steps)
+  }
 
   # air and water temperature
   simulated.temperature <-
