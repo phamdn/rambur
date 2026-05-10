@@ -20,7 +20,8 @@ chamber.diurnal(
   tidal.day = 24,
   tidal.cycle = c(0, 1, 0, 1),
   tidal.start.time = 0,
-  water.change.time = NA
+  water.change.time = NA,
+  seed = 1
 )
 }
 \arguments{

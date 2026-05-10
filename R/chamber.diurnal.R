@@ -45,7 +45,8 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        tidal.day = 24,
                        tidal.cycle =  c(0, 1, 0, 1),
                        tidal.start.time = 0,
-                       water.change.time = NA
+                       water.change.time = NA,
+                       seed = 1
 ){
 
   # set time
@@ -61,6 +62,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # day.dec <- day + hour / 24 # calculate day decimal
 
   # light
+
   if (light.model == "gaussian.100"){ # to be deprecated in future versions
   ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
   simulated.light <- dnorm(hour,
@@ -84,8 +86,19 @@ chamber.diurnal <- function(day = 0, time.step = 1,
     light <- ifelse(strong.light >= 1 & reduced.light == 0, 1, reduced.light)
   }
 
-  if (light.model == "constant"){
-    light <- rep(floor(light.max), solar.steps)
+  else if (light.model == "constant"){
+    light <- rep(round(light.max), solar.steps)
+  }
+
+  else if (light.model == "random"){
+    set.seed(seed)
+    # light <- round(runif(n = solar.steps, min = 0, max = light.max)) # bias in edges
+    # light <- floor(runif(n = solar.steps, min = 0, max = light.max + 1)) # ok but complicated
+    light <- sample(0 : round(light.max), size = solar.steps, replace = TRUE)
+  }
+
+  else {
+    stop("light.model must be 'gaussian', 'constant', or 'random'.")
   }
 
   # air and water temperature
