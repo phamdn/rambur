@@ -7,7 +7,7 @@
 chamber.diurnal(
   day = 0,
   time.step = 1,
-  light.model = "gaussian.100",
+  light.model = "gaussian",
   light.max = 100,
   light.duration = 16,
   peak.light.time = 13,
@@ -29,9 +29,9 @@ chamber.diurnal(
 
 \item{time.step}{a numeric, the resolution of the profile in hours.}
 
-\item{light.model}{a character string, pattern of light. Default to "gaussian.100", indicating gaussian distribution with the maximum intensity of 100\%.}
+\item{light.model}{a character string, pattern of light. Default to "gaussian", indicating gaussian function.}
 
-\item{light.max}{a numeric, maximum light intensity.}
+\item{light.max}{an integer, maximum light intensity.}
 
 \item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
 

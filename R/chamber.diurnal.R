@@ -14,8 +14,8 @@
 #' @param tidal.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
 #' @param tidal.start.time a numeric, time of day when tidal cycle starts.
 #' @param water.change.time a numeric, time of day when automatic water change starts.
-#' @param light.model a character string, pattern of light. Default to "gaussian.100", indicating gaussian distribution with the maximum intensity of 100%.
-#' @param light.max a numeric, maximum light intensity.
+#' @param light.model a character string, pattern of light. Default to "gaussian", indicating gaussian function.
+#' @param light.max an integer, maximum light intensity.
 #' @param tidal.day a numeric, tidal day duration in hours. Default to 24, same as the solar day.
 #'
 #' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
@@ -36,7 +36,7 @@
 #'   water.change.time = 16.5)
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
-                       light.model = "gaussian.100", light.max = 100,
+                       light.model = "gaussian", light.max = 100,
                        light.duration = 16, peak.light.time = 13,
                        temp.model = "sin",
                        mean.air.temp = 17, range.air.temp = 8,
@@ -73,33 +73,39 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   }
 
   if (light.model == "gaussian"){
-    simulated.light <- dnorm(hour,
-                             mean = peak.light.time - time.step / 2,
-                             sd = (light.duration - time.step) / 6)
 
-    strong.light <- simulated.light / max(simulated.light) * 100
-    strong.light <- floor(strong.light)
+    if (light.duration <= time.step || light.max == 0) {
+      light <- rep(0, solar.steps)
+    } else if (light.duration > solar.day) {
+      light <- rep(light.max, solar.steps)
+    } else {
+      simulated.light <- dnorm(hour,
+                               mean = peak.light.time - time.step / 2,
+                               sd = (light.duration - time.step) / 6)
 
-    reduced.light <- strong.light * (light.max / 100)
-    reduced.light <- floor(reduced.light)
+      strong.light <- simulated.light / max(simulated.light) * 100
+      strong.light <- floor(strong.light)
 
-    light <- ifelse(strong.light >= 1 & reduced.light == 0, 1, reduced.light)
+      reduced.light <- strong.light * (light.max / 100)
+      reduced.light <- floor(reduced.light)
+
+      light <- ifelse(strong.light >= 1 & reduced.light == 0, 1, reduced.light)
+    }
+
   }
 
-  else if (light.model == "constant"){
-    light <- rep(round(light.max), solar.steps)
-  }
-
-  else if (light.model == "random"){
-    set.seed(seed)
-    # light <- round(runif(n = solar.steps, min = 0, max = light.max)) # bias in edges
-    # light <- floor(runif(n = solar.steps, min = 0, max = light.max + 1)) # ok but complicated
-    light <- sample(0 : round(light.max), size = solar.steps, replace = TRUE)
-  }
-
-  else {
-    stop("light.model must be 'gaussian', 'constant', or 'random'.")
-  }
+  # else if (light.model == "constant"){
+  #   light <- rep(light.max, solar.steps)
+  # }
+  #
+  # else if (light.model == "random"){
+  #   set.seed(seed)
+  #   light <- sample(1 : light.max, size = solar.steps, replace = TRUE)
+  # }
+  #
+  # else {
+  #   stop("light.model must be 'gaussian', 'constant', or 'random'.")
+  # }
 
   # air and water temperature
   simulated.temperature <-
