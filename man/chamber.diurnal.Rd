@@ -10,17 +10,17 @@ chamber.diurnal(
   light.model = "gaussian",
   light.max = 100,
   light.duration = 16,
-  peak.light.time = 13,
+  light.peak.time = 13,
   temp.model = "sin",
-  mean.air.temp = 17,
-  range.air.temp = 8,
-  mean.water.temp = 19,
-  range.water.temp = 1,
-  peak.temp.time = 15,
+  temp.air.mean = 17,
+  temp.air.range = 8,
+  temp.water.mean = 19,
+  temp.water.range = 1,
+  temp.peak.time = 15,
   tidal.day = 24,
   tidal.cycle = c(0, 1, 0, 1),
   tidal.start.time = 0,
-  water.change.time = NA,
+  wc.time = NA,
   seed = 1
 )
 }
@@ -35,17 +35,17 @@ chamber.diurnal(
 
 \item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
 
-\item{peak.light.time}{a numeric, time of day when light intensity peaks.}
+\item{light.peak.time}{a numeric, time of day when light intensity peaks.}
 
-\item{mean.air.temp}{a numeric, the mean of air temperature during the day in °C.}
+\item{temp.air.mean}{a numeric, the mean of air temperature during the day in °C.}
 
-\item{range.air.temp}{a numeric, the range of air temperature during the day in °C.}
+\item{temp.air.range}{a numeric, the range of air temperature during the day in °C.}
 
-\item{mean.water.temp}{a numeric, the mean of water temperature during the day in °C.}
+\item{temp.water.mean}{a numeric, the mean of water temperature during the day in °C.}
 
-\item{range.water.temp}{a numeric, the range of water temperature during the day in °C.}
+\item{temp.water.range}{a numeric, the range of water temperature during the day in °C.}
 
-\item{peak.temp.time}{a numeric, time of day when temperature peaks.}
+\item{temp.peak.time}{a numeric, time of day when temperature peaks.}
 
 \item{tidal.day}{a numeric, tidal day duration in hours. Default to 24, same as the solar day.}
 
@@ -53,11 +53,13 @@ chamber.diurnal(
 
 \item{tidal.start.time}{a numeric, time of day when tidal cycle starts.}
 
-\item{water.change.time}{a numeric, time of day when automatic water change starts.}
+\item{wc.time}{a numeric, time of day when automatic water change starts.}
+
+\item{seed}{}
 }
 \value{
 a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}.
+as \code{light}, \code{temp.air}, \code{temp.water}, \code{tide}, \code{temp}, \code{wc}.
 }
 \description{
 A helper function to design the diurnal patterns of environmental variables.
@@ -69,10 +71,10 @@ day0
 
 # custom
 chamber.diurnal(day = -3, time.step = 0.5,
-  light.duration = 17, peak.light.time = 12,
-  mean.air.temp = 30, range.air.temp = 10,
-  mean.water.temp = 20, range.water.temp = 2, peak.temp.time = 14,
+  light.duration = 17, light.peak.time = 12,
+  temp.air.mean = 30, temp.air.range = 10,
+  temp.water.mean = 20, temp.water.range = 2, temp.peak.time = 14,
   tidal.cycle =  c(0, 1), tidal.start.time = 2.5,
-  water.change.time = 16.5)
+  wc.time = 16.5)
 
 }

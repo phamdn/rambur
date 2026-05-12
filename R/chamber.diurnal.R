@@ -5,21 +5,23 @@
 #' @param day an integer, the day of experiment.
 #' @param time.step a numeric, the resolution of the profile in hours.
 #' @param light.duration a numeric, light duration (photoperiod) in hours, with light intensity of at least 1%.
-#' @param peak.light.time a numeric, time of day when light intensity peaks.
-#' @param mean.air.temp a numeric, the mean of air temperature during the day in °C.
-#' @param range.air.temp a numeric, the range of air temperature during the day in °C.
-#' @param mean.water.temp a numeric, the mean of water temperature during the day in °C.
-#' @param range.water.temp a numeric, the range of water temperature during the day in °C.
-#' @param peak.temp.time a numeric, time of day when temperature peaks.
+#' @param light.peak.time a numeric, time of day when light intensity peaks.
+#' @param temp.air.mean a numeric, the mean of air temperature during the day in °C.
+#' @param temp.air.range a numeric, the range of air temperature during the day in °C.
+#' @param temp.water.mean a numeric, the mean of water temperature during the day in °C.
+#' @param temp.water.range a numeric, the range of water temperature during the day in °C.
+#' @param temp.peak.time a numeric, time of day when temperature peaks.
 #' @param tidal.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
 #' @param tidal.start.time a numeric, time of day when tidal cycle starts.
-#' @param water.change.time a numeric, time of day when automatic water change starts.
+#' @param wc.time a numeric, time of day when automatic water change starts.
 #' @param light.model a character string, pattern of light. Default to "gaussian", indicating gaussian function.
 #' @param light.max an integer, maximum light intensity.
 #' @param tidal.day a numeric, tidal day duration in hours. Default to 24, same as the solar day.
+#' @param temp.model
+#' @param seed
 #'
 #' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-#' as \code{light}, \code{air.temp}, \code{water.temp}, \code{tide}, \code{exp.temp}, \code{wc}.
+#' as \code{light}, \code{temp.air}, \code{temp.water}, \code{tide}, \code{temp}, \code{wc}.
 #' @export
 #'
 #' @examples
@@ -29,23 +31,27 @@
 #'
 #' # custom
 #' chamber.diurnal(day = -3, time.step = 0.5,
-#'   light.duration = 17, peak.light.time = 12,
-#'   mean.air.temp = 30, range.air.temp = 10,
-#'   mean.water.temp = 20, range.water.temp = 2, peak.temp.time = 14,
+#'   light.duration = 17, light.peak.time = 12,
+#'   temp.air.mean = 30, temp.air.range = 10,
+#'   temp.water.mean = 20, temp.water.range = 2, temp.peak.time = 14,
 #'   tidal.cycle =  c(0, 1), tidal.start.time = 2.5,
-#'   water.change.time = 16.5)
+#'   wc.time = 16.5)
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
-                       light.model = "gaussian", light.max = 100,
-                       light.duration = 16, peak.light.time = 13,
+                       light.model = "gaussian",
+                       light.max = 100,
+                       light.duration = 16,
+                       light.peak.time = 13,
                        temp.model = "sin",
-                       mean.air.temp = 17, range.air.temp = 8,
-                       mean.water.temp = 19, range.water.temp = 1,
-                       peak.temp.time = 15,
+                       temp.air.mean = 17,
+                       temp.air.range = 8,
+                       temp.water.mean = 19,
+                       temp.water.range = 1,
+                       temp.peak.time = 15,
                        tidal.day = 24,
                        tidal.cycle =  c(0, 1, 0, 1),
                        tidal.start.time = 0,
-                       water.change.time = NA,
+                       wc.time = NA,
                        seed = 1
 ){
 
@@ -66,7 +72,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   if (light.model == "gaussian.100"){ # to be deprecated in future versions
   ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
   simulated.light <- dnorm(hour,
-                           mean = peak.light.time - time.step / 2, # continuity correction
+                           mean = light.peak.time - time.step / 2, # continuity correction
                            sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
   light <- simulated.light / max(simulated.light) * 100 # unit %
   light <- floor(light) # 0.6% will be 0%, not 1%
@@ -80,7 +86,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
       light <- rep(light.max, solar.steps)
     } else {
       simulated.light <- dnorm(hour,
-                               mean = peak.light.time - time.step / 2,
+                               mean = light.peak.time - time.step / 2,
                                sd = (light.duration - time.step) / 6)
 
       strong.light <- simulated.light / max(simulated.light) * 100
@@ -108,12 +114,12 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # }
 
   # air and water temperature
-  simulated.temperature <-
-    (sinpi((hour + 6 - peak.temp.time) / 12) + 1) / 2 # see plot(0:360, sinpi(0:360 / 180))
+  simulated.temp <-
+    (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2 # see plot(0:360, sinpi(0:360 / 180))
 
-  air.temp <- (mean.air.temp - range.air.temp/2) + simulated.temperature * range.air.temp
+  temp.air <- (temp.air.mean - temp.air.range/2) + simulated.temp * temp.air.range
 
-  water.temp <- (mean.water.temp - range.water.temp/2) + simulated.temperature * range.water.temp
+  temp.water <- (temp.water.mean - temp.water.range/2) + simulated.temp * temp.water.range
 
   # tide
   tidal.steps <- tidal.day / time.step
@@ -141,22 +147,22 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # }
 
   # exposure temperature
-  exp.temp <- ifelse(tide == 0, air.temp, water.temp)
+  temp <- ifelse(tide == 0, temp.air, temp.water)
 
   # water change
   wc <- rep(0, solar.steps) # no water change as default
 
-  if (!is.na(water.change.time)) wc[hour == water.change.time] <- 1
+  if (!is.na(wc.time)) wc[hour == wc.time] <- 1
 
   # output
   output <- data.frame(day = day,
                        hour = hour,
                        # day.dec = day.dec,
                        light = light,
-                       air.temp = round(air.temp, digits = 1),
-                       water.temp = round(water.temp, digits = 1),
+                       temp.air = round(temp.air, digits = 1),
+                       temp.water = round(temp.water, digits = 1),
                        tide = tide,
-                       exp.temp = round(exp.temp, digits = 1),
+                       temp = round(temp, digits = 1),
                        wc = wc
   )
 

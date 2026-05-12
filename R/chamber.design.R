@@ -14,7 +14,7 @@
 #' @examples
 #' # acclimation phase
 #' acc.daily.settings <- data.frame(day = seq(0, 34),
-#' mean.air.temp = 17, mean.water.temp = 19)
+#' temp.air.mean = 17, temp.water.mean = 19)
 #'
 #' acc <- chamber.design(acc.daily.settings,
 #' start.date = "2025-05-15", export = FALSE)
@@ -49,7 +49,7 @@ chamber.design <- function(daily.settings,
         format(.data$timestamp, scientific = FALSE),
         # otherwise timestamp such as 1746000000 (2025-04-30 08:00:00) will become 1.746e+09
         "-",
-        sprintf("%03d", .data$exp.temp * 10), # decimal integer, 3 digits, leading 0
+        sprintf("%03d", .data$temp * 10), # decimal integer, 3 digits, leading 0
         .data$tide,
         sprintf("%03d", .data$light),
         .data$wc
@@ -84,8 +84,8 @@ chamber.design <- function(daily.settings,
     }
 
     # design.csv <- subset(design,
-    #                       select = c(.data$datetime, .data$exp.temp, .data$tide, .data$light, .data$wc, .data$profile))
-    design.csv <- design[, c("datetime", "exp.temp", "tide", "light", "wc", "profile")]
+    #                       select = c(.data$datetime, .data$temp, .data$tide, .data$light, .data$wc, .data$profile))
+    design.csv <- design[, c("datetime", "temp", "tide", "light", "wc", "profile")]
 
     Profile.txt <- design$profile
 

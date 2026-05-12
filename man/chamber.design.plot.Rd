@@ -18,7 +18,7 @@ A helper function to plot the multiday patterns of environmental variables.
 \examples{
 # acclimation phase
 acc.setup <- data.frame(day = seq(0, 34),
-mean.air.temp = 17, mean.water.temp = 19)
+temp.air.mean = 17, temp.water.mean = 19)
 
 acc.profile <- chamber.design(acc.setup,
 start.date = "2025-05-15", export = FALSE)

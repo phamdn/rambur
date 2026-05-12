@@ -14,7 +14,7 @@
 #'
 chamber.diurnal.plot <- function(df){
 
-  temp.breaks <- pretty(range(df$air.temp, df$water.temp))
+  temp.breaks <- pretty(range(df$temp.air, df$temp.water))
   temp.breaks.range <- range(temp.breaks)
   hour.breaks <- seq(0, 24, 6)
 
@@ -26,7 +26,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Light", y = "%", x = "") +
     theme_minimal_grid()
 
-  fig2 <- ggplot(df, aes(x = .data$hour, y = .data$air.temp)) +
+  fig2 <- ggplot(df, aes(x = .data$hour, y = .data$temp.air)) +
     geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, shape = 17) + # color = 2
     scale_x_continuous(breaks = hour.breaks) +
@@ -34,7 +34,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Air temperature", y = "\u00B0C", x = "") +
     theme_minimal_grid()
 
-  fig3 <- ggplot(df, aes(x = .data$hour, y = .data$water.temp)) +
+  fig3 <- ggplot(df, aes(x = .data$hour, y = .data$temp.water)) +
     geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, shape = 15) + #color = 2
     scale_x_continuous(breaks = hour.breaks) +
@@ -50,7 +50,7 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Tide", y = NULL, x = "") +
     theme_minimal_grid()
 
-  fig5 <- ggplot(df, aes(x = .data$hour, y = .data$exp.temp)) +
+  fig5 <- ggplot(df, aes(x = .data$hour, y = .data$temp)) +
     geom_line(color = 1, linetype = 2) +
     geom_point(color = 2, aes(shape = as.factor(.data$tide))) + #color = 2
     scale_shape_manual(values = c(17, 15)) +

@@ -32,7 +32,7 @@ A function to expand the diurnal patterns of environmental variables into multid
 \examples{
 # acclimation phase
 acc.daily.settings <- data.frame(day = seq(0, 34),
-mean.air.temp = 17, mean.water.temp = 19)
+temp.air.mean = 17, temp.water.mean = 19)
 
 acc <- chamber.design(acc.daily.settings,
 start.date = "2025-05-15", export = FALSE)
