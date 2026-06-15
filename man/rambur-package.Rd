@@ -11,6 +11,11 @@ A toolkit for your intertidal experiments.
 \author{
 \strong{Maintainer}: Duy Nghia Pham \email{nghiapham@yandex.com} (\href{https://orcid.org/0000-0003-1349-1710}{ORCID})
 
+Authors:
+\itemize{
+  \item Duy Nghia Pham \email{nghiapham@yandex.com} (\href{https://orcid.org/0000-0003-1349-1710}{ORCID})
+}
+
 Other contributors:
 \itemize{
   \item Inna M. Sokolova (\href{https://orcid.org/0000-0002-2068-4302}{ORCID}) [contributor]

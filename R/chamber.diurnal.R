@@ -39,9 +39,9 @@
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
                        light.model = "gaussian",
-                       light.max = 100,
                        light.duration = 16,
                        light.peak.time = 13,
+                       light.max = 100,
                        temp.model = "sin",
                        temp.air.mean = 17,
                        temp.air.range = 8,

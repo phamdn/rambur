@@ -8,9 +8,9 @@ chamber.diurnal(
   day = 0,
   time.step = 1,
   light.model = "gaussian",
-  light.max = 100,
   light.duration = 16,
   light.peak.time = 13,
+  light.max = 100,
   temp.model = "sin",
   temp.air.mean = 17,
   temp.air.range = 8,
@@ -31,11 +31,11 @@ chamber.diurnal(
 
 \item{light.model}{a character string, pattern of light. Default to "gaussian", indicating gaussian function.}
 
-\item{light.max}{an integer, maximum light intensity.}
-
 \item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
 
 \item{light.peak.time}{a numeric, time of day when light intensity peaks.}
+
+\item{light.max}{an integer, maximum light intensity.}
 
 \item{temp.air.mean}{a numeric, the mean of air temperature during the day in °C.}
 
@@ -54,8 +54,6 @@ chamber.diurnal(
 \item{tidal.start.time}{a numeric, time of day when tidal cycle starts.}
 
 \item{wc.time}{a numeric, time of day when automatic water change starts.}
-
-\item{seed}{}
 }
 \value{
 a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
