@@ -24,6 +24,10 @@ robo.read <- function(file.path,
     message("using ", Sys.timezone(), " time zone")
   }
 
+  # metadata
+  metadata <- paste(read_lines(file = file.path, n_max = metadata.lines),
+                    collapse = "\n")
+
   original.data <- read_csv(file = file.path, skip = metadata.lines,
                             show_col_types = FALSE)
   # read_csv uses UTC as default (see col_datetime() and locale()),
@@ -32,13 +36,14 @@ robo.read <- function(file.path,
   enhanced.data <- original.data %>%
     transmute(datetime.UTC = .data$time,
               # datetime = format(time, tz = timezone), not working, just <chr> format
-              datetime = as.POSIXct(.data$time, tz = timezone),
+              datetime = as.POSIXct(.data$datetime.UTC, tz = timezone),
               date = as_date(.data$datetime),
               time = as_hms(.data$datetime), # as.Date is base R but as_date and as_hms is not
-              body.temp = .data$temp
+              temp = .data$temp
            ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
 
-  output <-   list(
+  output <- list(
+    metadata = metadata,
     # original.data = original.data,
     enhanced.data = enhanced.data
   )
@@ -47,7 +52,8 @@ robo.read <- function(file.path,
     summarized.data <- enhanced.data %>%
       mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
       group_by(.data$datetime) %>%
-      summarize(body.temp = mean(.data$body.temp, na.rm = TRUE)) %>%
+      summarize(n = sum(!is.na(.data$temp)),
+                temp = mean(.data$temp, na.rm = TRUE)) %>%
       mutate(date = as_date(.data$datetime),
              time = as_hms(.data$datetime),
              .after = .data$datetime
