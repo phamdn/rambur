@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-datetime.ext <- function(df, timezone = "") {
+datetime <- function(df, timezone = "") {
 
   if ("datetime.UTC" %in% names(df)) {
     df <- df %>%
