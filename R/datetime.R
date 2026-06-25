@@ -1,4 +1,4 @@
-#' Expand datetime
+#' Helper: Convert and Expand Datetime UTC
 #'
 #' @param df
 #' @param timezone
@@ -17,6 +17,11 @@ datetime <- function(df, timezone = "") {
         time = as_hms(.data$datetime),
         .after = .data$datetime.UTC
       )
+
+    # notice about time zone
+    if (timezone == "") {
+      message("using ", Sys.timezone(), " time zone")
+    } # need to check double message in main functions
   }
 
   else if ("datetime" %in% names(df)) {
