@@ -7,10 +7,10 @@
 pulse.hr(
   signal,
   sampling.rate = 5,
-  score.exponents = c(2, 1),
-  cor.threshold = 0.4,
-  diagnostics = TRUE,
-  PPG.only = FALSE
+  score.method = "power.law",
+  score.parameter = 1,
+  cor.min = 0.4,
+  diagnostics = c("all", "ppg", "none")
 )
 }
 \arguments{
@@ -18,16 +18,16 @@ pulse.hr(
 
 \item{sampling.rate}{an integer, sampling rate in Hz.}
 
-\item{score.exponents}{a vector of two integers, exponents for the score.}
+\item{score.method}{a character string, a method for lag penalty.}
 
-\item{cor.threshold}{a numeric, the correlation threshold for qualified signal.}
+\item{score.parameter}{a numeric, the exponent used in the score.}
 
-\item{diagnostics}{a logical, whether to plot diagnostics.}
+\item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
-\item{PPG.only}{a logical, whether to display only PPG, which is useful for data training.}
+\item{diagnostics}{a character string, whether to plot diagnostics.}
 }
 \value{
-a mixed list, \code{locmax} for local maxima, \code{highest.score} for the best peak, \code{qualified.cor} and \code{qualified.lag} for quality control, and \code{hr} for final heart rate.
+a mixed list, \code{locmax} for local maxima, \code{highest.score} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
 }
 \description{
 A helper function to calculate heart rate
@@ -35,12 +35,12 @@ A helper function to calculate heart rate
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
+ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
+ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
 datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
+ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
-pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
+ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
 datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 }

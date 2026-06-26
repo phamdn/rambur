@@ -7,10 +7,9 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
-  score.exponents = c(2, 1),
-  cor.threshold = 0.4,
-  diagnostics = FALSE,
-  PPG.only = FALSE,
+  score.parameter = 1,
+  cor.min = 0.4,
+  diagnostics = "none",
   time.window = "minute",
   summary.period = NULL,
   summary.fun = "mean",
@@ -22,13 +21,7 @@ pulse.extract(
 
 \item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
 
-\item{score.exponents}{a vector of two integers, exponents for the score.}
-
-\item{cor.threshold}{a numeric, the correlation threshold for qualified signal.}
-
 \item{diagnostics}{a logical, whether to plot diagnostics.}
-
-\item{PPG.only}{a logical, whether to display only PPG, which is useful for data training.}
 
 \item{time.window}{a character string, window duration extract heart rate.}
 

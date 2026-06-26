@@ -6,12 +6,11 @@
 #' @param summary.period a character string, duration to summarize the mean or median of the records.
 #' @param time.window a character string, window duration extract heart rate.
 #' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
-#' @param cor.threshold a numeric, the correlation threshold for qualified signal.
 #' @param summary.fun a character string, central tendancy to summarize.
-#' @param score.exponents a vector of two integers, exponents for the score.
 #' @param diagnostics a logical, whether to plot diagnostics.
-#' @param PPG.only a logical, whether to display only PPG, which is useful for data training.
 #' @param nonNA.threshold a numeric, only summarize when the proportion of non missing values exceeds this threshold.
+#' @param score.parameter
+#' @param cor.min
 #'
 #' @returns a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
 #' @export
@@ -23,8 +22,8 @@
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
-                          score.exponents = c(2, 1), cor.threshold = 0.4,
-                          diagnostics = FALSE, PPG.only = FALSE,
+                          score.parameter = 1, cor.min = 0.4,
+                          diagnostics = "none",
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "mean",
                           nonNA.threshold = 0){
@@ -41,17 +40,16 @@ pulse.extract <- function(data, sampling.rate = NULL,
     mutate(datetime = floor_date(.data$datetime, time.window)) %>%
     group_by(.data$datetime) %>%
     summarize(across(where(is.numeric), function(x) {
-      if (diagnostics) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
+      if (diagnostics %in% c("all", "ppg")) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
 
       pulse.hr(x,
                sampling.rate = sampling.rate,
-               score.exponents = score.exponents,
-               cor.threshold = cor.threshold,
-               diagnostics = diagnostics,
-               PPG.only = PPG.only
+               score.parameter = score.parameter,
+               cor.min = cor.min,
+               diagnostics = diagnostics
       )$hr
     }
-                     )) %>%
+    )) %>%
     mutate(date = as_date(.data$datetime),
            time = as_hms(.data$datetime),
            .after = .data$datetime
