@@ -8,9 +8,9 @@ pulse.hr(
   signal,
   sampling.rate = 5,
   score.method = "power.law",
-  score.parameter = 1,
+  score.parameter = 0.5,
   cor.min = 0.4,
-  diagnostics = c("all", "ppg", "none")
+  display = c("all", "ppg", "none")
 )
 }
 \arguments{
@@ -24,10 +24,10 @@ pulse.hr(
 
 \item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
-\item{diagnostics}{a character string, whether to plot diagnostics.}
+\item{display}{a character string, whether to plot display.}
 }
 \value{
-a mixed list, \code{locmax} for local maxima, \code{highest.score} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
+a mixed list, \code{locmax} for local maxima, \code{nominee} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
 }
 \description{
 A helper function to calculate heart rate

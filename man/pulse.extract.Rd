@@ -9,7 +9,7 @@ pulse.extract(
   sampling.rate = NULL,
   score.parameter = 1,
   cor.min = 0.4,
-  diagnostics = "none",
+  display = "none",
   time.window = "minute",
   summary.period = NULL,
   summary.fun = "mean",
@@ -21,7 +21,7 @@ pulse.extract(
 
 \item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
 
-\item{diagnostics}{a logical, whether to plot diagnostics.}
+\item{display}{a logical, whether to plot display.}
 
 \item{time.window}{a character string, window duration extract heart rate.}
 

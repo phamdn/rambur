@@ -7,7 +7,7 @@
 #' @param time.window a character string, window duration extract heart rate.
 #' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
 #' @param summary.fun a character string, central tendancy to summarize.
-#' @param diagnostics a logical, whether to plot diagnostics.
+#' @param display a logical, whether to plot display.
 #' @param nonNA.threshold a numeric, only summarize when the proportion of non missing values exceeds this threshold.
 #' @param score.parameter
 #' @param cor.min
@@ -23,7 +23,7 @@
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
                           score.parameter = 1, cor.min = 0.4,
-                          diagnostics = "none",
+                          display = "none",
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "mean",
                           nonNA.threshold = 0){
@@ -40,13 +40,13 @@ pulse.extract <- function(data, sampling.rate = NULL,
     mutate(datetime = floor_date(.data$datetime, time.window)) %>%
     group_by(.data$datetime) %>%
     summarize(across(where(is.numeric), function(x) {
-      if (diagnostics %in% c("all", "ppg")) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
+      if (display %in% c("all", "ppg")) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
 
       pulse.hr(x,
                sampling.rate = sampling.rate,
                score.parameter = score.parameter,
                cor.min = cor.min,
-               diagnostics = diagnostics
+               display = display
       )$hr
     }
     )) %>%
