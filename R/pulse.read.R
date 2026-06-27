@@ -5,7 +5,7 @@
 #' @param timezone a character string, time zone.
 #' @param folder.path a character string, path to the folder of CSV records.
 #' @param metadata.lines an integer, number of lines to skip in the header.
-#' @param size.limits a vector of two numerics, minimum and maximum size in bytes.
+#' @param size.limits a vector of two numerics, minimum and maximum file sizes in bytes.
 #' @param file.name a character string, filter the file name.
 #'
 #' @returns a data frame of enhanced records.
@@ -25,21 +25,20 @@ pulse.read <- function(folder.path = NULL,
     message("reading from the current working directory")
   }
 
-  # get a list of all CSV files
+  # get a list of CSV files with matched names
   pulse.files <- list.files(path = folder.path, pattern = file.name, full.names = TRUE)
 
-  # size limit
+  # filter by size limits
   pulse.files <- subset(pulse.files,
-                        file.size(pulse.files) > size.limits[1] &
-                          file.size(pulse.files) < size.limits[2])
-  # print(pulse.files) to diagnose
+                        file.size(pulse.files) >= size.limits[1] &
+                          file.size(pulse.files) <= size.limits[2])
 
   message("importing ", length(pulse.files), " files")
 
   # notice about time zone
-  if (timezone == "") {
-    message("using ", Sys.timezone(), " time zone")
-  }
+  # if (timezone == "") {
+  #   message("using ", Sys.timezone(), " time zone")
+  # }
 
   # read and merge to a single original dataframe
   original.data <- read_csv(pulse.files, skip = metadata.lines,
@@ -50,14 +49,21 @@ pulse.read <- function(folder.path = NULL,
   # read_csv uses UTC as default (see col_datetime() and locale()),
   # which is the correct tz of Pulse device (always UTC+0000)
 
+  # enhanced.data <- original.data %>%
+  #   mutate(
+  #     datetime.UTC = .data$time,
+  #     datetime = as.POSIXct(.data$time, tz = timezone),
+  #     date = as_date(.data$datetime),
+  #     time = as_hms(.data$datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
+  #     .keep = "unused", .before = 1
+  #   )
+
   enhanced.data <- original.data %>%
     mutate(
       datetime.UTC = .data$time,
-      datetime = as.POSIXct(.data$time, tz = timezone),
-      date = as_date(.data$datetime),
-      time = as_hms(.data$datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
       .keep = "unused", .before = 1
-    )
+    ) %>%
+    datetime(timezone = timezone)
 
   # take too much space to return both
   # list(original.data = original.data,

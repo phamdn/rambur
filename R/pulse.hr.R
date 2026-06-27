@@ -25,7 +25,7 @@
 #' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 pulse.hr <- function(signal, sampling.rate = 5,
                      score.method = "power.law", score.parameter = 0.5,
-                     cor.min = 0.4,
+                     cor.min = 0.5,
                      display = c("all", "ppg", "none")
 ){
 

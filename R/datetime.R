@@ -1,4 +1,4 @@
-#' Helper: Convert and Expand Datetime UTC
+#' General Helper: Converting UTC Datetime to Local Datetime
 #'
 #' @param df
 #' @param timezone
@@ -21,7 +21,7 @@ datetime <- function(df, timezone = "") {
     # notice about time zone
     if (timezone == "") {
       message("using ", Sys.timezone(), " time zone")
-    } # need to check double message in main functions
+    } # need to check main functions to avoid duplicate messages
   }
 
   else if ("datetime" %in% names(df)) {

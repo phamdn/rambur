@@ -17,7 +17,7 @@ pulse.read(
 
 \item{file.name}{a character string, filter the file name.}
 
-\item{size.limits}{a vector of two numerics, minimum and maximum size in bytes.}
+\item{size.limits}{a vector of two numerics, minimum and maximum file sizes in bytes.}
 
 \item{metadata.lines}{an integer, number of lines to skip in the header.}
 

@@ -2,10 +2,10 @@
 % Please edit documentation in R/datetime.R
 \name{datetime}
 \alias{datetime}
-\title{Helper: Convert and Expand Datetime UTC}
+\title{General Helper: Converting UTC Datetime to Local Datetime}
 \usage{
 datetime(df, timezone = "")
 }
 \description{
-Helper: Convert and Expand Datetime UTC
+General Helper: Converting UTC Datetime to Local Datetime
 }

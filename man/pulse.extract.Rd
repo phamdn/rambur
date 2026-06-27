@@ -7,8 +7,8 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
-  score.parameter = 1,
-  cor.min = 0.4,
+  score.parameter = 0.5,
+  cor.min = 0.5,
   display = "none",
   time.window = "minute",
   summary.period = NULL,

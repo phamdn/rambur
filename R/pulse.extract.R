@@ -22,7 +22,7 @@
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
-                          score.parameter = 1, cor.min = 0.4,
+                          score.parameter = 0.5, cor.min = 0.5,
                           display = "none",
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "mean",
