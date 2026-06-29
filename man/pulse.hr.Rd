@@ -7,7 +7,8 @@
 pulse.hr(
   signal,
   sampling.rate = 5,
-  score.method = "power.law",
+  upsampling.factor = 10,
+  score.method = c("power.law", "exponential"),
   score.parameter = 0.5,
   cor.min = 0.5,
   display = c("all", "ppg", "none")
@@ -43,4 +44,7 @@ ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
 ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
 datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+}
+\seealso{
+\code{\link[=pulse.extract]{pulse.extract()}}
 }

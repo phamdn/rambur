@@ -7,7 +7,8 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
-  score.parameter = 0.5,
+  score.method = "exponential",
+  score.parameter = 0.1,
   cor.min = 0.5,
   display = "none",
   time.window = "minute",
@@ -43,4 +44,7 @@ pulse.data <- pulse.read(folder)
 pulse.extract(pulse.data)
 pulse.extract(pulse.data, summary.period = "15 minutes")
 pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
+}
+\seealso{
+\code{\link[=pulse.hr]{pulse.hr()}}
 }

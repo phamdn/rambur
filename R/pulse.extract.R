@@ -15,6 +15,8 @@
 #' @returns a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
 #' @export
 #'
+#' @seealso [pulse.hr()]
+#'
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
@@ -22,7 +24,8 @@
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
 pulse.extract <- function(data, sampling.rate = NULL,
-                          score.parameter = 0.5, cor.min = 0.5,
+                          score.method = "exponential",
+                          score.parameter = 0.1, cor.min = 0.5,
                           display = "none",
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "mean",
@@ -44,6 +47,7 @@ pulse.extract <- function(data, sampling.rate = NULL,
 
       pulse.hr(x,
                sampling.rate = sampling.rate,
+               score.method = score.method,
                score.parameter = score.parameter,
                cor.min = cor.min,
                display = display
