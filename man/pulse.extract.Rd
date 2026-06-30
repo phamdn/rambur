@@ -7,8 +7,8 @@
 pulse.extract(
   data,
   sampling.rate = NULL,
-  score.method = "exponential",
-  score.parameter = 0.1,
+  score.method = "power.law",
+  score.parameter = 0.5,
   cor.min = 0.5,
   display = "none",
   time.window = "minute",

@@ -11,6 +11,7 @@
 #' @param nonNA.threshold a numeric, only summarize when the proportion of non missing values exceeds this threshold.
 #' @param score.parameter
 #' @param cor.min
+#' @param score.method
 #'
 #' @returns a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
 #' @export
@@ -23,9 +24,10 @@
 #' pulse.extract(pulse.data)
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
-pulse.extract <- function(data, sampling.rate = NULL,
-                          score.method = "exponential",
-                          score.parameter = 0.1, cor.min = 0.5,
+pulse.extract <- function(data,
+                          sampling.rate = NULL,
+                          score.method = "power.law", score.parameter = 0.5,
+                          cor.min = 0.5,
                           display = "none",
                           time.window = "minute",
                           summary.period = NULL, summary.fun = "mean",

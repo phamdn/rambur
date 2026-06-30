@@ -7,7 +7,6 @@
 pulse.hr(
   signal,
   sampling.rate = 5,
-  upsampling.factor = 10,
   score.method = c("power.law", "exponential"),
   score.parameter = 0.5,
   cor.min = 0.5,
