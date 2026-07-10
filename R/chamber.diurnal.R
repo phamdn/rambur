@@ -100,9 +100,11 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   }
 
-  # else if (light.model == "constant"){
-  #   light <- rep(light.max, solar.steps)
-  # }
+  else if (light.model == "uniform"){
+    sunrise <- light.peak.time - light.duration / 2
+    sunset <- light.peak.time + light.duration / 2
+    light <- ifelse(hour >= sunrise & hour < sunset, floor(light.max), 0)
+  }
   #
   # else if (light.model == "random"){
   #   set.seed(seed)
