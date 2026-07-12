@@ -11,7 +11,7 @@ chamber.diurnal(
   light.duration = 16,
   light.peak.time = 13,
   light.max = 100,
-  temp.model = "sin",
+  temp.model = "sinusoidal",
   temp.air.mean = 17,
   temp.air.range = 8,
   temp.water.mean = 19,

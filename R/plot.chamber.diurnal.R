@@ -2,17 +2,25 @@
 #'
 #' A helper function to plot the diurnal patterns of environmental variables.
 #'
-#' @param df a data frame, output of \code{\link{chamber.diurnal}}.
+#' @param display a character string, which plots to display.
+#' @param x a data frame, output of \code{\link{chamber.diurnal}}.
+#' @param ... additional arguments, currently ignored.
 #'
 #' @returns a six-panel plot of environmental variables.
+#' @method plot chamber.diurnal
 #' @export
 #'
 #' @examples
 #' # default
 #' day0 <- chamber.diurnal()
-#' chamber.diurnal.plot(day0)
-#'
-chamber.diurnal.plot <- function(df){
+#' plot(day0)
+#' plot(day0, display = "light")
+#' plot(day0, display = "tide")
+#' plot(day0, display = "temp")
+plot.chamber.diurnal <- function(x, ...,
+                                 display = c("all", "light", "tide", "temperature")){
+
+  df <- x
 
   temp.breaks <- pretty(range(df$temp.air, df$temp.water))
   temp.breaks.range <- range(temp.breaks)
@@ -68,8 +76,19 @@ chamber.diurnal.plot <- function(df){
     labs(title = "Water change", y = NULL, x = "") +
     theme_minimal_grid()
 
-  output <- plot_grid(fig1, fig2, fig3, fig4, fig5, fig6,
-                      align = "hv")
+  display <- match.arg(display)
+
+  if (display == "all") {
+    output <- plot_grid(fig1, fig2, fig3, fig4, fig5, fig6,
+                        align = "hv")
+  } else if (display == "light") {
+    output <- fig1 + labs(x = "Time of day (h)")
+  } else if (display == "tide") {
+    output <- fig4 + labs(x = "Time of day (h)")
+  } else if (display == "temperature") {
+    output <- plot_grid(fig2, fig3, fig4, fig5,
+                        align = "hv")
+  }
 
   output
 }

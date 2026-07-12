@@ -42,7 +42,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        light.duration = 16,
                        light.peak.time = 13,
                        light.max = 100,
-                       temp.model = "sin",
+                       temp.model = "sinusoidal",
                        temp.air.mean = 17,
                        temp.air.range = 8,
                        temp.water.mean = 19,
@@ -168,5 +168,6 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        wc = wc
   )
 
+  class(output) <- c("chamber.diurnal", "data.frame")
   output
 }

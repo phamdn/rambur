@@ -11,7 +11,7 @@
 #' @importFrom readr read_csv cols col_double col_datetime problems read_lines
 #' @importFrom stats dnorm acf median na.omit
 #' @importFrom utils head tail write.table write.csv
-#' @importFrom graphics abline points text
+#' @importFrom graphics abline points text legend lines
 #' @importFrom rlang .data :=
 #' @importFrom tidyselect where starts_with
 ## usethis namespace: end
