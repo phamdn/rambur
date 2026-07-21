@@ -27,6 +27,7 @@
 #' # default
 #' day0 <- chamber.diurnal()
 #' day0
+#' plot(day0)
 #'
 #' # custom
 #' chamber.diurnal(day = -3, time.step = 0.5,
@@ -62,7 +63,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   solar.steps <- solar.day / time.step
 
   if (solar.steps != round(solar.steps)) {
-    stop("24 (h) divided by 'time.step' must result in a natural number.")
+    stop("24 (h) divided by 'time.step' must result in a positive integer.")
   }
 
   hour <- seq(from = 0, by = time.step, length.out = solar.steps)
@@ -71,18 +72,18 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   # light
 
-  if (light.model == "gaussian.100"){ # to be deprecated in future versions
-  ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
-  simulated.light <- dnorm(hour,
-                           mean = light.peak.time - time.step / 2, # continuity correction
-                           sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
-  light <- simulated.light / max(simulated.light) * 100 # unit %
-  light <- floor(light) # 0.6% will be 0%, not 1%
-  }
+  # if (light.model == "gaussian.100"){ # to be deprecated in future versions
+  # ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
+  # simulated.light <- dnorm(hour,
+  #                          mean = light.peak.time - time.step / 2, # continuity correction
+  #                          sd = (light.duration - time.step) / 6) # three-sigma rule of thumb
+  # light <- simulated.light / max(simulated.light) * 100 # unit %
+  # light <- floor(light) # 0.6% will be 0%, not 1%
+  # }
 
   if (light.model == "gaussian"){
 
-    if (light.duration <= time.step || light.max == 0) {
+    if (light.duration <= time.step || light.max == 0) { # some edge cases
       light <- rep(0, solar.steps)
     } else if (light.duration > solar.day) {
       light <- rep(light.max, solar.steps)
@@ -115,8 +116,9 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   # air and water temperature
   if (temp.model == "sinusoidal") {
+    # plot(0:360, sinpi(0:360 / 180)) # original sin func
     simulated.temp <-
-      (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2 # see plot(0:360, sinpi(0:360 / 180))
+      (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2
 
     temp.air <- (temp.air.mean - temp.air.range/2) + simulated.temp * temp.air.range
 
@@ -133,19 +135,21 @@ chamber.diurnal <- function(day = 0, time.step = 1,
 
   immersion <- rep(ie.cycle, each = steps.per.entry) # has the length of tidal.steps NOT solar.steps
 
+  steps.shift <- round(iec.start.time / time.step) # add round to fix floating-point precision issue, see ?integer
+
+  immersion <- c(
+    tail(immersion, steps.shift), # take some tail values and put forward
+    head(immersion, solar.steps - steps.shift) # take the head values and move behind
+  ) # also has the length of solar.steps
+
   # if (iec.start.time > 0) { # not needed anymore
-    steps.shift <- round(iec.start.time / time.step) #add round to fix floating-point precision
 
     # if (steps.shift != round(steps.shift)) {
     #   stop("'iec.start.time' divided by 'time.step' must result in a natural number.")
     # } dont use, cause error due to floating-point precision, consider all.equal in future
 
-    immersion <- c(
-      tail(immersion, steps.shift), # take some tail values and put forward
-      head(immersion, solar.steps - steps.shift) # take the head values and move behind
       # head(immersion, - steps.shift) works in case of 24h tidal day but looks confusing
       # not work for iec.start.time = 0 or tidal day > 24h
-    ) # NOW has the length of solar.steps
   # }
 
   # exposure temperature
@@ -159,7 +163,6 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   # output
   output <- data.frame(day = day,
                        hour = hour,
-                       # day.dec = day.dec,
                        light = light,
                        temp.air = round(temp.air, digits = 1),
                        temp.water = round(temp.water, digits = 1),

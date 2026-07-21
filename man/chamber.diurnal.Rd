@@ -67,6 +67,7 @@ A worker function to design the diurnal patterns of environmental variables.
 # default
 day0 <- chamber.diurnal()
 day0
+plot(day0)
 
 # custom
 chamber.diurnal(day = -3, time.step = 0.5,
