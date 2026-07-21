@@ -1,6 +1,6 @@
-#' Chamber Helper: Designing Diurnal Profile
+#' Chamber: Designing Diurnal Profile
 #'
-#' A helper function to design the diurnal patterns of environmental variables.
+#' A worker function to design the diurnal patterns of environmental variables.
 #'
 #' @param day an integer, the day of experiment.
 #' @param time.step a numeric, the resolution of the profile in hours.
@@ -11,17 +11,16 @@
 #' @param temp.water.mean a numeric, the mean of water temperature during the day in °C.
 #' @param temp.water.range a numeric, the range of water temperature during the day in °C.
 #' @param temp.peak.time a numeric, time of day when temperature peaks.
-#' @param tidal.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
-#' @param tidal.start.time a numeric, time of day when tidal cycle starts.
+#' @param ie.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
+#' @param iec.start.time a numeric, time of day when tidal cycle starts.
 #' @param wc.time a numeric, time of day when automatic water change starts.
 #' @param light.model a character string, pattern of light. Default to "gaussian", indicating gaussian function.
 #' @param light.max an integer, maximum light intensity.
 #' @param tidal.day a numeric, tidal day duration in hours. Default to 24, same as the solar day.
-#' @param temp.model
-#' @param seed
+#' @param temp.model a character string, pattern of temperature. Default to "sinusoidal", indicating sinusoidal function.
 #'
 #' @returns a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-#' as \code{light}, \code{temp.air}, \code{temp.water}, \code{tide}, \code{temp}, \code{wc}.
+#' as \code{light}, \code{temp.air}, \code{temp.water}, \code{immersion}, \code{temp}, \code{wc}.
 #' @export
 #'
 #' @examples
@@ -34,25 +33,28 @@
 #'   light.duration = 17, light.peak.time = 12,
 #'   temp.air.mean = 30, temp.air.range = 10,
 #'   temp.water.mean = 20, temp.water.range = 2, temp.peak.time = 14,
-#'   tidal.cycle =  c(0, 1), tidal.start.time = 2.5,
+#'   ie.cycle =  c(0, 1), iec.start.time = 2.5,
 #'   wc.time = 16.5)
 #'
 chamber.diurnal <- function(day = 0, time.step = 1,
+
                        light.model = "gaussian",
                        light.duration = 16,
                        light.peak.time = 13,
                        light.max = 100,
+
                        temp.model = "sinusoidal",
                        temp.air.mean = 17,
                        temp.air.range = 8,
                        temp.water.mean = 19,
                        temp.water.range = 1,
                        temp.peak.time = 15,
+
                        tidal.day = 24,
-                       tidal.cycle =  c(0, 1, 0, 1),
-                       tidal.start.time = 0,
-                       wc.time = NA,
-                       seed = 1
+                       ie.cycle =  c(0, 1, 0, 1),
+                       iec.start.time = 0,
+
+                       wc.time = NA
 ){
 
   # set time
@@ -110,46 +112,44 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   #   set.seed(seed)
   #   light <- sample(1 : light.max, size = solar.steps, replace = TRUE)
   # }
-  #
-  # else {
-  #   stop("light.model must be 'gaussian', 'constant', or 'random'.")
-  # }
 
   # air and water temperature
-  simulated.temp <-
-    (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2 # see plot(0:360, sinpi(0:360 / 180))
+  if (temp.model == "sinusoidal") {
+    simulated.temp <-
+      (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2 # see plot(0:360, sinpi(0:360 / 180))
 
-  temp.air <- (temp.air.mean - temp.air.range/2) + simulated.temp * temp.air.range
+    temp.air <- (temp.air.mean - temp.air.range/2) + simulated.temp * temp.air.range
 
-  temp.water <- (temp.water.mean - temp.water.range/2) + simulated.temp * temp.water.range
-
-  # tide
-  tidal.steps <- tidal.day / time.step
-  steps.per.entry <- tidal.steps / length(tidal.cycle)
-
-  if (steps.per.entry != round(steps.per.entry)) {
-    stop("The length of 'tidal.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal).")
+    temp.water <- (temp.water.mean - temp.water.range/2) + simulated.temp * temp.water.range
   }
 
-  tide <- rep(tidal.cycle, each = steps.per.entry) # has the length of tidal.steps NOT solar.steps
+  # immersion
+  tidal.steps <- tidal.day / time.step
+  steps.per.entry <- tidal.steps / length(ie.cycle)
 
-  # if (tidal.start.time > 0) { # not needed anymore
-    steps.shift <- round(tidal.start.time / time.step) #add round to fix floating-point precision
+  if (steps.per.entry != round(steps.per.entry)) {
+    stop("The length of 'ie.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal).")
+  }
+
+  immersion <- rep(ie.cycle, each = steps.per.entry) # has the length of tidal.steps NOT solar.steps
+
+  # if (iec.start.time > 0) { # not needed anymore
+    steps.shift <- round(iec.start.time / time.step) #add round to fix floating-point precision
 
     # if (steps.shift != round(steps.shift)) {
-    #   stop("'tidal.start.time' divided by 'time.step' must result in a natural number.")
+    #   stop("'iec.start.time' divided by 'time.step' must result in a natural number.")
     # } dont use, cause error due to floating-point precision, consider all.equal in future
 
-    tide <- c(
-      tail(tide, steps.shift), # take some tail values and put forward
-      head(tide, solar.steps - steps.shift) # take the head values and move behind
-      # head(tide, - steps.shift) works in case of 24h tidal day but looks confusing
-      # not work for tidal.start.time = 0 or tidal day > 24h
+    immersion <- c(
+      tail(immersion, steps.shift), # take some tail values and put forward
+      head(immersion, solar.steps - steps.shift) # take the head values and move behind
+      # head(immersion, - steps.shift) works in case of 24h tidal day but looks confusing
+      # not work for iec.start.time = 0 or tidal day > 24h
     ) # NOW has the length of solar.steps
   # }
 
   # exposure temperature
-  temp <- ifelse(tide == 0, temp.air, temp.water)
+  temp <- ifelse(immersion == 0, temp.air, temp.water)
 
   # water change
   wc <- rep(0, solar.steps) # no water change as default
@@ -163,7 +163,7 @@ chamber.diurnal <- function(day = 0, time.step = 1,
                        light = light,
                        temp.air = round(temp.air, digits = 1),
                        temp.water = round(temp.water, digits = 1),
-                       tide = tide,
+                       immersion = immersion,
                        temp = round(temp, digits = 1),
                        wc = wc
   )

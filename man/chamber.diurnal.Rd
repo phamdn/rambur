@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.diurnal.R
 \name{chamber.diurnal}
 \alias{chamber.diurnal}
-\title{Chamber Helper: Designing Diurnal Profile}
+\title{Chamber: Designing Diurnal Profile}
 \usage{
 chamber.diurnal(
   day = 0,
@@ -18,10 +18,9 @@ chamber.diurnal(
   temp.water.range = 1,
   temp.peak.time = 15,
   tidal.day = 24,
-  tidal.cycle = c(0, 1, 0, 1),
-  tidal.start.time = 0,
-  wc.time = NA,
-  seed = 1
+  ie.cycle = c(0, 1, 0, 1),
+  iec.start.time = 0,
+  wc.time = NA
 )
 }
 \arguments{
@@ -37,6 +36,8 @@ chamber.diurnal(
 
 \item{light.max}{an integer, maximum light intensity.}
 
+\item{temp.model}{a character string, pattern of temperature. Default to "sinusoidal", indicating sinusoidal function.}
+
 \item{temp.air.mean}{a numeric, the mean of air temperature during the day in °C.}
 
 \item{temp.air.range}{a numeric, the range of air temperature during the day in °C.}
@@ -49,18 +50,18 @@ chamber.diurnal(
 
 \item{tidal.day}{a numeric, tidal day duration in hours. Default to 24, same as the solar day.}
 
-\item{tidal.cycle}{a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)}
+\item{ie.cycle}{a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)}
 
-\item{tidal.start.time}{a numeric, time of day when tidal cycle starts.}
+\item{iec.start.time}{a numeric, time of day when tidal cycle starts.}
 
 \item{wc.time}{a numeric, time of day when automatic water change starts.}
 }
 \value{
 a data frame with eight columns, including time as \code{day} and \code{hour}, and environmental variables
-as \code{light}, \code{temp.air}, \code{temp.water}, \code{tide}, \code{temp}, \code{wc}.
+as \code{light}, \code{temp.air}, \code{temp.water}, \code{immersion}, \code{temp}, \code{wc}.
 }
 \description{
-A helper function to design the diurnal patterns of environmental variables.
+A worker function to design the diurnal patterns of environmental variables.
 }
 \examples{
 # default
@@ -72,7 +73,7 @@ chamber.diurnal(day = -3, time.step = 0.5,
   light.duration = 17, light.peak.time = 12,
   temp.air.mean = 30, temp.air.range = 10,
   temp.water.mean = 20, temp.water.range = 2, temp.peak.time = 14,
-  tidal.cycle =  c(0, 1), tidal.start.time = 2.5,
+  ie.cycle =  c(0, 1), iec.start.time = 2.5,
   wc.time = 16.5)
 
 }

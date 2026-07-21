@@ -2,9 +2,9 @@
 % Please edit documentation in R/plot.chamber.diurnal.R
 \name{plot.chamber.diurnal}
 \alias{plot.chamber.diurnal}
-\title{Chamber Helper: Plotting Diurnal Profile}
+\title{Chamber: Plotting Diurnal Profile}
 \usage{
-\method{plot}{chamber.diurnal}(x, ..., display = c("all", "light", "tide", "temperature"))
+\method{plot}{chamber.diurnal}(x, ..., display = c("all", "light", "immersion", "temperature"))
 }
 \arguments{
 \item{x}{a data frame, output of \code{\link{chamber.diurnal}}.}
@@ -17,13 +17,13 @@
 a six-panel plot of environmental variables.
 }
 \description{
-A helper function to plot the diurnal patterns of environmental variables.
+A function to plot the diurnal patterns of environmental variables.
 }
 \examples{
 # default
 day0 <- chamber.diurnal()
 plot(day0)
 plot(day0, display = "light")
-plot(day0, display = "tide")
+plot(day0, display = "immersion")
 plot(day0, display = "temp")
 }

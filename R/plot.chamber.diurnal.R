@@ -1,6 +1,6 @@
-#' Chamber Helper: Plotting Diurnal Profile
+#' Chamber: Plotting Diurnal Profile
 #'
-#' A helper function to plot the diurnal patterns of environmental variables.
+#' A function to plot the diurnal patterns of environmental variables.
 #'
 #' @param display a character string, which plots to display.
 #' @param x a data frame, output of \code{\link{chamber.diurnal}}.
@@ -15,10 +15,10 @@
 #' day0 <- chamber.diurnal()
 #' plot(day0)
 #' plot(day0, display = "light")
-#' plot(day0, display = "tide")
+#' plot(day0, display = "immersion")
 #' plot(day0, display = "temp")
 plot.chamber.diurnal <- function(x, ...,
-                                 display = c("all", "light", "tide", "temperature")){
+                                 display = c("all", "light", "immersion", "temperature")){
 
   df <- x
 
@@ -31,6 +31,7 @@ plot.chamber.diurnal <- function(x, ...,
     geom_point(color = 7) + # color = 7
     # geom_line(linetype = 2) + # normal curve
     scale_x_continuous(breaks = hour.breaks) +
+    scale_y_continuous(limits = c(0, 100)) +
     labs(title = "Light", y = "%", x = "") +
     theme_minimal_grid()
 
@@ -50,17 +51,17 @@ plot.chamber.diurnal <- function(x, ...,
     labs(title = "Water temperature", y = "\u00B0C", x = "") +
     theme_minimal_grid()
 
-  fig4 <- ggplot(df, aes(x = .data$hour, y = .data$tide)) +
+  fig4 <- ggplot(df, aes(x = .data$hour, y = .data$immersion)) +
     geom_step(color = 1, linetype = 2) +
     geom_point(color = 4) + #color = 4
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Tide", y = NULL, x = "") +
+    labs(title = "Immersion", y = NULL, x = "") +
     theme_minimal_grid()
 
   fig5 <- ggplot(df, aes(x = .data$hour, y = .data$temp)) +
     geom_line(color = 1, linetype = 2) +
-    geom_point(color = 2, aes(shape = as.factor(.data$tide))) + #color = 2
+    geom_point(color = 2, aes(shape = as.factor(.data$immersion))) + #color = 2
     scale_shape_manual(values = c(17, 15)) +
     scale_x_continuous(breaks = hour.breaks) +
     scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
@@ -83,7 +84,7 @@ plot.chamber.diurnal <- function(x, ...,
                         align = "hv")
   } else if (display == "light") {
     output <- fig1 + labs(x = "Time of day (h)")
-  } else if (display == "tide") {
+  } else if (display == "immersion") {
     output <- fig4 + labs(x = "Time of day (h)")
   } else if (display == "temperature") {
     output <- plot_grid(fig2, fig3, fig4, fig5,
