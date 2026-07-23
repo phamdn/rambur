@@ -1,4 +1,4 @@
-#' General Helper: Converting UTC Datetime to Local Datetime
+#' General Helper: Converting UTC Datetime to Local Datetime and Adding Date and Time
 #'
 #' @param df
 #' @param timezone
@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-datetime <- function(df, timezone = "") {
+add.datetime <- function(df, timezone = "") {
 
   if ("datetime.UTC" %in% names(df)) {
     df <- df %>%
