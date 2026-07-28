@@ -1,4 +1,6 @@
-#' General Helper: Converting UTC Datetime to Local Datetime and Adding Date and Time
+#' Converting UTC to Local Datetime
+#'
+#' A helper function to add local datetime, date, and time columns.
 #'
 #' @param df
 #' @param timezone

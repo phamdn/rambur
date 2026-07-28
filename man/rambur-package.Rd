@@ -6,7 +6,7 @@
 \alias{rambur-package}
 \title{rambur: Research Assistant in Marine Biology at the University of Rostock}
 \description{
-A toolkit for your intertidal experiments.
+A toolkit for your intertidal experiments, supporting ElectricBlue Intertidal Chamber, Pulse, and EnvLogger.
 }
 \author{
 \strong{Maintainer}: Duy Nghia Pham \email{nghiapham@yandex.com} (\href{https://orcid.org/0000-0003-1349-1710}{ORCID})
