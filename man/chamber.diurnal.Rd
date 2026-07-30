@@ -78,3 +78,6 @@ chamber.diurnal(day = -3, time.step = 0.5,
   wc.time = 16.5)
 
 }
+\seealso{
+\code{\link[=chamber.design]{chamber.design()}}
+}

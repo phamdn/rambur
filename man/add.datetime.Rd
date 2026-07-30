@@ -4,7 +4,7 @@
 \alias{add.datetime}
 \title{Converting UTC to Local Datetime}
 \usage{
-add.datetime(df, timezone = "")
+add.datetime(df, timezone)
 }
 \description{
 A helper function to add local datetime, date, and time columns.

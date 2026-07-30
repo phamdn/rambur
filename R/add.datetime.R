@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-add.datetime <- function(df, timezone = "") {
+add.datetime <- function(df, timezone) {
 
   if ("datetime.UTC" %in% names(df)) {
     df <- df %>%
@@ -21,9 +21,12 @@ add.datetime <- function(df, timezone = "") {
       )
 
     # notice about time zone
+    # need to check main functions to avoid duplicate messages
     if (timezone == "") {
-      message("using ", Sys.timezone(), " time zone")
-    } # need to check main functions to avoid duplicate messages
+      message("converting UTC to ", Sys.timezone(), " time")
+    } else {
+      message("converting UTC to ", timezone, " time")
+    }
   }
 
   else if ("datetime" %in% names(df)) {

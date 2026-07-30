@@ -9,7 +9,7 @@ robo.read2(
   file.name = ".csv",
   metadata.lines = 21,
   timezone = "",
-  summary.period = NULL
+  agg.res = NULL
 )
 }
 \arguments{
@@ -21,10 +21,10 @@ robo.read2(
 
 \item{timezone}{a character string, time zone.}
 
-\item{summary.period}{a character string, duration to summarize the mean of the records. Optional.}
+\item{agg.res}{a character string, duration to summarize the mean of the records. Optional.}
 }
 \value{
-a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{summarized.data} for enhanced, synchronized, and summarized records, respectively.
+a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and summarized records, respectively.
 }
 \description{
 A function to read the CSV Records of multiple robomussels.
@@ -32,5 +32,5 @@ A function to read the CSV Records of multiple robomussels.
 \examples{
 robo.folder <- system.file("extdata/robo", package = "rambur")
 robo.read2(robo.folder)
-robo.read2(robo.folder, summary.period = "hour")
+robo.read2(robo.folder, agg.res = "hour")
 }

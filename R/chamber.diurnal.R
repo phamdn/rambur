@@ -23,6 +23,8 @@
 #' as \code{light}, \code{temp.air}, \code{temp.water}, \code{immersion}, \code{temp}, \code{wc}.
 #' @export
 #'
+#' @seealso [chamber.design()]
+#'
 #' @examples
 #' # default
 #' day0 <- chamber.diurnal()

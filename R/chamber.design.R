@@ -2,7 +2,7 @@
 #'
 #' A function to expand the diurnal patterns of environmental variables into multiday patterns.
 #'
-#' @param daily.settings a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link{chamber.diurnal}}.
+#' @param daily.settings a data frame, diurnal patterns of environmental variables. Columns must match arguments of [chamber.diurnal()].
 #' @param start.date a character string, start date of the experiment.
 #' @param export a logical, whether to export the output as files (e.g., Profile.txt).
 #' @param folder.path a character string, path to the export folder.
@@ -10,6 +10,8 @@
 #'
 #' @returns a list of two data frames, \code{daily.settings} as input but with an extra column \code{date}, and \code{design} of expanded multiday patterns.
 #' @export
+#'
+#' @seealso [chamber.diurnal()]
 #'
 #' @examples
 #' # acclimation phase
@@ -61,7 +63,7 @@ chamber.design <- function(daily.settings,
     #        .after = .data$datetime
     #        )
     mutate(datetime = force_tz(.data$datetime, tzone = timezone)) |> # chamber uses UTC timestamp but implements it as local time
-    add.datetime()
+    add.datetime(timezone = timezone)
 
   # check profile: length of each line
   invalid <- which(nchar(design$profile) != 19)

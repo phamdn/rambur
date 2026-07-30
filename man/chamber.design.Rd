@@ -13,7 +13,7 @@ chamber.design(
 )
 }
 \arguments{
-\item{daily.settings}{a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link{chamber.diurnal}}.}
+\item{daily.settings}{a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link[=chamber.diurnal]{chamber.diurnal()}}.}
 
 \item{start.date}{a character string, start date of the experiment.}
 
@@ -40,4 +40,7 @@ start.date = "2025-05-15", export = FALSE)
 
 acc
 
+}
+\seealso{
+\code{\link[=chamber.diurnal]{chamber.diurnal()}}
 }
