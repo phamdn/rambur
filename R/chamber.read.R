@@ -1,6 +1,6 @@
-#' Chamber: Reading Multiple CSV Records
+#' Chamber: Reading CSV Log Files
 #'
-#' A function to read the CSV records of intertidal chambers.
+#' A function to read the CSV log files of an intertidal chamber.
 #'
 #' @param timezone a character string, time zone.
 #' @param folder.path a character string, path to the folder of CSV records.

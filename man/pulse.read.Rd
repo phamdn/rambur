@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse.read.R
 \name{pulse.read}
 \alias{pulse.read}
-\title{Pulse: Reading Multiple CSV Records}
+\title{Pulse: Reading CSV Log Files}
 \usage{
 pulse.read(
   folder.path = NULL,
@@ -27,7 +27,7 @@ pulse.read(
 a data frame of enhanced records.
 }
 \description{
-A function to read the CSV records of pulse devices.
+A function to read the CSV log files of a pulse logger.
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")

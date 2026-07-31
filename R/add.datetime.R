@@ -1,6 +1,6 @@
-#' Converting UTC to Local Datetime
+#' Adding Local Datetime
 #'
-#' A helper function to add local datetime, date, and time columns.
+#' A helper function to convert UTC to local datetime, then add date and time columns.
 #'
 #' @param df
 #' @param timezone
@@ -31,6 +31,10 @@ add.datetime <- function(df, timezone) {
 
   else if ("datetime" %in% names(df)) {
     df <- df %>%
+      # mutate(
+      #   datetime.UTC = as.POSIXct(.data$datetime, tz = "UTC"),
+      #   .before = .data$datetime
+      # ) |>
       mutate(
         date = as_date(.data$datetime),
         time = as_hms(.data$datetime),

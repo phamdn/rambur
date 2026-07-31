@@ -2,10 +2,10 @@
 % Please edit documentation in R/add.datetime.R
 \name{add.datetime}
 \alias{add.datetime}
-\title{Converting UTC to Local Datetime}
+\title{Adding Local Datetime}
 \usage{
 add.datetime(df, timezone)
 }
 \description{
-A helper function to add local datetime, date, and time columns.
+A helper function to convert UTC to local datetime, then add date and time columns.
 }

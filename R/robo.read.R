@@ -1,6 +1,6 @@
-#' Robomussel: Reading a Single CSV Record
+#' Robomussel: Reading a CSV Log File
 #'
-#' A function to read the CSV Record of a single robomussel.
+#' A function to read the CSV log file of a single robomussel or temperature EnvLogger.
 #'
 #' @param file.path a character string, path to the file.
 #' @param metadata.lines an integer, number of lines to skip in the header.

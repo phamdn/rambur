@@ -2,7 +2,7 @@
 % Please edit documentation in R/robo.read.R
 \name{robo.read}
 \alias{robo.read}
-\title{Robomussel: Reading a Single CSV Record}
+\title{Robomussel: Reading a CSV Log File}
 \usage{
 robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 }
@@ -19,7 +19,7 @@ robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 a list of two data frames, \code{enhanced.data} and \code{summarized.data} for enhanced and summarized records, respectively.
 }
 \description{
-A function to read the CSV Record of a single robomussel.
+A function to read the CSV log file of a single robomussel or temperature EnvLogger.
 }
 \examples{
 robo.file <- system.file("extdata/robo/RM1.csv", package = "rambur")

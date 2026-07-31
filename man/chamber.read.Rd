@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.read.R
 \name{chamber.read}
 \alias{chamber.read}
-\title{Chamber: Reading Multiple CSV Records}
+\title{Chamber: Reading CSV Log Files}
 \usage{
 chamber.read(
   folder.path = NULL,
@@ -30,7 +30,7 @@ chamber.read(
 a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{summarized.data} for original, enhanced, and summarized records, respectively.
 }
 \description{
-A function to read the CSV records of intertidal chambers.
+A function to read the CSV log files of an intertidal chamber.
 }
 \examples{
 folder <- system.file("extdata/chamber", package = "rambur")

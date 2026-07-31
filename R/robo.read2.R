@@ -1,6 +1,6 @@
-#' Robomussels: Reading Multiple CSV Records
+#' RobomusselS: Reading CSV Log Files
 #'
-#' A function to read the CSV Records of multiple robomussels.
+#' A function to read the log files of multiple robomussels or temperature EnvLoggers.
 #'
 #' @param folder.path a character string, path to the folder.
 #' @param file.name a character string, filter the file name.
@@ -76,15 +76,16 @@ robo.read2 <- function(folder.path = NULL,
   synchronized.data <- imap(enhanced.data, \(x, idx) {
     x %>%
       transmute(
-        datetime = floor_date(.data$datetime, "minute"),
+        datetime.UTC = floor_date(.data$datetime.UTC, "minute"),
         !!paste0("temp", idx) := .data$temp
       )
   }) %>%
-    reduce(full_join, by = "datetime") %>%
-    mutate(date = as_date(.data$datetime),
-           time = as_hms(.data$datetime),
-           .after = .data$datetime
-    ) %>%
+    reduce(full_join, by = "datetime.UTC") %>%
+    # mutate(date = as_date(.data$datetime),
+    #        time = as_hms(.data$datetime),
+    #        .after = .data$datetime
+    # ) %>%
+    add.datetime(timezone = timezone) |>
     mutate(
       temp = rowMeans(across(starts_with("temp")), na.rm = TRUE)
     )
@@ -97,14 +98,14 @@ robo.read2 <- function(folder.path = NULL,
 
   if (!is.null(agg.res)) {
     aggregated.data <- synchronized.data %>%
-      mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
-      group_by(.data$datetime) %>%
+      mutate(datetime.UTC = floor_date(.data$datetime.UTC, agg.res)) %>%
+      group_by(.data$datetime.UTC) %>%
       summarize(temp = mean(.data$temp, na.rm = TRUE)) %>%
-      mutate(date = as_date(.data$datetime),
-             time = as_hms(.data$datetime),
-             .after = .data$datetime
-      )
-
+      # mutate(date = as_date(.data$datetime),
+      #        time = as_hms(.data$datetime),
+      #        .after = .data$datetime
+      # )
+      add.datetime(timezone = timezone)
 
     output$aggregated.data <- aggregated.data
   }
