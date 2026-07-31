@@ -1,46 +1,43 @@
 #' Adding Local Datetime
 #'
-#' A helper function to convert UTC to local datetime if needed, then add date and time columns.
+#' A helper function to convert UTC datetime to local datetime, then break it into date and time.
 #'
 #' @param df a data frame.
-#' @param timezone a character string, time zone.
+#' @param timezone a character string, local time zone.
+#' @param reverse a logical, whether to add datetime.UTC column.
 #'
 #' @returns
 #' @export
 #'
 #' @examples
-add.datetime <- function(df, timezone) {
+add.datetime <- function(df, timezone, reverse = FALSE) {
 
-  if ("datetime.UTC" %in% names(df)) {
-    df <- df %>%
-      mutate(
-        datetime = as.POSIXct(.data$datetime.UTC, tz = timezone),
-        # date = as_date(.data$datetime),
-        # time = as_hms(.data$datetime),
-        .after = .data$datetime.UTC
-      )
-
-    # notice about time zone
-    # need to check main functions to avoid duplicate messages
-    if (timezone == "") {
-      message("converting UTC to ", Sys.timezone(), " time")
-    } else {
-      message("converting UTC to ", timezone, " time")
+  if (!reverse){
+    if (!"datetime" %in% names(df)) { # if datetime missing
+      df <- df %>%
+        mutate(
+          datetime = as.POSIXct(.data$datetime.UTC, tz = timezone),
+          .after = .data$datetime.UTC
+        )
+      # notice about time zone
+      message("converting UTC to ", ifelse(timezone == "", Sys.timezone(), timezone), " time")
     }
-  }
 
-  # else if ("datetime" %in% names(df)) {
-    if ("datetime" %in% names(df)) {
+    if (!"date" %in% names(df) || !"time" %in% names(df)) { # if date or time missing
+      df <- df %>%
+        mutate(
+          date = as_date(.data$datetime),
+          time = as_hms(.data$datetime),
+          .after = .data$datetime
+        )
+    }
+  } else { # reverse = TRUE, user wants to convert local time to UTC
     df <- df %>%
-      # mutate(
-      #   datetime.UTC = as.POSIXct(.data$datetime, tz = "UTC"),
-      #   .before = .data$datetime
-      # ) |>
       mutate(
-        date = as_date(.data$datetime),
-        time = as_hms(.data$datetime),
-        .after = .data$datetime
+        datetime.UTC = as.POSIXct(.data$datetime, tz = "UTC"),
+        .before = .data$datetime
       )
+    message("adding UTC time")
   }
 
   df

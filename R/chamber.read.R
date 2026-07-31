@@ -39,11 +39,12 @@ chamber.read <- function(folder.path = NULL,
   message("importing ", length(chamber.files), " files")
 
   # notice about time zone
-  if (timezone == "") {
-    message("using ", Sys.timezone(), " time zone")
-  } else {
-    message("using ", timezone, " time zone")
-  }
+  message("using ", ifelse(timezone == "", Sys.timezone(), timezone), " time zone")
+  # if (timezone == "") {
+  #   message("using ", Sys.timezone(), " time zone")
+  # } else {
+  #   message("using ", timezone, " time zone")
+  # }
 
   # read and merge to a single original dataframe
   original.data <- read_csv(chamber.files, skip = metadata.lines,

@@ -4,13 +4,15 @@
 \alias{add.datetime}
 \title{Adding Local Datetime}
 \usage{
-add.datetime(df, timezone)
+add.datetime(df, timezone, reverse = FALSE)
 }
 \arguments{
 \item{df}{a data frame.}
 
-\item{timezone}{a character string, time zone.}
+\item{timezone}{a character string, local time zone.}
+
+\item{reverse}{a logical, whether to add datetime.UTC column.}
 }
 \description{
-A helper function to convert UTC to local datetime if needed, then add date and time columns.
+A helper function to convert UTC datetime to local datetime, then break it into date and time.
 }
