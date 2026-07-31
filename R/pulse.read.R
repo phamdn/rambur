@@ -1,14 +1,14 @@
 #' Pulse: Reading CSV Log Files
 #'
-#' A function to read the CSV log files of a pulse logger.
+#' A function to read the CSV log files of a PULSE V2 logger.
 #'
 #' @param timezone a character string, time zone.
 #' @param folder.path a character string, path to the folder of CSV records.
 #' @param metadata.lines an integer, number of lines to skip in the header.
-#' @param size.limits a vector of two numerics, minimum and maximum file sizes in bytes.
+#' @param size.limits a vector of two numerics, minimum and maximum file sizes in bytes, e.g., 1e6 bytes (~1 MB).
 #' @param file.name a character string, filter the file name.
 #'
-#' @returns a data frame of enhanced records.
+#' @returns a data frame of enhanced data.
 #' @export
 #'
 #' @examples
@@ -16,8 +16,10 @@
 #' pulse.data <- pulse.read(folder)
 #' pulse.data
 pulse.read <- function(folder.path = NULL,
-                       file.name = "0000.CSV", size.limits = c(1000e3, 2000e3),
+                       file.name = ".CSV",
+                       size.limits = c(0, Inf),
                        metadata.lines = 22,
+                       channel.names = NULL,
                        timezone = ""){
 
   if (is.null(folder.path)) {
@@ -40,9 +42,13 @@ pulse.read <- function(folder.path = NULL,
   #   message("using ", Sys.timezone(), " time zone")
   # }
 
+  if (is.null(channel.names)) {
+    channel.names <- paste0("channel.", 1:10)
+  } else stopifnot("10 channel names are required" = length(channel.names) == 10)
+
   # read and merge to a single original dataframe
   original.data <- read_csv(pulse.files, skip = metadata.lines,
-                            col_names = c("time", paste0("channel.", 1:10)), # need to improve to retain original sample names
+                            col_names = c("time", channel.names), # need to improve to retain original sample names
                             # col_types = cols(time = col_datetime())
                             show_col_types = FALSE
                             )

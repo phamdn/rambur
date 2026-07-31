@@ -2,8 +2,8 @@
 #'
 #' A helper function to convert UTC to local datetime, then add date and time columns.
 #'
-#' @param df
-#' @param timezone
+#' @param df a data frame.
+#' @param timezone a character string, time zone.
 #'
 #' @returns
 #' @export

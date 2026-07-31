@@ -6,9 +6,10 @@
 \usage{
 pulse.read(
   folder.path = NULL,
-  file.name = "0000.CSV",
-  size.limits = c(1e+06, 2e+06),
+  file.name = ".CSV",
+  size.limits = c(0, Inf),
   metadata.lines = 22,
+  channel.names = NULL,
   timezone = ""
 )
 }
@@ -17,17 +18,17 @@ pulse.read(
 
 \item{file.name}{a character string, filter the file name.}
 
-\item{size.limits}{a vector of two numerics, minimum and maximum file sizes in bytes.}
+\item{size.limits}{a vector of two numerics, minimum and maximum file sizes in bytes, e.g., 1e6 bytes (~1 MB).}
 
 \item{metadata.lines}{an integer, number of lines to skip in the header.}
 
 \item{timezone}{a character string, time zone.}
 }
 \value{
-a data frame of enhanced records.
+a data frame of enhanced data.
 }
 \description{
-A function to read the CSV log files of a pulse logger.
+A function to read the CSV log files of a PULSE V2 logger.
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")

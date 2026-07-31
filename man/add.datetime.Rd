@@ -6,6 +6,11 @@
 \usage{
 add.datetime(df, timezone)
 }
+\arguments{
+\item{df}{a data frame.}
+
+\item{timezone}{a character string, time zone.}
+}
 \description{
 A helper function to convert UTC to local datetime, then add date and time columns.
 }

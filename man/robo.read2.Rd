@@ -24,13 +24,12 @@ robo.read2(
 \item{agg.res}{a character string, duration to summarize the mean of the records. Optional.}
 }
 \value{
-a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and summarized records, respectively.
+a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and aggregated data, respectively.
 }
 \description{
 A function to read the log files of multiple robomussels or temperature EnvLoggers.
 }
 \examples{
 robo.folder <- system.file("extdata/robo", package = "rambur")
-robo.read2(robo.folder)
 robo.read2(robo.folder, agg.res = "hour")
 }

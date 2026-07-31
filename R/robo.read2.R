@@ -8,12 +8,11 @@
 #' @param timezone a character string, time zone.
 #' @param agg.res a character string, duration to summarize the mean of the records. Optional.
 #'
-#' @returns a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and summarized records, respectively.
+#' @returns a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and aggregated data, respectively.
 #' @export
 #'
 #' @examples
 #' robo.folder <- system.file("extdata/robo", package = "rambur")
-#' robo.read2(robo.folder)
 #' robo.read2(robo.folder, agg.res = "hour")
 robo.read2 <- function(folder.path = NULL,
                        file.name = ".csv",

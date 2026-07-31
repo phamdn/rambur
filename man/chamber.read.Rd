@@ -6,7 +6,7 @@
 \usage{
 chamber.read(
   folder.path = NULL,
-  file.name = "h.CSV",
+  file.name = ".CSV",
   size.limits = c(0, Inf),
   metadata.lines = 16,
   timezone = "",

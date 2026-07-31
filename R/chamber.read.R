@@ -17,7 +17,7 @@
 #' chamber.data <- chamber.read(folder)
 #' chamber.data
 chamber.read <- function(folder.path = NULL,
-                         file.name = "h.CSV", size.limits = c(0, Inf),
+                         file.name = ".CSV", size.limits = c(0, Inf),
                          metadata.lines = 16,
                          timezone = "",
                          summary.period = "hour"){
