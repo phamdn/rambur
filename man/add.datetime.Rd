@@ -12,5 +12,5 @@ add.datetime(df, timezone)
 \item{timezone}{a character string, time zone.}
 }
 \description{
-A helper function to convert UTC to local datetime, then add date and time columns.
+A helper function to convert UTC to local datetime if needed, then add date and time columns.
 }

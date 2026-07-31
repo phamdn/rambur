@@ -34,6 +34,8 @@ chamber.design <- function(daily.settings,
   # notice about time zone
   if (timezone == "") {
     message("using ", Sys.timezone(), " time zone")
+  } else {
+    message("using ", timezone, " time zone")
   }
 
   multiday.list <- do.call(mapply, c(chamber.diurnal, daily.settings, SIMPLIFY = FALSE))
@@ -63,7 +65,7 @@ chamber.design <- function(daily.settings,
     #        .after = .data$datetime
     #        )
     mutate(datetime = force_tz(.data$datetime, tzone = timezone)) |> # chamber uses UTC timestamp but implements it as local time
-    add.datetime(timezone = timezone)
+    add.datetime()
 
   # check profile: length of each line
   invalid <- which(nchar(design$profile) != 19)

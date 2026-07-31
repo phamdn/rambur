@@ -10,7 +10,7 @@ chamber.read(
   size.limits = c(0, Inf),
   metadata.lines = 16,
   timezone = "",
-  summary.period = "hour"
+  agg.res = "minute"
 )
 }
 \arguments{
@@ -24,10 +24,10 @@ chamber.read(
 
 \item{timezone}{a character string, time zone.}
 
-\item{summary.period}{a character string, duration to summarize the mean of the records.}
+\item{agg.res}{a character string, duration to summarize the mean of the records.}
 }
 \value{
-a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{summarized.data} for original, enhanced, and summarized records, respectively.
+a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{aggregated.data} for original, enhanced, and summarized records, respectively.
 }
 \description{
 A function to read the CSV log files of an intertidal chamber.

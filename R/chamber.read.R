@@ -7,9 +7,9 @@
 #' @param metadata.lines an integer, number of lines to skip in the header.
 #' @param file.name a character string, filter the file name.
 #' @param size.limits a vector of two numerics, minimum and maximum size in bytes.
-#' @param summary.period a character string, duration to summarize the mean of the records.
+#' @param agg.res a character string, duration to summarize the mean of the records.
 #'
-#' @returns a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{summarized.data} for original, enhanced, and summarized records, respectively.
+#' @returns a list of three data frames, \code{original.data}, \code{enhanced.data}, and \code{aggregated.data} for original, enhanced, and summarized records, respectively.
 #' @export
 #'
 #' @examples
@@ -17,10 +17,11 @@
 #' chamber.data <- chamber.read(folder)
 #' chamber.data
 chamber.read <- function(folder.path = NULL,
-                         file.name = ".CSV", size.limits = c(0, Inf),
+                         file.name = ".CSV",
+                         size.limits = c(0, Inf),
                          metadata.lines = 16,
                          timezone = "",
-                         summary.period = "hour"){
+                         agg.res = "minute"){
 
   if (is.null(folder.path)) {
     folder.path <- getwd()
@@ -40,6 +41,8 @@ chamber.read <- function(folder.path = NULL,
   # notice about time zone
   if (timezone == "") {
     message("using ", Sys.timezone(), " time zone")
+  } else {
+    message("using ", timezone, " time zone")
   }
 
   # read and merge to a single original dataframe
@@ -103,19 +106,20 @@ chamber.read <- function(folder.path = NULL,
       .before = 1
     )
 
-  summarized.data <- enhanced.data %>%
-    mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+  aggregated.data <- enhanced.data %>%
+    mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
     group_by(.data$datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
     summarize(across(c(.data$actual.light, .data$tide.pump, .data$actual.tide, .data$actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
-    mutate(date = as_date(.data$datetime), # better than as.Date(datetime, tz = timezone)
-           time = as_hms(.data$datetime),
-           .after = .data$datetime
-           )
+    # mutate(date = as_date(.data$datetime), # better than as.Date(datetime, tz = timezone)
+    #        time = as_hms(.data$datetime),
+    #        .after = .data$datetime
+    #        )
+    add.datetime()
 
   list(original.data = original.data, # keep to understand NA problems
        # problems = problems,
        enhanced.data = enhanced.data,
-       summarized.data = summarized.data
+       aggregated.data = aggregated.data
        )
 }
