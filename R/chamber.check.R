@@ -8,7 +8,7 @@
 #' @param dttm.limits a vector of two character strings, limits of dates.
 #' @param dttm.breaks a character string, duration between date breaks.
 #' @param dttm.labels a character string, format of dates.
-#' @param ambient.label a character string, how to label ambient temperature.
+#' @param ambient.label a character string, how to ambient temperature.
 #'
 #' @returns a three-panel plot of light, immersion, and temperature.
 #' @export
@@ -63,7 +63,7 @@ chamber.check <- function(design,
                               chamber.data$ambient.temp,
                               robo.data$body.temp,
                               na.rm = TRUE))
-  temp.breaks.range <- range(temp.breaks)
+  temp.limits <- range(temp.breaks)
 
   fig3.values <- c("Designed" = 1, "Actual" = 2, "Body" = 8)
   fig3.values[ambient.label] <- 3
@@ -79,7 +79,7 @@ chamber.check <- function(design,
     } +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +
-    scale_y_continuous(breaks = temp.breaks, limits = temp.breaks.range) +
+    scale_y_continuous(breaks = temp.breaks, limits = temp.limits) +
     scale_color_manual(values = fig3.values,
                        breaks = fig3.breaks) +
     labs(title = "Temperature", x = NULL, y = "\u00B0C", color = NULL) + # title = "Exposure temperature"

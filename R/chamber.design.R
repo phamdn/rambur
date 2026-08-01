@@ -84,7 +84,7 @@ chamber.design <- function(daily.settings,
   daily.settings$date <- as.POSIXct(start.date, tz = timezone) + as.difftime(daily.settings$day, units = "days")
   # chamber use UTC timestamp but implement it as local time
 
-  # export
+  # export files
   if (export) {
 
     if (is.null(folder.path)) {
@@ -95,23 +95,30 @@ chamber.design <- function(daily.settings,
       dir.create(folder.path, recursive = TRUE)
     }
 
-    write.csv(transform(daily.settings, ie.cycle = sapply(ie.cycle, toString)),
+    write.csv(
+      if ("ie.cycle" %in% names(daily.settings)){
+        transform(daily.settings, ie.cycle = sapply(ie.cycle, toString))
+      } else {
+        daily.settings
+      },
               file.path(folder.path, "daily.settings.csv"),
-              # quote = FALSE, # need to be TRUE otherwise wrong cols due to c(0,1,0,1)
+              # quote = FALSE, # need to be TRUE to wrap c(0,1,0,1) in "" otherwise commas interfere in CSV
               row.names = FALSE)
 
     # design.csv <- subset(design,
     #                       select = c(.data$datetime, .data$temp, .data$tide, .data$light, .data$wc, .data$profile))
-    design.csv <- design[, c("datetime", "temp", "immersion", "light", "wc", "profile")]
+    # design.csv <-
 
-    Profile.txt <- design$profile
+    # Profile.txt <-
 
     # write_xlsx(design.xlsx, file.path(folder.path, "Profile.xlsx")) # datetime column in excel shows UTC time!
-    write.csv(design.csv, file.path(folder.path, "design.csv"),
+    write.csv(design[, c("datetime", "temp", "immersion", "light", "wc", "profile")],
+              file.path(folder.path, "design.csv"),
               # quote = FALSE,
               row.names = FALSE)
 
-    write.table(Profile.txt, file.path(folder.path, "Profile.txt"),
+    write.table(design$profile,
+                file.path(folder.path, "Profile.txt"),
                 quote = FALSE,
                 row.names = FALSE,
                 col.names = FALSE)

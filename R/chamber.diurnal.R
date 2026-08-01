@@ -11,7 +11,7 @@
 #' @param temp.water.mean a numeric, the mean of water temperature during the day in °C.
 #' @param temp.water.range a numeric, the range of water temperature during the day in °C.
 #' @param temp.peak.time a numeric, time of day when temperature peaks.
-#' @param ie.cycle a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)
+#' @param ie.cycle a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal)
 #' @param iec.start.time a numeric, time of day when tidal cycle starts.
 #' @param wc.time a numeric, time of day when automatic water change starts.
 #' @param light.model a character string, pattern of light. Default to "gaussian", indicating gaussian function.

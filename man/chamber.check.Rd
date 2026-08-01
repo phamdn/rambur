@@ -27,7 +27,7 @@ chamber.check(
 
 \item{dttm.labels}{a character string, format of dates.}
 
-\item{ambient.label}{a character string, which term to use for ambient temperature.}
+\item{ambient.label}{a character string, how to ambient temperature.}
 }
 \value{
 a three-panel plot of light, immersion, and temperature.

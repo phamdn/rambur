@@ -50,7 +50,7 @@ chamber.diurnal(
 
 \item{tidal.day}{a numeric, tidal day duration in hours. Default to 24, same as the solar day.}
 
-\item{ie.cycle}{a vector of 0 and 1, the tidal cycle (e.g., semi-diurnal)}
+\item{ie.cycle}{a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal)}
 
 \item{iec.start.time}{a numeric, time of day when tidal cycle starts.}
 
