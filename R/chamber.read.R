@@ -72,26 +72,27 @@ chamber.read <- function(folder.path = NULL,
                                       # simply use mean() or sd() will not perform row-wise calculation
       # actual.temp.sd = apply(across(T1:T3), 1, sd),
       # actual.temp.diff = apply(across(T1:T3), 1, function(x) diff(range(x))),
-      room.temp = .data$T6,
+      ambient.temp = .data$T6,
 
-      storage.target.temp = .data$Base_setpoint,
-      storage.actual.temp1 = .data$T4,
-      storage.actual.temp2 = .data$T5,
-      storage.actual.temp = (.data$T4 + .data$T5)/2,
+      stor.target.temp = .data$Base_setpoint,
+      stor.actual.temp1 = .data$T4,
+      stor.actual.temp2 = .data$T5,
+      stor.actual.temp = (.data$T4 + .data$T5)/2,
 
-      target.tide = .data$Tide,
+      target.immersion = .data$Tide,
       tide.pump = .data$Tide_pump_state,
-      actual.tide1 = .data$WS1,
-      actual.tide2 = .data$WS2,
-      actual.tide3 = .data$WS3,
-      actual.tide = (.data$WS1 + .data$WS2 + .data$WS3)/3,
+      actual.immersion1 = .data$WS1,
+      actual.immersion2 = .data$WS2,
+      actual.immersion3 = .data$WS3,
+      actual.immersion = (.data$WS1 + .data$WS2 + .data$WS3)/3,
 
-      min.water1 = .data$WS6,
-      min.water2 = .data$WS7,
-      min.water3 = .data$WS8,
-      min.water = (.data$WS6 + .data$WS7 + .data$WS8)/3,
-      max.water.upper = .data$WS4,
-      max.water.lower = .data$WS5,
+      stor.min.water1 = .data$WS6,
+      stor.min.water2 = .data$WS7,
+      stor.min.water3 = .data$WS8,
+      stor.min.water = (.data$WS6 + .data$WS7 + .data$WS8)/3,
+      stor.max.water.em = .data$WS4,
+      stor.max.water.im = .data$WS5,
+
       wc.out = .data$Outlet_valve_state,
       wc.in = .data$Inlet_valve_state,
 
@@ -112,7 +113,7 @@ chamber.read <- function(folder.path = NULL,
     mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
     group_by(.data$datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(.data$actual.light, .data$tide.pump, .data$actual.tide, .data$actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
+    summarize(across(c(.data$actual.light, .data$tide.pump, .data$actual.immersion, .data$actual.temp), \(x) mean(x, na.rm = TRUE))) %>% # better to be more selective in what to summarize here
     # mutate(date = as_date(.data$datetime), # better than as.Date(datetime, tz = timezone)
     #        time = as_hms(.data$datetime),
     #        .after = .data$datetime

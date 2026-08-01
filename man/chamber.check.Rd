@@ -10,7 +10,8 @@ chamber.check(
   robo.data = NULL,
   dttm.limits = c(NA, NA),
   dttm.breaks = waiver(),
-  dttm.labels = waiver()
+  dttm.labels = waiver(),
+  ambient.label = c("Ambient", "Room")
 )
 }
 \arguments{
@@ -25,17 +26,18 @@ chamber.check(
 \item{dttm.breaks}{a character string, duration between date breaks.}
 
 \item{dttm.labels}{a character string, format of dates.}
+
+\item{ambient.label}{a character string, which term to use for ambient temperature.}
 }
 \value{
-a three-panel plot of light, tide, and temperature.
+a three-panel plot of light, immersion, and temperature.
 }
 \description{
 A function to compare the design and the actual performance of the chamber.
 }
 \examples{
 
-acc.daily.settings <- data.frame(day = seq(0, 34),
-mean.air.temp = 17, mean.water.temp = 19)
+acc.daily.settings <- data.frame(day = seq(0, 34))
 
 acc <- chamber.design(acc.daily.settings,
                               start.date = "2025-05-15", export = FALSE)
@@ -43,6 +45,6 @@ acc <- chamber.design(acc.daily.settings,
 folder <- system.file("extdata/chamber", package = "rambur")
 chamber.data <- chamber.read(folder)
 
-chamber.check(acc$design, chamber.data$enhanced.data, dttm.limits = c("2025-05-15", "2025-05-20"))
+chamber.check(acc$design, chamber.data$enhanced.data, dttm.limits = c("2025-05-15", "2025-05-20"), ambient.label = "Room")
 
 }
