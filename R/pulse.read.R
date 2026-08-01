@@ -38,6 +38,7 @@ pulse.read <- function(folder.path = NULL,
   message("importing ", length(pulse.files), " files")
 
   # notice about time zone
+  message("reminder: timestamps in pulse log files were recorded in UTC")
   # if (timezone == "") {
   #   message("using ", Sys.timezone(), " time zone")
   # }

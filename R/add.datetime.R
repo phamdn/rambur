@@ -37,7 +37,7 @@ add.datetime <- function(df, timezone, reverse = FALSE) {
         datetime.UTC = as.POSIXct(.data$datetime, tz = "UTC"),
         .before = .data$datetime
       )
-    message("adding UTC time")
+    message("adding UTC")
   }
 
   df

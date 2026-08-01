@@ -32,7 +32,7 @@ chamber.design <- function(daily.settings,
                      ){
 
   # notice about time zone
-  message("using ", ifelse(timezone == "", Sys.timezone(), timezone), " time zone")
+  message("assuming ", ifelse(timezone == "", Sys.timezone(), timezone), " as local time zone")
   # if (timezone == "") {
   #   message("using ", Sys.timezone(), " time zone")
   # } else {
