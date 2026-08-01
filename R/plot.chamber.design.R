@@ -5,6 +5,7 @@
 #' @param df a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.
 #'
 #' @returns a list of six plots of environmental variables.
+#' @method plot chamber.design
 #' @export
 #'
 #' @examples
@@ -15,9 +16,9 @@
 #' acc.profile <- chamber.design(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #'
-#' chamber.design.plot(acc.profile$design)
+#' plot.chamber.design(acc.profile$design)
 #'
-chamber.design.plot <- function(df){
+plot.chamber.design <- function(df){
 
   temp.breaks <- pretty(range(df$temp))
   temp.breaks.range <- range(temp.breaks)
@@ -45,11 +46,11 @@ chamber.design.plot <- function(df){
     labs(title = "Water temperature", x = NULL, y = "\u00B0C") +
     theme_minimal_grid()
 
-  fig4 <- ggplot(df, aes(x = .data$datetime, y = .data$tide)) +
+  fig4 <- ggplot(df, aes(x = .data$datetime, y = .data$immersion)) +
     geom_step() +
     scale_x_datetime(sec.axis = dup_axis(labels = upper.x.axis, name = "Day of exposure")) +
     scale_y_continuous(breaks = c(0, 1), limits = c(0, 1)) +
-    labs(title = "Tide", x = NULL, y = NULL) +
+    labs(title = "Immersion", x = NULL, y = NULL) +
     theme_minimal_grid()
 
   fig5 <- ggplot(df, aes(x = .data$datetime, y = .data$temp)) +
@@ -69,7 +70,7 @@ chamber.design.plot <- function(df){
   output <- list(light = fig1,
                  temp.air = fig2,
                  temp.water = fig3,
-                 tide = fig4,
+                 immersion = fig4,
                  temp = fig5,
                  wc = fig6)
 

@@ -39,7 +39,7 @@ chamber.read <- function(folder.path = NULL,
   message("importing ", length(chamber.files), " files")
 
   # notice about time zone
-  message("reminder: timestamps in chamber log files were recorded in local time")
+  message("reminder: chamber log files were in local time")
   message("assuming ", ifelse(timezone == "", Sys.timezone(), timezone), " as local time zone")
   # if (timezone == "") {
   #   message("using ", Sys.timezone(), " time zone")

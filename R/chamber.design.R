@@ -117,6 +117,8 @@ chamber.design <- function(daily.settings,
                 col.names = FALSE)
   }
 
+  class(design) <- c("chamber.design", "data.frame")
+
   # essentially, apply diurnal expansion to daily.settings to get expanded design
   list(daily.settings = daily.settings, design = design)
 }

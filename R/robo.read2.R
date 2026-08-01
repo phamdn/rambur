@@ -31,7 +31,7 @@ robo.read2 <- function(folder.path = NULL,
   message("importing ", length(robo.files), " files")
 
   # notice about time zone
-  message("reminder: timestamps in robo log files were recorded in UTC")
+  message("reminder: robo log files were in UTC")
   # if (timezone == "") {
   #   message("using ", Sys.timezone(), " time zone")
   # }
