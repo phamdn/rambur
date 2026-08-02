@@ -33,12 +33,6 @@ chamber.design <- function(daily.settings,
 
   # notice about time zone
   message("assuming ", ifelse(timezone == "", Sys.timezone(), timezone), " as local time zone")
-  # if (timezone == "") {
-  #   message("using ", Sys.timezone(), " time zone")
-  # } else {
-  #   message("using ", timezone, " time zone")
-  # }
-
 
   multiday.list <- do.call(mapply, c(chamber.diurnal, daily.settings, SIMPLIFY = FALSE))
 

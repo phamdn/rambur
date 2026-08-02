@@ -20,6 +20,9 @@ robo.read2 <- function(folder.path = NULL,
                       timezone = "",
                       agg.res = NULL){
 
+  # notice about time zone
+  message("reminder: robo log files were in UTC")
+
   if (is.null(folder.path)) {
     folder.path <- getwd()
     message("reading from the current working directory")
@@ -29,12 +32,6 @@ robo.read2 <- function(folder.path = NULL,
   robo.files <- list.files(path = folder.path, pattern = file.name, full.names = TRUE)
 
   message("importing ", length(robo.files), " files")
-
-  # notice about time zone
-  message("reminder: robo log files were in UTC")
-  # if (timezone == "") {
-  #   message("using ", Sys.timezone(), " time zone")
-  # }
 
   original.data <- lapply(robo.files, function(x){
      read_csv(file = x, skip = metadata.lines,

@@ -61,7 +61,7 @@ chamber.check <- function(design,
   temp.breaks <- pretty(range(design$temp,
                               chamber.data$actual.temp,
                               chamber.data$ambient.temp,
-                              robo.data$body.temp,
+                              robo.data$temp,
                               na.rm = TRUE))
   temp.limits <- range(temp.breaks)
 
@@ -75,7 +75,7 @@ chamber.check <- function(design,
     geom_line(data = chamber.data, aes(y = .data$actual.temp, color = "Actual"), alpha = 0.8) +
     {
       if (!is.null(robo.data))
-        geom_line(data = robo.data, aes(y = .data$body.temp, color = "Body"), alpha = 0.8) # plot body temp last
+        geom_line(data = robo.data, aes(y = .data$temp, color = "Body"), alpha = 0.8) # plot body temp last
     } +
     scale_x_datetime(limits = as.POSIXct(dttm.limits),
                      date_breaks = dttm.breaks, date_labels = dttm.labels) +

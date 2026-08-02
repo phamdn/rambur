@@ -22,6 +22,9 @@ pulse.read <- function(folder.path = NULL,
                        channel.names = NULL,
                        timezone = ""){
 
+  # notice about time zone
+  message("reminder: pulse log files were in UTC")
+
   if (is.null(folder.path)) {
     folder.path <- getwd()
     message("reading from the current working directory")
@@ -36,12 +39,6 @@ pulse.read <- function(folder.path = NULL,
                           file.size(pulse.files) <= size.limits[2])
 
   message("importing ", length(pulse.files), " files")
-
-  # notice about time zone
-  message("reminder: pulse log files were in UTC")
-  # if (timezone == "") {
-  #   message("using ", Sys.timezone(), " time zone")
-  # }
 
   if (is.null(channel.names)) {
     channel.names <- paste0("channel.", 1:10)
