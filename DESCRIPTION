@@ -1,6 +1,6 @@
 Package: rambur
 Title: Research Assistant in Marine Biology at the University of Rostock
-Version: 0.2.20
+Version: 0.3.0
 Authors@R: c(
     person("Duy Nghia", "Pham", email = "nghiapham@yandex.com", 
     role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1349-1710")),
@@ -25,5 +25,6 @@ Imports:
     stats,
     graphics,
     utils,
-    tidyselect
+    tidyselect,
+    patchwork
 Config/roxygen2/version: 8.0.0

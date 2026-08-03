@@ -2,23 +2,20 @@
 % Please edit documentation in R/pulse.hr.R
 \name{pulse.hr}
 \alias{pulse.hr}
-\title{Pulse Helper: Calculating Heart Rate}
+\title{Pulse: Calculating Heart Rate}
 \usage{
 pulse.hr(
   signal,
   sampling.rate = 5,
-  score.method = c("power.law", "exponential"),
   score.parameter = 0.5,
   cor.min = 0.5,
-  display = c("all", "ppg", "none")
+  display = c("all", "ppg", "none", "ggplot")
 )
 }
 \arguments{
 \item{signal}{an integer vector, infrared signal from pulse device.}
 
 \item{sampling.rate}{an integer, sampling rate in Hz.}
-
-\item{score.method}{a character string, a method for lag penalty.}
 
 \item{score.parameter}{a numeric, the exponent used in the score.}
 
@@ -30,19 +27,23 @@ pulse.hr(
 a mixed list, \code{locmax} for local maxima, \code{nominee} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
 }
 \description{
-A helper function to calculate heart rate
+A worker function to calculate heart rate
 }
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
+ex1b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
+datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot")
 ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
 datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
 ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
 ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
 datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+ex4b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
+datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot")
 }
 \seealso{
 \code{\link[=pulse.extract]{pulse.extract()}}

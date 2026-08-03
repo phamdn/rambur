@@ -14,5 +14,6 @@
 #' @importFrom graphics abline points text legend lines
 #' @importFrom rlang .data :=
 #' @importFrom tidyselect where starts_with
+#' @importFrom patchwork plot_layout
 ## usethis namespace: end
 NULL
