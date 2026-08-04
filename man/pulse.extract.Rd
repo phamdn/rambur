@@ -5,20 +5,19 @@
 \title{Pulse: Extracting Heart Rate}
 \usage{
 pulse.extract(
-  data,
+  pulse.data,
   sampling.rate = NULL,
-  score.method = "power.law",
   score.parameter = 0.5,
   cor.min = 0.5,
   display = "none",
-  time.window = "minute",
+  time.window = "1 minute",
   summary.period = NULL,
   summary.fun = "mean",
   nonNA.threshold = 0
 )
 }
 \arguments{
-\item{data}{a data frame, records of signal. Use output of \code{\link{pulse.read}}.}
+\item{pulse.data}{a data frame, records of signal. Use output of \code{\link{pulse.read}}.}
 
 \item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
 

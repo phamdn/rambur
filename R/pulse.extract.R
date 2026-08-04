@@ -2,7 +2,7 @@
 #'
 #' A function to extract heart rate from records of pulse devices.
 #'
-#' @param data a data frame, records of signal. Use output of \code{\link{pulse.read}}.
+#' @param pulse.data a data frame, records of signal. Use output of \code{\link{pulse.read}}.
 #' @param summary.period a character string, duration to summarize the mean or median of the records.
 #' @param time.window a character string, window duration extract heart rate.
 #' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
@@ -24,32 +24,34 @@
 #' pulse.extract(pulse.data)
 #' pulse.extract(pulse.data, summary.period = "15 minutes")
 #' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
-pulse.extract <- function(data,
+pulse.extract <- function(pulse.data,
                           sampling.rate = NULL,
-                          score.method = "power.law", score.parameter = 0.5,
+                          # score.method = "power.law",
+                          score.parameter = 0.5,
                           cor.min = 0.5,
                           display = "none",
-                          time.window = "minute",
-                          summary.period = NULL, summary.fun = "mean",
+                          time.window = "1 minute",
+                          summary.period = NULL,
+                          summary.fun = "mean",
                           nonNA.threshold = 0){
 
   # infer sampling rate Hz based on input data
   # use median, as the diff bw 2 timestamps are sometimes higher than usual, e.g., 00.390 - 59.989 = 0.41 s, not 0.2 s as typical for 5 Hz
   if (is.null(sampling.rate)) {
-    sampling.rate <- round(1/median(as.numeric(diff(data$datetime))))
-    message("using sampling rate of ", sampling.rate, " Hz")
+    sampling.rate <- round(1/median(as.numeric(diff(pulse.data$datetime))))
+    message("assuming a sampling rate of ", sampling.rate, " Hz")
   }
 
   # using non-overlapping (sequential) windows, not overlapping (sliding) windows
-  window.hr <- data %>%
+  window.hr <- pulse.data %>%
     mutate(datetime = floor_date(.data$datetime, time.window)) %>%
     group_by(.data$datetime) %>%
     summarize(across(where(is.numeric), function(x) {
-      if (display %in% c("all", "ppg")) message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
+      if (display != "none") message(paste("datetime:", cur_group()$datetime, "| channel:", cur_column()))
 
       pulse.hr(x,
                sampling.rate = sampling.rate,
-               score.method = score.method,
+               # score.method = score.method,
                score.parameter = score.parameter,
                cor.min = cor.min,
                display = display
