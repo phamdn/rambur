@@ -9,7 +9,7 @@ pulse.hr(
   sampling.rate = 5,
   score.parameter = 0.5,
   cor.min = 0.5,
-  display = c("all", "ppg", "none", "ggplot")
+  display = c("all", "ppg", "none", "baseR", "ggplot2")
 )
 }
 \arguments{
@@ -35,15 +35,15 @@ pulse.data <- pulse.read(folder)
 ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
 ex1b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
-datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot")
+datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot2")
 ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
 datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
 ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
 ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "baseR")
 ex4b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot")
+datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot2")
 }
 \seealso{
 \code{\link[=pulse.extract]{pulse.extract()}}

@@ -19,21 +19,20 @@
 #' ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 #' datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
 #' ex1b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
-#' datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot")
+#' datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot2")
 #' ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
 #' datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
 #' ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 #' datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
 #' ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "baseR")
 #' ex4b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot")
+#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot2")
 pulse.hr <- function(signal,
                      sampling.rate = 5,
-                     # score.method = c("power.law", "exponential"),
                      score.parameter = 0.5,
                      cor.min = 0.5,
-                     display = c("all", "ppg", "none", "ggplot")
+                     display = c("all", "ppg", "none", "baseR", "ggplot2")
 ){
   signal.length <- NROW(signal) # use NROW instead of length() to allow 1 column matrix or dataframe
 
@@ -118,21 +117,21 @@ pulse.hr <- function(signal,
   # display
   display <- match.arg(display)
 
-  if (display %in% c("all", "ppg")) {
-    plot(signal, type = "l", main = "Photoplethysmogram", ylab = "IR signal",
+  if (display %in% c("all", "baseR", "ppg")) {
+    plot(signal, type = "l", main = "Photoplethysmogram", ylab = "Intensity",
          ylim = c(0, 4095)
          )
     text(signal.length, 0, labels = paste(signal.length / sampling.rate, "s\n", sampling.rate, "Hz"),
          adj = c(1, 0), col = 2)
   }
 
-  if (display == "all") { # hide these if human counting
+  if (display %in% c("all", "baseR")) { # hide these if human counting
     plot(ac.list, main = "Autocorrelogram", ci = 0, col = 8)
     points(locmax$lag, locmax$cor, pch = 19)
     legend("topright", legend = "Interpolated local maxima", pch = 19)
 
     plot(locmax$timelag, locmax$cor, type = "o", pch = 19, lty = 5,
-         main = "Scoring of local maxima", xlab = "Time lag (s)", ylab = "",
+         main = "Candidate scoring", xlab = "Time lag (s)", ylab = "",
          xlim = c(0, timelag.max), ylim = c(0, 1))
     lines(locmax$timelag, locmax$score, type = "o", pch = 19, lty = 5, col = 2) # plot score
     points(nominee$timelag, nominee$score, col = 2, cex = 3) # dominant highlight
@@ -148,7 +147,7 @@ pulse.hr <- function(signal,
     print(output)
   }
 
-  if (display == "ggplot") {
+  if (display == "ggplot2") {
 
     fig1 <- data.frame(Index = seq_along(signal),
                        Intensity = signal) |>
@@ -173,15 +172,12 @@ pulse.hr <- function(signal,
       theme(legend.position = "top")
 
     fig3 <- locmax |> ggplot(aes(x = timelag)) +
-      geom_hline(yintercept = cor.min, linetype = 2, color = 8) +
-      # geom_segment(data = nominee, aes(y = cor, xend = timelag, yend = 0), color = 2) +
-      geom_line(aes(y = cor, color = "Correlation"), linetype = 2) +
+      geom_hline(yintercept = cor.min, color = 4) +
+      geom_line(aes(y = cor, color = "Correlation"), linetype = 3) +
       geom_point(aes(y = cor, color = "Correlation")) +
-      geom_line(aes(y = score, color = "Score"), linetype = 2) +
+      geom_line(aes(y = score, color = "Score"), linetype = 3) +
       geom_point(aes(y = score, color = "Score")) +
       geom_point(data = nominee, aes(y = score, color = "Nominee"), shape = 1, size = 5, color = 2) +
-      # geom_text(data = nominee, aes(y = cor, label = paste(round(hr, 1), "bpm")),
-      #           vjust = -1, color = 2) +
       annotate("text", x = Inf, y = Inf, #x = timelag.max, y = 1,
                label = ifelse(is.na(hr), "HR = N/A", paste("HR =", round(hr, 1), "bpm")),
                col = 2, hjust = 1, vjust = 1
@@ -191,14 +187,14 @@ pulse.hr <- function(signal,
       scale_color_manual(values = c("Correlation" = 4,
                                     "Score" = 2
                                     )) +
-      labs(title = "Evaluation of local maxima", x = "Time lag (s)", y = NULL, color = NULL) +
+      labs(title = "Candidate scoring", x = "Time lag (s)", y = NULL, color = NULL) +
       theme_cowplot() +
       theme(legend.position = "top")
 
-    # fig23 <- plot_grid(fig2, fig3, nrow = 1, align = "h")
+    # fig23 <- plot_grid(fig2, fig3, nrow = 1, align = "h") # cowplot
     # fig <- plot_grid(fig1, fig23, ncol = 1, axis = "l")
 
-    fig <- fig1 / (fig2 | fig3) #patchwork syntax
+    fig <- fig1 / (fig2 | fig3) # patchwork syntax
     output$fig <- fig
 
     print(output)
