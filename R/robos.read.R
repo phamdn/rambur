@@ -13,8 +13,8 @@
 #'
 #' @examples
 #' robo.folder <- system.file("extdata/robo", package = "rambur")
-#' robo.read2(robo.folder, agg.res = "hour")
-robo.read2 <- function(folder.path = NULL,
+#' robos.read(robo.folder, agg.res = "hour")
+robos.read <- function(folder.path = NULL,
                        file.name = ".csv",
                       metadata.lines = 21,
                       timezone = "",
