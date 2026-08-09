@@ -15,48 +15,66 @@ export(robo.read)
 export(robos.read)
 import(cowplot)
 import(ggplot2)
-importFrom(dplyr,"%>%")
-importFrom(dplyr,across)
-importFrom(dplyr,c_across)
-importFrom(dplyr,case_when)
-importFrom(dplyr,cur_column)
-importFrom(dplyr,cur_group)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n)
-importFrom(dplyr,relocate)
-importFrom(dplyr,select)
-importFrom(dplyr,summarize)
-importFrom(dplyr,transmute)
-importFrom(graphics,abline)
-importFrom(graphics,legend)
-importFrom(graphics,lines)
-importFrom(graphics,points)
-importFrom(graphics,text)
+importFrom(dplyr,
+  "%>%",
+  across,
+  c_across,
+  case_when,
+  cur_column,
+  cur_group,
+  full_join,
+  group_by,
+  mutate,
+  n,
+  relocate,
+  select,
+  summarize,
+  transmute
+)
+importFrom(graphics,
+  abline,
+  legend,
+  lines,
+  points,
+  text
+)
 importFrom(hms,as_hms)
-importFrom(lubridate,as_date)
-importFrom(lubridate,floor_date)
-importFrom(lubridate,force_tz)
-importFrom(lubridate,round_date)
+importFrom(lubridate,
+  as_date,
+  floor_date,
+  force_tz,
+  round_date
+)
 importFrom(patchwork,plot_layout)
-importFrom(purrr,imap)
-importFrom(purrr,reduce)
-importFrom(readr,col_datetime)
-importFrom(readr,col_double)
-importFrom(readr,cols)
-importFrom(readr,problems)
-importFrom(readr,read_csv)
-importFrom(readr,read_lines)
-importFrom(rlang,":=")
-importFrom(rlang,.data)
-importFrom(stats,acf)
-importFrom(stats,dnorm)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(tidyselect,starts_with)
-importFrom(tidyselect,where)
-importFrom(utils,head)
-importFrom(utils,tail)
-importFrom(utils,write.csv)
-importFrom(utils,write.table)
+importFrom(purrr,
+  imap,
+  reduce
+)
+importFrom(readr,
+  col_datetime,
+  col_double,
+  cols,
+  problems,
+  read_csv,
+  read_lines
+)
+importFrom(rlang,
+  ":=",
+  .data
+)
+importFrom(stats,
+  acf,
+  dnorm,
+  median,
+  na.omit
+)
+importFrom(tidyselect,
+  starts_with,
+  where
+)
+importFrom(utils,
+  head,
+  tail,
+  write.csv,
+  write.table
+)

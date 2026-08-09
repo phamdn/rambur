@@ -128,7 +128,7 @@ pulse.hr <- function(signal,
   if (display %in% c("all", "baseR")) { # hide these if human counting
     plot(ac.list, main = "Autocorrelogram", ci = 0, col = 8)
     points(locmax$lag, locmax$cor, pch = 19)
-    legend("topright", legend = "Interpolated local maxima", pch = 19)
+    legend("topright", legend = "Interpolated peaks", pch = 19)
 
     plot(locmax$timelag, locmax$cor, type = "o", pch = 19, lty = 5,
          main = "Candidate scoring", xlab = "Time lag (s)", ylab = "",
@@ -165,19 +165,36 @@ pulse.hr <- function(signal,
     fig2 <- ac |> ggplot(aes(x = lag, y = cor)) +
       geom_hline(aes(yintercept = 0)) +
       geom_segment(aes(xend = lag, yend = 0), col = 8) +
-      geom_point(data = locmax, aes(color = "Interpolated local maxima")) +
-      scale_color_manual(values = c("Interpolated local maxima" = 4)) +
+      geom_point(data = locmax, aes(color = "Interpolated peaks")) +
+      scale_color_manual(values = c("Interpolated peaks" = 4)) +
       labs(title = "Autocorrelogram", y = "Correlation", x = "Lag", color = NULL) +
       theme_cowplot() +
       theme(legend.position = "top")
 
     fig3 <- locmax |> ggplot(aes(x = timelag)) +
-      geom_hline(yintercept = cor.min, color = 4) +
+      {if (cor.min != 0)
+        geom_hline(yintercept = cor.min, color = 4)
+      } +
       geom_line(aes(y = cor, color = "Correlation"), linetype = 3) +
       geom_point(aes(y = cor, color = "Correlation")) +
-      geom_line(aes(y = score, color = "Score"), linetype = 3) +
-      geom_point(aes(y = score, color = "Score")) +
-      geom_point(data = nominee, aes(y = score, color = "Nominee"), shape = 1, size = 5, color = 2) +
+      {if (score.parameter != 0) list(
+        geom_line(aes(y = score, color = "Score"), linetype = 3),
+          geom_point(aes(y = score, color = "Score"))
+      )
+        } +
+      geom_point(data = nominee, aes(y = score), shape = 1, size = 5, color = 2) +
+      # {if (cor.min != 0)
+      #   annotate("text", x = Inf, y = cor.min,
+      #            label = paste0("\u03B8 = ", cor.min),
+      #            col = 4, hjust = 1, vjust = -0.5, size = 5
+      #   )
+      #   } +
+      # {if (score.parameter != 0)
+      #   annotate("text", x = Inf, y = cor.min,
+      #            label = paste0("\u03B1 = ", score.parameter),
+      #            col = 2, hjust = 1, vjust = 1.5, size = 5
+      #   )
+      # } +
       annotate("text", x = Inf, y = Inf, #x = timelag.max, y = 1,
                label = ifelse(is.na(hr), "HR = N/A", paste("HR =", round(hr, 1), "bpm")),
                col = 2, hjust = 1, vjust = 1
@@ -185,8 +202,7 @@ pulse.hr <- function(signal,
       scale_x_continuous(limits = c(0, timelag.max)) +
       scale_y_continuous(limits = c(0, 1)) +
       scale_color_manual(values = c("Correlation" = 4,
-                                    "Score" = 2
-                                    )) +
+                                    "Score" = 2)) +
       labs(title = "Candidate scoring", x = "Time lag (s)", y = NULL, color = NULL) +
       theme_cowplot() +
       theme(legend.position = "top")
