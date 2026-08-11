@@ -11,8 +11,22 @@ add.datetime(df, timezone, reverse = FALSE)
 
 \item{timezone}{a character string, local time zone.}
 
-\item{reverse}{a logical, whether to add datetime.UTC column.}
+\item{reverse}{a logical, whether to convert local datetime to UTC datetime.}
 }
 \description{
 A helper function to convert UTC datetime to local datetime, then break it into date and time.
+}
+\examples{
+# example a
+df <- data.frame(datetime.UTC = as.POSIXct(c("2025-01-01 01:00:00", "2025-07-01 01:00:00"), tz = "UTC"))
+df2 <- add.datetime(df, timezone = "")
+df2
+df2$datetime.UTC
+df2$datetime
+
+# example b
+df3 <- data.frame(datetime = as.POSIXct(c("2025-02-01 01:00:00", "2025-08-01 01:00:00")))
+df3$datetime
+df4 <- add.datetime(df3)
+df4
 }
