@@ -3,17 +3,14 @@
 #' A function to extract heart rate from records of pulse devices.
 #'
 #' @param pulse.data a data frame, records of signal. Use output of \code{\link{pulse.read}}.
-#' @param summary.period a character string, duration to summarize the mean or median of the records.
+#' @param agg.res a character string, duration to summarize the mean or median of the records.
 #' @param time.window a character string, window duration extract heart rate.
 #' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
-#' @param summary.fun a character string, central tendancy to summarize.
 #' @param display a logical, whether to plot display.
-#' @param nonNA.threshold a numeric, only summarize when the proportion of non missing values exceeds this threshold.
-#' @param score.parameter
-#' @param cor.min
-#' @param score.method
+#' @param score.parameter a numeric, the exponent used in the score.
+#' @param cor.min a numeric, the correlation threshold for qualified signal.
 #'
-#' @returns a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
+#' @returns a list of two data frames, \code{window.hr} and \code{aggregated.hr} for window and summarized heart rate.
 #' @export
 #'
 #' @seealso [pulse.hr()]
@@ -22,8 +19,7 @@
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
 #' pulse.extract(pulse.data)
-#' pulse.extract(pulse.data, summary.period = "15 minutes")
-#' pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
+#' pulse.extract(pulse.data, agg.res = "15 minutes")
 pulse.extract <- function(pulse.data,
                           sampling.rate = NULL,
                           # score.method = "power.law",
@@ -31,9 +27,8 @@ pulse.extract <- function(pulse.data,
                           cor.min = 0.5,
                           display = "none",
                           time.window = "1 minute",
-                          summary.period = NULL,
-                          summary.fun = "mean",
-                          nonNA.threshold = 0){
+                          agg.res = NULL
+                          ){
 
   # infer sampling rate Hz based on input data
   # use median, as the diff bw 2 timestamps are sometimes higher than usual, e.g., 00.390 - 59.989 = 0.41 s, not 0.2 s as typical for 5 Hz
@@ -58,40 +53,43 @@ pulse.extract <- function(pulse.data,
       )$hr
     }
     )) %>%
-    mutate(date = as_date(.data$datetime),
-           time = as_hms(.data$datetime),
-           .after = .data$datetime
-    )
+    # mutate(date = as_date(.data$datetime),
+    #        time = as_hms(.data$datetime),
+    #        .after = .data$datetime
+    # )
+    add.datetime()
 
   output <- list(window.hr = window.hr)
 
-  if (!is.null(summary.period)) {
+  if (!is.null(agg.res)) {
     # helper for central tendency
-    central <- function(x,
-                        na.rm,
-                        type = c("median", "mean")) {
-      type <- match.arg(type)
-      switch(type,
-             mean = mean(x, na.rm = na.rm),
-             median = median(x, na.rm = na.rm)
-      )
-    }
+    # central <- function(x,
+    #                     na.rm,
+    #                     type = c("median", "mean")) {
+    #   type <- match.arg(type)
+    #   switch(type,
+    #          mean = mean(x, na.rm = na.rm),
+    #          median = median(x, na.rm = na.rm)
+    #   )
+    # }
 
-    summarized.hr <- window.hr %>%
-      mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
+    aggregated.hr <- window.hr %>%
+      mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
       group_by(.data$datetime) %>%
       # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
-      summarize(across(where(is.numeric),
-                       ~ ifelse(mean(!is.na(.x)) >= nonNA.threshold,
-                                central(.x, na.rm = TRUE, type = summary.fun),
-                                NA)
-      )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
-      mutate(date = as_date(.data$datetime),
-             time = as_hms(.data$datetime),
-             .after = .data$datetime
-      )
+      # summarize(across(where(is.numeric),
+      #                  ~ ifelse(mean(!is.na(.x)) >= nonNA.threshold,
+      #                           central(.x, na.rm = TRUE, type = summary.fun),
+      #                           NA)
+      # )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
+      summarize(across(where(is.numeric), \(x) mean(x))) |>
+      # mutate(date = as_date(.data$datetime),
+      #        time = as_hms(.data$datetime),
+      #        .after = .data$datetime
+      # )
+      add.datetime()
 
-    output$summarized.hr <- summarized.hr
+    output$aggregated.hr <- aggregated.hr
 
   }
 

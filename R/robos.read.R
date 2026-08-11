@@ -84,7 +84,7 @@ robos.read <- function(folder.path = NULL,
     # ) %>%
     add.datetime(timezone = timezone) |>
     mutate(
-      temp = rowMeans(across(starts_with("temp")), na.rm = TRUE)
+      temp = rowMeans(across(starts_with("temp")))
     )
 
   output <- list(
@@ -97,7 +97,7 @@ robos.read <- function(folder.path = NULL,
     aggregated.data <- synchronized.data %>%
       mutate(datetime.UTC = floor_date(.data$datetime.UTC, agg.res)) %>%
       group_by(.data$datetime.UTC) %>%
-      summarize(temp = mean(.data$temp, na.rm = TRUE)) %>%
+      summarize(temp = mean(.data$temp)) %>%
       # mutate(date = as_date(.data$datetime),
       #        time = as_hms(.data$datetime),
       #        .after = .data$datetime

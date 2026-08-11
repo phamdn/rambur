@@ -11,9 +11,7 @@ pulse.extract(
   cor.min = 0.5,
   display = "none",
   time.window = "1 minute",
-  summary.period = NULL,
-  summary.fun = "mean",
-  nonNA.threshold = 0
+  agg.res = NULL
 )
 }
 \arguments{
@@ -21,18 +19,18 @@ pulse.extract(
 
 \item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
 
+\item{score.parameter}{a numeric, the exponent used in the score.}
+
+\item{cor.min}{a numeric, the correlation threshold for qualified signal.}
+
 \item{display}{a logical, whether to plot display.}
 
 \item{time.window}{a character string, window duration extract heart rate.}
 
-\item{summary.period}{a character string, duration to summarize the mean or median of the records.}
-
-\item{summary.fun}{a character string, central tendancy to summarize.}
-
-\item{nonNA.threshold}{a numeric, only summarize when the proportion of non missing values exceeds this threshold.}
+\item{agg.res}{a character string, duration to summarize the mean or median of the records.}
 }
 \value{
-a list of two data frames, \code{window.hr} and \code{summarized.hr} for window and summarized heart rate.
+a list of two data frames, \code{window.hr} and \code{aggregated.hr} for window and summarized heart rate.
 }
 \description{
 A function to extract heart rate from records of pulse devices.
@@ -41,8 +39,7 @@ A function to extract heart rate from records of pulse devices.
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 pulse.extract(pulse.data)
-pulse.extract(pulse.data, summary.period = "15 minutes")
-pulse.extract(pulse.data, summary.period = "15 minutes", summary.fun = "median")
+pulse.extract(pulse.data, agg.res = "15 minutes")
 }
 \seealso{
 \code{\link[=pulse.hr]{pulse.hr()}}

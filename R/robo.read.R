@@ -53,7 +53,7 @@ robo.read <- function(file.path,
       mutate(datetime = floor_date(.data$datetime, summary.period)) %>%
       group_by(.data$datetime) %>%
       summarize(n = sum(!is.na(.data$temp)),
-                temp = mean(.data$temp, na.rm = TRUE)) %>%
+                temp = mean(.data$temp)) %>%
       mutate(date = as_date(.data$datetime),
              time = as_hms(.data$datetime),
              .after = .data$datetime
