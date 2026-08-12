@@ -22,6 +22,8 @@ pulse.read(
 
 \item{metadata.lines}{an integer, number of lines to skip in the header.}
 
+\item{channel.names}{a character vector of length 10. Optional names for channels.}
+
 \item{timezone}{a character string, time zone.}
 }
 \value{

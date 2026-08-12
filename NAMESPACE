@@ -60,7 +60,8 @@ importFrom(readr,
 )
 importFrom(rlang,
   ":=",
-  .data
+  .data,
+  .env
 )
 importFrom(stats,
   acf,

@@ -23,7 +23,8 @@ A helper function to convert UTC datetime to local datetime.
 }
 \examples{
 # example a
-df <- data.frame(datetime.UTC = as.POSIXct(c("2025-01-01 01:00:00", "2025-07-01 01:00:00"), tz = "UTC"))
+df <- data.frame(datetime.UTC = as.POSIXct(c("2025-01-01 01:00:00",
+"2025-07-01 01:00:00"), tz = "UTC"))
 df
 df1 <- add.datetime(df, type = 1, timezone = "")
 df1

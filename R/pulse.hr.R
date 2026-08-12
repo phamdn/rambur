@@ -150,10 +150,10 @@ pulse.hr <- function(signal,
 
     fig1 <- data.frame(Index = seq_along(signal),
                        Intensity = signal) |>
-    ggplot(aes(x = Index, y = Intensity)) +
+    ggplot(aes(x = .data$Index, y = .data$Intensity)) +
       geom_line() +
       annotate("text", x = signal.length, y = 0,
-               label = paste(signal.length / sampling.rate, "s ×", sampling.rate, "Hz"),
+               label = paste(signal.length / sampling.rate, "s \u00d7", sampling.rate, "Hz"),
                 col = 2,
                hjust = 0.75, vjust = 0
                ) +
@@ -161,27 +161,27 @@ pulse.hr <- function(signal,
       labs(title = "Photoplethysmogram") +
       theme_cowplot()
 
-    fig2 <- ac |> ggplot(aes(x = lag, y = cor)) +
+    fig2 <- ac |> ggplot(aes(x = .data$lag, y = .data$cor)) +
       geom_hline(aes(yintercept = 0)) +
-      geom_segment(aes(xend = lag, yend = 0), col = 8) +
+      geom_segment(aes(xend = .data$lag, yend = 0), col = 8) +
       geom_point(data = locmax, aes(color = "Interpolated peaks")) +
       scale_color_manual(values = c("Interpolated peaks" = 4)) +
       labs(title = "Autocorrelogram", y = "Correlation", x = "Lag", color = NULL) +
       theme_cowplot() +
       theme(legend.position = "top")
 
-    fig3 <- locmax |> ggplot(aes(x = timelag)) +
+    fig3 <- locmax |> ggplot(aes(x = .data$timelag)) +
       {if (cor.min != 0)
         geom_hline(yintercept = cor.min, color = 4)
       } +
-      geom_line(aes(y = cor, color = "Correlation"), linetype = 3) +
-      geom_point(aes(y = cor, color = "Correlation")) +
+      geom_line(aes(y = .data$cor, color = "Correlation"), linetype = 3) +
+      geom_point(aes(y = .data$cor, color = "Correlation")) +
       {if (score.parameter != 0) list(
-        geom_line(aes(y = score, color = "Score"), linetype = 3),
-          geom_point(aes(y = score, color = "Score"))
+        geom_line(aes(y = .data$score, color = "Score"), linetype = 3),
+          geom_point(aes(y = .data$score, color = "Score"))
       )
         } +
-      geom_point(data = nominee, aes(y = score), shape = 1, size = 5, color = 2) +
+      geom_point(data = nominee, aes(y = .data$score), shape = 1, size = 5, color = 2) +
       annotate("text", x = Inf, y = Inf, #x = timelag.max, y = 1,
                label = ifelse(is.na(hr), "HR = N/A", paste("HR =", round(hr, 1), "bpm")),
                col = 2, hjust = 1, vjust = 1

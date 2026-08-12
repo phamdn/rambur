@@ -2,7 +2,8 @@
 #'
 #' A helper function to plot the multiday patterns of environmental variables.
 #'
-#' @param df a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.
+#' @param x a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.
+#' @param ... additional arguments, currently ignored.
 #'
 #' @returns a list of six plots of environmental variables.
 #' @method plot chamber.design
@@ -16,9 +17,11 @@
 #' acc.profile <- chamber.design(acc.setup,
 #' start.date = "2025-05-15", export = FALSE)
 #'
-#' plot.chamber.design(acc.profile$design)
+#' plot(acc.profile$design)
 #'
-plot.chamber.design <- function(df){
+plot.chamber.design <- function(x, ...){
+
+  df <- x
 
   temp.breaks <- pretty(range(df$temp))
   temp.breaks.range <- range(temp.breaks)

@@ -90,7 +90,10 @@ chamber.design <- function(daily.settings,
 
     write.csv(
       if ("ie.cycle" %in% names(daily.settings)){
-        transform(daily.settings, ie.cycle = sapply(ie.cycle, toString))
+        # transform(daily.settings, ie.cycle = sapply(ie.cycle, toString)) #no visible binding for global variable 'ie.cycle'
+        copy.daily.settings <- daily.settings
+        copy.daily.settings$ie.cycle <- sapply(copy.daily.settings$ie.cycle, toString)
+        copy.daily.settings
       } else {
         daily.settings
       },

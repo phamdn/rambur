@@ -7,6 +7,7 @@
 #' @param metadata.lines an integer, number of lines to skip in the header.
 #' @param size.limits a vector of two numerics, minimum and maximum file sizes in bytes, e.g., 1e6 bytes (~1 MB).
 #' @param file.name a character string, filter the file name.
+#' @param channel.names a character vector of length 10. Optional names for channels.
 #'
 #' @returns a data frame of enhanced data.
 #' @export

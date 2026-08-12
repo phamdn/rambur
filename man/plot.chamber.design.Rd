@@ -4,10 +4,12 @@
 \alias{plot.chamber.design}
 \title{Chamber: Plotting Multiday Profile}
 \usage{
-\method{plot}{chamber.design}(df)
+\method{plot}{chamber.design}(x, ...)
 }
 \arguments{
-\item{df}{a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.}
+\item{x}{a data frame, multiday patterns of environmental variables. Use \code{design} output of \code{\link{chamber.design}}.}
+
+\item{...}{additional arguments, currently ignored.}
 }
 \value{
 a list of six plots of environmental variables.
@@ -23,6 +25,6 @@ temp.air.mean = 17, temp.water.mean = 19)
 acc.profile <- chamber.design(acc.setup,
 start.date = "2025-05-15", export = FALSE)
 
-plot.chamber.design(acc.profile$design)
+plot(acc.profile$design)
 
 }

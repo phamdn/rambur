@@ -12,7 +12,7 @@
 #' @importFrom stats dnorm acf median na.omit
 #' @importFrom utils head tail write.table write.csv
 #' @importFrom graphics abline points text legend lines
-#' @importFrom rlang .data :=
+#' @importFrom rlang .data := .env
 #' @importFrom tidyselect where starts_with
 #' @importFrom patchwork plot_layout
 ## usethis namespace: end
