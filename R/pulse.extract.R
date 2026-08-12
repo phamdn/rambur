@@ -53,11 +53,7 @@ pulse.extract <- function(pulse.data,
       )$hr
     }
     )) %>%
-    # mutate(date = as_date(.data$datetime),
-    #        time = as_hms(.data$datetime),
-    #        .after = .data$datetime
-    # )
-    add.datetime()
+    add.datetime(type = 2)
 
   output <- list(window.hr = window.hr)
 
@@ -83,11 +79,7 @@ pulse.extract <- function(pulse.data,
       #                           NA)
       # )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
       summarize(across(where(is.numeric), \(x) mean(x, na.rm = FALSE))) |>
-      # mutate(date = as_date(.data$datetime),
-      #        time = as_hms(.data$datetime),
-      #        .after = .data$datetime
-      # )
-      add.datetime()
+      add.datetime(type = 2)
 
     output$aggregated.hr <- aggregated.hr
 

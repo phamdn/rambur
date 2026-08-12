@@ -61,7 +61,7 @@ chamber.design <- function(daily.settings,
       )
     ) %>%
     mutate(datetime = force_tz(.data$datetime, tzone = timezone)) |> # force it back to local time as interpreted by chamber
-    add.datetime() # add date and time columns
+    add.datetime(type = 2) # add date and time columns
 
   # check profile: length of each line
   invalid <- which(nchar(design$profile) != 19)

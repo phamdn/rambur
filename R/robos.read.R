@@ -46,7 +46,7 @@ robos.read <- function(folder.path = NULL,
       # ) |> # transmute() might be better than mutate() for keeping columns in desired order
       transmute(datetime.UTC = .data$time,
                 temp = .data$temp) |>
-      add.datetime(timezone = timezone)
+      add.datetime(type = 3, timezone = timezone)
   })
 
   # resolve the clock drift issue
@@ -72,7 +72,7 @@ robos.read <- function(folder.path = NULL,
       )
   }) %>%
     reduce(full_join, by = "datetime.UTC") %>%
-    add.datetime(timezone = timezone) |>
+    add.datetime(type = 3, timezone = timezone) |>
     mutate(
       temp = rowMeans(across(starts_with("temp")))
     )
@@ -88,7 +88,7 @@ robos.read <- function(folder.path = NULL,
       mutate(datetime.UTC = floor_date(.data$datetime.UTC, agg.res)) %>%
       group_by(.data$datetime.UTC) %>%
       summarize(temp = mean(.data$temp)) %>%
-      add.datetime(timezone = timezone)
+      add.datetime(type = 3, timezone = timezone)
 
     output$aggregated.data <- aggregated.data
   }

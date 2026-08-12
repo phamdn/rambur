@@ -4,10 +4,12 @@
 \alias{add.datetime}
 \title{Adding Local Datetime}
 \usage{
-add.datetime(df, timezone, reverse = FALSE)
+add.datetime(df, type = 3, timezone, reverse = FALSE)
 }
 \arguments{
 \item{df}{a data frame.}
+
+\item{type}{an integer from 1 to 3. Use 1 to add datetime, 3 to add datetime, date, and time, and 2 to add date and time.}
 
 \item{timezone}{a character string, local time zone.}
 
@@ -17,19 +19,24 @@ add.datetime(df, timezone, reverse = FALSE)
 a data frame with additional columns.
 }
 \description{
-A helper function to convert UTC datetime to local datetime, then break it into date and time.
+A helper function to convert UTC datetime to local datetime.
 }
 \examples{
 # example a
 df <- data.frame(datetime.UTC = as.POSIXct(c("2025-01-01 01:00:00", "2025-07-01 01:00:00"), tz = "UTC"))
-df2 <- add.datetime(df, timezone = "")
-df2
-df2$datetime.UTC
-df2$datetime
+df
+df1 <- add.datetime(df, type = 1, timezone = "")
+df1
+df1$datetime.UTC
+df1$datetime
+
+df3 <- add.datetime(df, type = 3, timezone = "")
+df3
+
 
 # example b
-df3 <- data.frame(datetime = as.POSIXct(c("2025-02-01 01:00:00", "2025-08-01 01:00:00")))
-df3$datetime
-df4 <- add.datetime(df3)
-df4
+data <- data.frame(datetime = as.POSIXct(c("2025-02-01 01:00:00", "2025-08-01 01:00:00")))
+data$datetime
+data2 <- add.datetime(data, type = 2)
+data2
 }

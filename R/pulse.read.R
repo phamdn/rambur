@@ -58,7 +58,7 @@ pulse.read <- function(folder.path = NULL,
       datetime.UTC = .data$time,
       .keep = "unused", .before = 1
     ) %>%
-    add.datetime(timezone = timezone)
+    add.datetime(type = 1, timezone = timezone)
 
   # take too much space to return both
   # list(original.data = original.data,

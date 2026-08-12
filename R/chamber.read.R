@@ -114,7 +114,7 @@ chamber.read <- function(folder.path = NULL,
       across(c(.data$actual.light, .data$tide.pump, .data$actual.immersion, .data$actual.temp),
                      mean) # use na.rm will require \(x) mean(x, ...) or function(x) mean(x, ...), see ?across
       ) %>%
-    add.datetime()
+    add.datetime(type = 2)
 
   list(original.data = original.data, # keep to understand NA problems
        enhanced.data = enhanced.data,
