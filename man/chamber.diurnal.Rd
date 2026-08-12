@@ -30,11 +30,11 @@ chamber.diurnal(
 
 \item{light.model}{a character string, pattern of light. Default to "gaussian", indicating gaussian function.}
 
-\item{light.duration}{a numeric, light duration (photoperiod) in hours, with light intensity of at least 1\%.}
+\item{light.duration}{a numeric, light duration (photoperiod) in hours, with brightness of at least 1\%.}
 
-\item{light.peak.time}{a numeric, time of day when light intensity peaks.}
+\item{light.peak.time}{a numeric, time of day when brightness peaks.}
 
-\item{light.max}{an integer, maximum light intensity.}
+\item{light.max}{an integer, maximum brightness.}
 
 \item{temp.model}{a character string, pattern of temperature. Default to "sinusoidal", indicating sinusoidal function.}
 
@@ -50,9 +50,9 @@ chamber.diurnal(
 
 \item{tidal.day}{a numeric, tidal day duration in hours. Default to 24, same as the solar day.}
 
-\item{ie.cycle}{a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal)}
+\item{ie.cycle}{a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal).}
 
-\item{iec.start.time}{a numeric, time of day when tidal cycle starts.}
+\item{iec.start.time}{a numeric, time of day when immersion-emersion cycle starts.}
 
 \item{wc.time}{a numeric, time of day when automatic water change starts.}
 }

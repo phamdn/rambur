@@ -15,7 +15,7 @@ chamber.design(
 \arguments{
 \item{daily.settings}{a data frame, diurnal patterns of environmental variables. Columns must match arguments of \code{\link[=chamber.diurnal]{chamber.diurnal()}}.}
 
-\item{start.date}{a character string, start date of the experiment.}
+\item{start.date}{a character string, start date of the experiment. Time automatically set to 00:00:00.}
 
 \item{timezone}{a character string, time zone.}
 
@@ -39,7 +39,9 @@ start.date = "2025-05-15", export = FALSE)
 ## to save the output files, set 'export' to 'TRUE'.
 
 acc
-
+as.POSIXct(acc$design$timestamp[1], tz = "UTC")
+acc$design$datetime[1]
+acc$daily.settings$date[1]
 }
 \seealso{
 \code{\link[=chamber.diurnal]{chamber.diurnal()}}

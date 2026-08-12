@@ -4,18 +4,18 @@
 #'
 #' @param day an integer, the day of experiment.
 #' @param time.step a numeric, the resolution of the profile in hours.
-#' @param light.duration a numeric, light duration (photoperiod) in hours, with light intensity of at least 1%.
-#' @param light.peak.time a numeric, time of day when light intensity peaks.
+#' @param light.duration a numeric, light duration (photoperiod) in hours, with brightness of at least 1%.
+#' @param light.peak.time a numeric, time of day when brightness peaks.
 #' @param temp.air.mean a numeric, the mean of air temperature during the day in °C.
 #' @param temp.air.range a numeric, the range of air temperature during the day in °C.
 #' @param temp.water.mean a numeric, the mean of water temperature during the day in °C.
 #' @param temp.water.range a numeric, the range of water temperature during the day in °C.
 #' @param temp.peak.time a numeric, time of day when temperature peaks.
-#' @param ie.cycle a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal)
-#' @param iec.start.time a numeric, time of day when tidal cycle starts.
+#' @param ie.cycle a vector of 0 and 1, the immersion-emersion cycle (e.g., semi-diurnal).
+#' @param iec.start.time a numeric, time of day when immersion-emersion cycle starts.
 #' @param wc.time a numeric, time of day when automatic water change starts.
 #' @param light.model a character string, pattern of light. Default to "gaussian", indicating gaussian function.
-#' @param light.max an integer, maximum light intensity.
+#' @param light.max an integer, maximum brightness.
 #' @param tidal.day a numeric, tidal day duration in hours. Default to 24, same as the solar day.
 #' @param temp.model a character string, pattern of temperature. Default to "sinusoidal", indicating sinusoidal function.
 #'
@@ -69,12 +69,11 @@ chamber.diurnal <- function(day = 0, time.step = 1,
   }
 
   hour <- seq(from = 0, by = time.step, length.out = solar.steps)
-
   # day.dec <- day + hour / 24 # calculate day decimal
 
-  # light
+  # light modeling
 
-  # if (light.model == "gaussian.100"){ # to be deprecated in future versions
+  # if (light.model == "gaussian.100"){ # already deprecated
   # ## note the fact: dnorm(-3) / dnorm(0) * 100 =  1.1109 % need floor(), not round()
   # simulated.light <- dnorm(hour,
   #                          mean = light.peak.time - time.step / 2, # continuity correction
@@ -110,15 +109,15 @@ chamber.diurnal <- function(day = 0, time.step = 1,
     sunset <- light.peak.time + light.duration / 2
     light <- ifelse(hour >= sunrise & hour < sunset, floor(light.max), 0)
   }
-  #
+
   # else if (light.model == "random"){
   #   set.seed(seed)
   #   light <- sample(1 : light.max, size = solar.steps, replace = TRUE)
   # }
 
-  # air and water temperature
+  # air and water temperature modeling
   if (temp.model == "sinusoidal") {
-    # plot(0:360, sinpi(0:360 / 180)) # original sin func
+    # plot(0:360, sinpi(0:360 / 180)) # original sin function
     simulated.temp <-
       (sinpi((hour + 6 - temp.peak.time) / 12) + 1) / 2
 
@@ -127,29 +126,27 @@ chamber.diurnal <- function(day = 0, time.step = 1,
     temp.water <- (temp.water.mean - temp.water.range/2) + simulated.temp * temp.water.range
   }
 
-  # immersion
+  # immersion modeling
   tidal.steps <- tidal.day / time.step
   steps.per.entry <- tidal.steps / length(ie.cycle)
 
   if (steps.per.entry != round(steps.per.entry)) {
-    stop("The length of 'ie.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal).")
+    stop("'tidal.day' divided by 'time.step' must result in a positive integer. Also, the length of 'ie.cycle' vector should be 1, 2, or 4 (non-tidal, diurnal, or semidiurnal). ")
   }
 
-  immersion <- rep(ie.cycle, each = steps.per.entry) # has the length of tidal.steps NOT solar.steps
+  immersion <- rep(ie.cycle, each = steps.per.entry) # has the length of tidal.steps
 
   steps.shift <- round(iec.start.time / time.step) # add round to fix floating-point precision issue, see ?integer
 
   immersion <- c(
     tail(immersion, steps.shift), # take some tail values and put forward
     head(immersion, solar.steps - steps.shift) # take the head values and move behind
-  ) # also has the length of solar.steps
+  ) # has the length of solar.steps
 
   # if (iec.start.time > 0) { # not needed anymore
-
     # if (steps.shift != round(steps.shift)) {
     #   stop("'iec.start.time' divided by 'time.step' must result in a natural number.")
     # } dont use, cause error due to floating-point precision, consider all.equal in future
-
       # head(immersion, - steps.shift) works in case of 24h tidal day but looks confusing
       # not work for iec.start.time = 0 or tidal day > 24h
   # }
