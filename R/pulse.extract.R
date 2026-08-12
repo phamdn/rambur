@@ -22,7 +22,6 @@
 #' pulse.extract(pulse.data, agg.res = "15 minutes")
 pulse.extract <- function(pulse.data,
                           sampling.rate = NULL,
-                          # score.method = "power.law",
                           score.parameter = 0.5,
                           cor.min = 0.5,
                           display = "none",
@@ -58,27 +57,10 @@ pulse.extract <- function(pulse.data,
   output <- list(window.hr = window.hr)
 
   if (!is.null(agg.res)) {
-    # helper for central tendency
-    # central <- function(x,
-    #                     na.rm,
-    #                     type = c("median", "mean")) {
-    #   type <- match.arg(type)
-    #   switch(type,
-    #          mean = mean(x, na.rm = na.rm),
-    #          median = median(x, na.rm = na.rm)
-    #   )
-    # }
-
     aggregated.hr <- window.hr %>%
       mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
       group_by(.data$datetime) %>%
-      # summarize(across(where(is.numeric), median, na.rm = TRUE)) %>% # use median, not mean, to alleviate the errors in heart rate calculation
-      # summarize(across(where(is.numeric),
-      #                  ~ ifelse(mean(!is.na(.x)) >= nonNA.threshold,
-      #                           central(.x, na.rm = TRUE, type = summary.fun),
-      #                           NA)
-      # )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
-      summarize(across(where(is.numeric), \(x) mean(x, na.rm = FALSE))) |>
+      summarize(across(where(is.numeric), mean)) |> # do not ignore NA heart rate \(x) mean(x, na.rm = FALSE)
       add.datetime(type = 2)
 
     output$aggregated.hr <- aggregated.hr

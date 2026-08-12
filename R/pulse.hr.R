@@ -34,7 +34,8 @@ pulse.hr <- function(signal,
                      cor.min = 0.5,
                      display = c("all", "ppg", "none", "baseR", "ggplot2")
 ){
-  signal.length <- NROW(signal) # use NROW instead of length() to allow 1 column matrix or dataframe
+  # signal.length <- NROW(signal) # allow 1 column matrix or dataframe but not helpful as plotting functions need vector anyway
+  signal.length <- length(signal)
 
   # autocorrelation
   lag.max <- signal.length / 2 # half of the signal length, e.g., 1-min signal has min detectable hr of 2 bpm
@@ -55,25 +56,26 @@ pulse.hr <- function(signal,
 
   # quadratic interpolation from discrete locmax to estimate true fractional locmax
   # cor before, at, and after the discrete locmax
-  alpha <- ac$cor[locmax.idx - 1] # vectorized
-  beta <- ac$cor[locmax.idx]
-  gamma <- ac$cor[locmax.idx + 1]
+  y1 <- ac$cor[locmax.idx - 1] # vectorized
+  y2 <- ac$cor[locmax.idx]
+  y3 <- ac$cor[locmax.idx + 1]
   # the shift of lag
-  p <- 0.5 * (alpha - gamma) / (alpha - 2 * beta + gamma)
+  p <- 0.5 * (y1 - y3) / (y1 - 2 * y2 + y3)
   # interpolated locmax
   locmax <- data.frame(
     lag = ac$lag[locmax.idx] + p, # lag adjusted
-    cor = beta - 0.25 * (alpha - gamma) * p # cor of true locmax
+    cor = y2 - 0.25 * (y1 - y3) * p # cor of true locmax
   )
 
   # convert lag to time in seconds
   locmax$timelag <- locmax$lag / sampling.rate
 
-  # compute score using power-law decay or exponential decay
-  # score.method <- match.arg(score.method)
+  # compute score using power-law decay
+  locmax$score <- locmax$cor / (locmax$timelag)^score.parameter
 
+  # score.method <- match.arg(score.method)
   # if (score.method == "power.law") {
-    locmax$score <- locmax$cor / (locmax$timelag)^score.parameter
+    # locmax$score <- locmax$cor / (locmax$timelag)^score.parameter
   # } else if (score.method == "exponential") {
   #   locmax$score <- locmax$cor * exp(- score.parameter * locmax$timelag)
   # }
@@ -138,9 +140,6 @@ pulse.hr <- function(signal,
     text(nominee$timelag, nominee$score, labels = paste(round(nominee$hr, 1), "bpm"), #"HR =",
          pos = 3, offset = 1, col = 2)
     abline(h = cor.min, col = 4, lty = 2)
-    # abline(v = nominee$timelag, col = 3, lty = 2)
-    # segments(x0 = nominee$timelag, y0 = -0.1,
-    #          x1 = nominee$timelag, y1 = nominee$score, col = 3, lty = 2)
     legend("topright", legend = c("Correlation", "Score"),
            col = 1:2, text.col = 1:2, pch = 19, lty = 5)
 
@@ -183,18 +182,6 @@ pulse.hr <- function(signal,
       )
         } +
       geom_point(data = nominee, aes(y = score), shape = 1, size = 5, color = 2) +
-      # {if (cor.min != 0)
-      #   annotate("text", x = Inf, y = cor.min,
-      #            label = paste0("\u03B8 = ", cor.min),
-      #            col = 4, hjust = 1, vjust = -0.5, size = 5
-      #   )
-      #   } +
-      # {if (score.parameter != 0)
-      #   annotate("text", x = Inf, y = cor.min,
-      #            label = paste0("\u03B1 = ", score.parameter),
-      #            col = 2, hjust = 1, vjust = 1.5, size = 5
-      #   )
-      # } +
       annotate("text", x = Inf, y = Inf, #x = timelag.max, y = 1,
                label = ifelse(is.na(hr), "HR = N/A", paste("HR =", round(hr, 1), "bpm")),
                col = 2, hjust = 1, vjust = 1
