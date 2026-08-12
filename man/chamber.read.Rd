@@ -2,7 +2,7 @@
 % Please edit documentation in R/chamber.read.R
 \name{chamber.read}
 \alias{chamber.read}
-\title{Chamber: Reading CSV Log Files}
+\title{Chamber: Reading Log Files}
 \usage{
 chamber.read(
   folder.path = NULL,
@@ -10,7 +10,7 @@ chamber.read(
   size.limits = c(0, Inf),
   metadata.lines = 16,
   timezone = "",
-  agg.res = "minute"
+  agg.res = "1 minute"
 )
 }
 \arguments{

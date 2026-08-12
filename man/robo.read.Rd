@@ -2,7 +2,7 @@
 % Please edit documentation in R/robo.read.R
 \name{robo.read}
 \alias{robo.read}
-\title{Robomussel: Reading a CSV Log File}
+\title{Robomussel: Reading a Log File}
 \usage{
 robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 }

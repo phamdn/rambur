@@ -2,7 +2,7 @@
 % Please edit documentation in R/pulse.read.R
 \name{pulse.read}
 \alias{pulse.read}
-\title{Pulse: Reading CSV Log Files}
+\title{Pulse: Reading Log Files}
 \usage{
 pulse.read(
   folder.path = NULL,

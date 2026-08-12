@@ -2,7 +2,7 @@
 % Please edit documentation in R/robos.read.R
 \name{robos.read}
 \alias{robos.read}
-\title{RobomusselS: Reading CSV Log Files}
+\title{RobomusselS: Reading Log Files}
 \usage{
 robos.read(
   folder.path = NULL,
@@ -27,9 +27,9 @@ robos.read(
 a list of three data frames, \code{enhanced.data}, \code{synchronized.data}, and \code{aggregated.data} for enhanced, synchronized, and aggregated data, respectively.
 }
 \description{
-A function to read the log files of multiple robomussels or temperature EnvLoggers.
+A function to read the CSV log files of multiple robomussels or temperature EnvLoggers.
 }
 \examples{
 robo.folder <- system.file("extdata/robo", package = "rambur")
-robos.read(robo.folder, agg.res = "hour")
+robos.read(robo.folder, agg.res = "1 hour")
 }

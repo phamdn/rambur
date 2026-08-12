@@ -1,4 +1,4 @@
-#' Robomussel: Reading a CSV Log File
+#' Robomussel: Reading a Log File
 #'
 #' A function to read the CSV log file of a single robomussel or temperature EnvLogger.
 #'

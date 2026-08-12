@@ -13,6 +13,9 @@ add.datetime(df, timezone, reverse = FALSE)
 
 \item{reverse}{a logical, whether to convert local datetime to UTC datetime.}
 }
+\value{
+a data frame with additional columns.
+}
 \description{
 A helper function to convert UTC datetime to local datetime, then break it into date and time.
 }

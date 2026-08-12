@@ -1,6 +1,6 @@
-#' RobomusselS: Reading CSV Log Files
+#' RobomusselS: Reading Log Files
 #'
-#' A function to read the log files of multiple robomussels or temperature EnvLoggers.
+#' A function to read the CSV log files of multiple robomussels or temperature EnvLoggers.
 #'
 #' @param folder.path a character string, path to the folder.
 #' @param file.name a character string, filter the file name.
@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' robo.folder <- system.file("extdata/robo", package = "rambur")
-#' robos.read(robo.folder, agg.res = "hour")
+#' robos.read(robo.folder, agg.res = "1 hour")
 robos.read <- function(folder.path = NULL,
                        file.name = ".csv",
                       metadata.lines = 21,
@@ -34,22 +34,16 @@ robos.read <- function(folder.path = NULL,
   message("importing ", length(robo.files), " files")
 
   original.data <- lapply(robo.files, function(x){
-     read_csv(file = x, skip = metadata.lines,
-                              show_col_types = FALSE)
-    # read_csv uses UTC as default (see col_datetime() and locale()),
-    # which is the correct tz of robomussel (always UTC+0000)
-
+     read_csv(file = x, skip = metadata.lines, show_col_types = FALSE)
+    # read_csv uses UTC as default (see col_datetime() and locale()), which is the correct tz of robomussel (always UTC+0000)
   })
 
   enhanced.data <- lapply(original.data, function(x){
     x %>%
-      # transmute(datetime.UTC = .data$time,
-      #           # datetime = format(time, tz = timezone), not working, just <chr> format
-      #           datetime = as.POSIXct(.data$time, tz = timezone),
-      #           date = as_date(.data$datetime),
-      #           time = as_hms(.data$datetime), # as.Date is base R but as_date and as_hms is not
-      #           temp = .data$temp
-      # ) # transmute() is better than mutate() for keeping columns in desired order, note the repurposed use of "time"
+      # mutate(
+      #   datetime.UTC = .data$time,
+      #   .keep = "unused", .before = 1
+      # ) |> # transmute() might be better than mutate() for keeping columns in desired order
       transmute(datetime.UTC = .data$time,
                 temp = .data$temp) |>
       add.datetime(timezone = timezone)
@@ -78,10 +72,6 @@ robos.read <- function(folder.path = NULL,
       )
   }) %>%
     reduce(full_join, by = "datetime.UTC") %>%
-    # mutate(date = as_date(.data$datetime),
-    #        time = as_hms(.data$datetime),
-    #        .after = .data$datetime
-    # ) %>%
     add.datetime(timezone = timezone) |>
     mutate(
       temp = rowMeans(across(starts_with("temp")))
@@ -98,10 +88,6 @@ robos.read <- function(folder.path = NULL,
       mutate(datetime.UTC = floor_date(.data$datetime.UTC, agg.res)) %>%
       group_by(.data$datetime.UTC) %>%
       summarize(temp = mean(.data$temp)) %>%
-      # mutate(date = as_date(.data$datetime),
-      #        time = as_hms(.data$datetime),
-      #        .after = .data$datetime
-      # )
       add.datetime(timezone = timezone)
 
     output$aggregated.data <- aggregated.data

@@ -6,7 +6,7 @@
 #' @param timezone a character string, local time zone.
 #' @param reverse a logical, whether to convert local datetime to UTC datetime.
 #'
-#' @returns
+#' @returns a data frame with additional columns.
 #' @export
 #'
 #' @examples

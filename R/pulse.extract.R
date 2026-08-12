@@ -82,7 +82,7 @@ pulse.extract <- function(pulse.data,
       #                           central(.x, na.rm = TRUE, type = summary.fun),
       #                           NA)
       # )) %>% # or only calculate with enough observations e.g. more than 1/10 non missing
-      summarize(across(where(is.numeric), \(x) mean(x))) |>
+      summarize(across(where(is.numeric), \(x) mean(x, na.rm = FALSE))) |>
       # mutate(date = as_date(.data$datetime),
       #        time = as_hms(.data$datetime),
       #        .after = .data$datetime

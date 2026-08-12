@@ -1,4 +1,4 @@
-#' Pulse: Reading CSV Log Files
+#' Pulse: Reading Log Files
 #'
 #' A function to read the CSV log files of a PULSE V2 logger.
 #'
@@ -46,21 +46,12 @@ pulse.read <- function(folder.path = NULL,
 
   # read and merge to a single original dataframe
   original.data <- read_csv(pulse.files, skip = metadata.lines,
-                            col_names = c("time", channel.names), # need to improve to retain original sample names
+                            col_names = c("time", channel.names),
+                            # can be improve to extract original sample names in log files
                             # col_types = cols(time = col_datetime())
                             show_col_types = FALSE
                             )
-  # read_csv uses UTC as default (see col_datetime() and locale()),
-  # which is the correct tz of Pulse device (always UTC+0000)
-
-  # enhanced.data <- original.data %>%
-  #   mutate(
-  #     datetime.UTC = .data$time,
-  #     datetime = as.POSIXct(.data$time, tz = timezone),
-  #     date = as_date(.data$datetime),
-  #     time = as_hms(.data$datetime), # as.POSIXct and as.Date are base R but as_date and as_hms not
-  #     .keep = "unused", .before = 1
-  #   )
+  # read_csv uses UTC as default (see col_datetime() and locale()), which is the correct tz of Pulse device (always UTC+0000)
 
   enhanced.data <- original.data %>%
     mutate(

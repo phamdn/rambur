@@ -1,4 +1,4 @@
-#' Chamber: Reading CSV Log Files
+#' Chamber: Reading Log Files
 #'
 #' A function to read the CSV log files of an intertidal chamber.
 #'
@@ -21,7 +21,7 @@ chamber.read <- function(folder.path = NULL,
                          size.limits = c(0, Inf),
                          metadata.lines = 16,
                          timezone = "",
-                         agg.res = "minute"){
+                         agg.res = "1 minute"){
 
   # notice about time zone
   message("reminder: chamber log files were in local time")
@@ -46,9 +46,8 @@ chamber.read <- function(folder.path = NULL,
 
   # read and merge to a single original dataframe
   original.data <- read_csv(chamber.files, skip = metadata.lines,
-                             col_types = cols(`LED_intensity_%` = col_double())
-                            # otherwise, LED was character, e.g., "000"
-  ) # Note that Chamber records local time, not UTC like Pulse or Robo
+                             col_types = cols(`LED_intensity_%` = col_double()) # otherwise, LED was character, e.g., "000"
+  )
 
   # presence of "Reset" lines in CSV, i.e., when a chamber was reset
   # problems <- problems(original.data)
@@ -110,15 +109,14 @@ chamber.read <- function(folder.path = NULL,
     mutate(datetime = floor_date(.data$datetime, agg.res)) %>%
     group_by(.data$datetime) %>%
     # summarize(across(where(is.numeric), mean, na.rm = TRUE)) %>% # will also summarize cols such as designed.temp, which is meaningless
-    summarize(across(c(.data$actual.light, .data$tide.pump, .data$actual.immersion, .data$actual.temp), \(x) mean(x))) %>% # better to be more selective in what to summarize here
-    # mutate(date = as_date(.data$datetime), # better than as.Date(datetime, tz = timezone)
-    #        time = as_hms(.data$datetime),
-    #        .after = .data$datetime
-    #        )
+    # better to be more selective in what to summarize here
+    summarize(
+      across(c(.data$actual.light, .data$tide.pump, .data$actual.immersion, .data$actual.temp),
+                     mean) # use na.rm will require \(x) mean(x, ...) or function(x) mean(x, ...), see ?across
+      ) %>%
     add.datetime()
 
   list(original.data = original.data, # keep to understand NA problems
-       # problems = problems,
        enhanced.data = enhanced.data,
        aggregated.data = aggregated.data
        )
