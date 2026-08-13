@@ -29,7 +29,7 @@
 chamber.design <- function(daily.settings,
                      start.date = "2025-04-30",
                      timezone = "",
-                     export = FALSE,
+                     export = TRUE,
                      folder.path = NULL
                      ){
 
