@@ -67,7 +67,12 @@ pulse.hr <- function(signal,
   locmax$score <- locmax$cor / (locmax$timelag)^score.parameter
 
   # two peaks with highest scores, retain temporal order using sort()
-  top2 <- locmax[sort(order(locmax$score, decreasing = TRUE)[1:2]), ]
+
+  if(nrow(locmax) < 2) { # edge case when signal is too short, there might be less than 2 locmax
+    top2 <- locmax[c(NA_integer_, NA_integer_), ]
+  } else {
+    top2 <- locmax[sort(order(locmax$score, decreasing = TRUE)[1:2]), ]
+  }
 
   top2$role <- c("Nominee", "Validator")
 
