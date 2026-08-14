@@ -8,6 +8,7 @@
 #' @param score.parameter a numeric, the exponent used in the score.
 #' @param display a character string, whether to display plots.
 #' @param search.scope a numeric, the ratio of lag domain length to the total signal length.
+#' @param ppg.zoom a logical, whether to zoom the PPG plot to fit signal intensity.
 #'
 #' @returns a mixed list, \code{locmax} for local maxima, \code{nominee} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
 #' @export
@@ -28,7 +29,8 @@ pulse.hr <- function(signal,
                      search.scope = 1,
                      score.parameter = 0.5,
                      cor.min = 0.5,
-                     display = c("all", "ppg", "none")
+                     display = c("all", "ppg", "none"),
+                     ppg.zoom = FALSE
 ){
   signal.length <- length(signal)
   lag.max <- signal.length * search.scope # consider shortening for faster computation
@@ -146,9 +148,10 @@ pulse.hr <- function(signal,
 
   if (display == "ppg") {
     plot(signal, type = "l", main = "Photoplethysmogram", ylab = "Intensity",
-         ylim = c(0, 4095)
+         ylim = if (ppg.zoom) NULL else c(0, 4095)
          )
-    text(signal.length, 0, labels = paste(signal.length / sampling.rate, "s\n", sampling.rate, "Hz"),
+    text(x = signal.length, y = if (ppg.zoom) min(signal) else 0,
+         labels = paste(signal.length / sampling.rate, "s\n", sampling.rate, "Hz"),
          adj = c(1, 0), col = 2)
   }
 
@@ -179,11 +182,11 @@ pulse.hr <- function(signal,
                        Intensity = signal) |>
     ggplot(aes(x = .data$Index, y = .data$Intensity)) +
       geom_line() +
-      annotate("text", x = signal.length, y = 0,
+      annotate("text", x = signal.length, y = if (ppg.zoom) min(signal) else 0,
                label = paste(signal.length / sampling.rate, "s \u00d7", sampling.rate, "Hz"),
                 col = 2, hjust = 0.75, vjust = 0
                ) +
-      scale_y_continuous(limits = c(0, 4095)) +
+      scale_y_continuous(limits = if (ppg.zoom) NULL else c(0, 4095)) +
       labs(title = "Photoplethysmogram") +
       theme_cowplot()
 

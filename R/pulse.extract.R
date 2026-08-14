@@ -10,6 +10,7 @@
 #' @param score.parameter a numeric, the exponent used in the score.
 #' @param cor.min a numeric, the correlation threshold for qualified signal.
 #' @param search.scope a numeric, the ratio of lag domain length to the total signal length.
+#' @param ppg.zoom a logical, whether to zoom the PPG plot to fit signal intensity.
 #'
 #' @returns a list of two data frames, \code{window.hr} and \code{aggregated.hr} for window and summarized heart rate.
 #' @export
@@ -26,6 +27,7 @@ pulse.extract <- function(pulse.data,
                           score.parameter = 0.5,
                           cor.min = 0.5,
                           display = "none",
+                          ppg.zoom = FALSE,
                           time.window = "1 minute",
                           agg.res = NULL
                           ){
@@ -49,7 +51,8 @@ pulse.extract <- function(pulse.data,
                search.scope = search.scope,
                score.parameter = score.parameter,
                cor.min = cor.min,
-               display = display
+               display = display,
+               ppg.zoom = ppg.zoom
       )$hr
     }
     )) %>%

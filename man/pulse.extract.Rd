@@ -11,6 +11,7 @@ pulse.extract(
   score.parameter = 0.5,
   cor.min = 0.5,
   display = "none",
+  ppg.zoom = FALSE,
   time.window = "1 minute",
   agg.res = NULL
 )
@@ -27,6 +28,8 @@ pulse.extract(
 \item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
 \item{display}{a logical, whether to display plots.}
+
+\item{ppg.zoom}{a logical, whether to zoom the PPG plot to fit signal intensity.}
 
 \item{time.window}{a character string, window duration extract heart rate.}
 

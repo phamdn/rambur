@@ -10,7 +10,8 @@ pulse.hr(
   search.scope = 1,
   score.parameter = 0.5,
   cor.min = 0.5,
-  display = c("all", "ppg", "none")
+  display = c("all", "ppg", "none"),
+  ppg.zoom = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ pulse.hr(
 \item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
 \item{display}{a character string, whether to display plots.}
+
+\item{ppg.zoom}{a logical, whether to zoom the PPG plot to fit signal intensity.}
 }
 \value{
 a mixed list, \code{locmax} for local maxima, \code{nominee} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
