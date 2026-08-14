@@ -7,6 +7,7 @@
 pulse.extract(
   pulse.data,
   sampling.rate = NULL,
+  search.scope = 1,
   score.parameter = 0.5,
   cor.min = 0.5,
   display = "none",
@@ -19,11 +20,13 @@ pulse.extract(
 
 \item{sampling.rate}{an integer, sampling rate in Hz. Can be autocalculated from data.}
 
+\item{search.scope}{a numeric, the ratio of lag domain length to the total signal length.}
+
 \item{score.parameter}{a numeric, the exponent used in the score.}
 
 \item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
-\item{display}{a logical, whether to plot display.}
+\item{display}{a logical, whether to display plots.}
 
 \item{time.window}{a character string, window duration extract heart rate.}
 

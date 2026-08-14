@@ -6,9 +6,10 @@
 #' @param agg.res a character string, duration to summarize the mean or median of the records.
 #' @param time.window a character string, window duration extract heart rate.
 #' @param sampling.rate an integer, sampling rate in Hz. Can be autocalculated from data.
-#' @param display a logical, whether to plot display.
+#' @param display a logical, whether to display plots.
 #' @param score.parameter a numeric, the exponent used in the score.
 #' @param cor.min a numeric, the correlation threshold for qualified signal.
+#' @param search.scope a numeric, the ratio of lag domain length to the total signal length.
 #'
 #' @returns a list of two data frames, \code{window.hr} and \code{aggregated.hr} for window and summarized heart rate.
 #' @export
@@ -22,6 +23,7 @@
 #' pulse.extract(pulse.data, agg.res = "15 minutes")
 pulse.extract <- function(pulse.data,
                           sampling.rate = NULL,
+                          search.scope = 1,
                           score.parameter = 0.5,
                           cor.min = 0.5,
                           display = "none",
@@ -45,7 +47,7 @@ pulse.extract <- function(pulse.data,
 
       pulse.hr(x,
                sampling.rate = sampling.rate,
-               # score.method = score.method,
+               search.scope = search.scope,
                score.parameter = score.parameter,
                cor.min = cor.min,
                display = display

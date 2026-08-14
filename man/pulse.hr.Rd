@@ -7,9 +7,10 @@
 pulse.hr(
   signal,
   sampling.rate = 5,
+  search.scope = 1,
   score.parameter = 0.5,
   cor.min = 0.5,
-  display = c("all", "ppg", "none", "baseR", "ggplot2")
+  display = c("all", "ppg", "none")
 )
 }
 \arguments{
@@ -17,11 +18,13 @@ pulse.hr(
 
 \item{sampling.rate}{an integer, sampling rate in Hz.}
 
+\item{search.scope}{a numeric, the ratio of lag domain length to the total signal length.}
+
 \item{score.parameter}{a numeric, the exponent used in the score.}
 
 \item{cor.min}{a numeric, the correlation threshold for qualified signal.}
 
-\item{display}{a character string, whether to plot display.}
+\item{display}{a character string, whether to display plots.}
 }
 \value{
 a mixed list, \code{locmax} for local maxima, \code{nominee} for the best peak, \code{cor.pass} and \code{anticor.pass} for quality control, and \code{hr} for final heart rate.
@@ -34,16 +37,12 @@ folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-ex1b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
-datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE), display = "ggplot2")
 ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
 datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
 ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
 datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
 ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "baseR")
-ex4b <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ggplot2")
+datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
 }
 \seealso{
 \code{\link[=pulse.extract]{pulse.extract()}}
