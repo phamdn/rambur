@@ -19,12 +19,10 @@
 #' pulse.data <- pulse.read(folder)
 #' ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 #' datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-#' ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 01:07:00" &
-#' datetime <= "2025-05-21 01:08:00", channel.1, drop = TRUE))
-#' ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
-#' datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE))
-#' ex4 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE))
+#' ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
+#' datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE), display = "none")
+#' ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
+#' datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ppg")
 pulse.hr <- function(signal,
                      sampling.rate = 5,
                      search.scope = 1,

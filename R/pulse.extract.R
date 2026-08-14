@@ -19,7 +19,6 @@
 #' @examples
 #' folder <- system.file("extdata/pulse", package = "rambur")
 #' pulse.data <- pulse.read(folder)
-#' pulse.extract(pulse.data)
 #' pulse.extract(pulse.data, agg.res = "15 minutes")
 pulse.extract <- function(pulse.data,
                           sampling.rate = NULL,
