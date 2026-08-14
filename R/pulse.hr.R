@@ -69,12 +69,12 @@ pulse.hr <- function(signal,
   # two peaks with highest scores, retain temporal order using sort()
   top2 <- locmax[sort(order(locmax$score, decreasing = TRUE)[1:2]), ]
 
+  top2$role <- c("Nominee", "Validator")
+
   top2$lag.ratio <- top2$lag / top2$lag[1] # lag of validator over nominee
 
   # compute hr in beats per minute (bpm) for top2
   top2$hr <- 60 / top2$timelag
-
-  top2$role <- c("Nominee", "Validator")
 
   # quality checks
   # place holders
@@ -218,9 +218,7 @@ pulse.hr <- function(signal,
       ) +
       scale_x_continuous(limits = c(0, timelag.max)) +
       scale_y_continuous(limits = c(0, 1)) +
-      scale_color_manual(values = c("Nominee" = 2,
-                                    "Validator" = 1,
-                                    "Score" = 2),
+      scale_color_manual(values = c("Score" = 2, "Nominee" = 2, "Validator" = 1),
                          breaks = c("Score", "Nominee", "Validator")
                          ) +
       labs(title = "Peak evaluation", x = "Time lag (s)", y = NULL, color = NULL) +
