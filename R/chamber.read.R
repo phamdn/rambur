@@ -116,6 +116,9 @@ chamber.read <- function(folder.path = NULL,
       ) %>%
     add.datetime(type = 2)
 
+  if (aggregated.data$datetime |>  diff() |> unique() |> length() != 1)
+    warning("time gaps detected in the log files")
+
   list(original.data = original.data, # keep to understand NA problems
        enhanced.data = enhanced.data,
        aggregated.data = aggregated.data
