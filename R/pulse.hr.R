@@ -183,6 +183,7 @@ pulse.hr <- function(signal,
 
   if (display == "all") {
 
+    #Photoplethysmogram
     fig1 <- data.frame(Index = seq_along(signal),
                        Intensity = signal) |>
     ggplot(aes(x = .data$Index, y = .data$Intensity)) +
@@ -192,15 +193,16 @@ pulse.hr <- function(signal,
                 col = 2, hjust = 0.75, vjust = 0
                ) +
       scale_y_continuous(limits = if (ppg.zoom) NULL else c(0, 4095)) +
-      labs(title = "Photoplethysmogram") +
+      labs(title = "PPG") +
       theme_cowplot()
 
+    #Autocorrelogram
     fig2 <- ac |> ggplot(aes(x = .data$lag, y = .data$cor)) +
       geom_hline(aes(yintercept = 0)) +
       geom_segment(aes(xend = .data$lag, yend = 0), col = 8) +
       geom_point(data = locmax, aes(color = "Interpolated peaks")) +
       scale_color_manual(values = c("Interpolated peaks" = 4)) +
-      labs(title = "Autocorrelogram", y = "Correlation", x = "Lag", color = NULL) +
+      labs(title = "ACF", y = "Correlation", x = "Lag", color = NULL) +
       theme_cowplot() +
       theme(legend.position = "top")
 
