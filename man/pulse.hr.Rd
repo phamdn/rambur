@@ -11,7 +11,7 @@ pulse.hr(
   score.parameter = 0.5,
   cor.min = 0.5,
   display = c("all", "ppg", "none"),
-  ppg.zoom = FALSE
+  ppg.zoom = TRUE
 )
 }
 \arguments{

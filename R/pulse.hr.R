@@ -30,7 +30,7 @@ pulse.hr <- function(signal,
                      score.parameter = 0.5,
                      cor.min = 0.5,
                      display = c("all", "ppg", "none"),
-                     ppg.zoom = FALSE
+                     ppg.zoom = TRUE
 ){
   signal.length <- length(signal)
   lag.max <- signal.length * search.scope # consider shortening for faster computation
@@ -187,10 +187,11 @@ pulse.hr <- function(signal,
     fig1 <- data.frame(Index = seq_along(signal),
                        Intensity = signal) |>
     ggplot(aes(x = .data$Index, y = .data$Intensity)) +
-      geom_line() +
-      annotate("text", x = signal.length, y = if (ppg.zoom) min(signal) else 0,
-               label = paste(signal.length / sampling.rate, "s \u00d7", sampling.rate, "Hz"),
-                col = 2, hjust = 0.75, vjust = 0
+      geom_line(color = 1, alpha = 0.3) +
+      geom_point(size = 0.5) +
+      annotate("label", x = signal.length, y = if (ppg.zoom) min(signal) else 0,
+               label = paste(sampling.rate, "Hz \u00d7", signal.length / sampling.rate, "s"),
+                col = 1, hjust = 0.75, vjust = 0
                ) +
       scale_y_continuous(limits = if (ppg.zoom) NULL else c(0, 4095)) +
       labs(title = "PPG") +
@@ -198,7 +199,7 @@ pulse.hr <- function(signal,
 
     #Autocorrelogram
     fig2 <- ac |> ggplot(aes(x = .data$lag, y = .data$cor)) +
-      geom_hline(aes(yintercept = 0)) +
+      geom_hline(aes(yintercept = 0), col = 8) +
       geom_segment(aes(xend = .data$lag, yend = 0), col = 8) +
       geom_point(data = locmax, aes(color = "Interpolated peaks")) +
       scale_color_manual(values = c("Interpolated peaks" = 4)) +
@@ -221,7 +222,7 @@ pulse.hr <- function(signal,
       geom_point(data = top2, aes(y = .data$cor, color = .data$role), shape = 1, size = 6) +
       annotate("text", x = Inf, y = Inf, #x = timelag.max, y = 1,
                label = ifelse(is.na(hr), "HR = N/A", paste("HR =", round(hr, 1), "bpm")),
-               col = 2, hjust = 1, vjust = 1
+               col = 2, hjust = 1, vjust = 1, fontface = "bold"
       ) +
       scale_x_continuous(limits = c(0, timelag.max)) +
       scale_y_continuous(limits = c(0, 1)) +
