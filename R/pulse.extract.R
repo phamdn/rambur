@@ -39,6 +39,13 @@ pulse.extract <- function(pulse.data,
     message("assuming a sampling rate of ", sampling.rate, " Hz")
   }
 
+  settings <- data.frame(
+    # sampling.rate = sampling.rate,
+    search.scope = search.scope,
+    score.parameter = score.parameter,
+    cor.min = cor.min
+  )
+
   # using non-overlapping (sequential) windows, not overlapping (sliding) windows
   window.hr <- pulse.data %>%
     mutate(datetime = floor_date(.data$datetime, time.window)) %>%
@@ -58,7 +65,8 @@ pulse.extract <- function(pulse.data,
     )) %>%
     add.datetime(type = 2)
 
-  output <- list(window.hr = window.hr)
+  output <- list(settings = settings,
+                 window.hr = window.hr)
 
   if (!is.null(agg.res)) {
     aggregated.hr <- window.hr %>%

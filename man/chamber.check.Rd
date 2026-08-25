@@ -11,7 +11,8 @@ chamber.check(
   dttm.limits = c(NA, NA),
   dttm.breaks = waiver(),
   dttm.labels = waiver(),
-  ambient.label = c("Ambient", "Room")
+  ambient.label = c("Ambient", "Room"),
+  temp.limits = NULL
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ chamber.check(
 \item{dttm.labels}{a character string, format of dates.}
 
 \item{ambient.label}{a character string, how to ambient temperature.}
+
+\item{temp.limits}{a vector of two numeric, limits of temperature.}
 }
 \value{
 a three-panel plot of light, immersion, and temperature.

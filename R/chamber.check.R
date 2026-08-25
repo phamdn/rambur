@@ -9,6 +9,7 @@
 #' @param dttm.breaks a character string, duration between date breaks.
 #' @param dttm.labels a character string, format of dates.
 #' @param ambient.label a character string, how to ambient temperature.
+#' @param temp.limits a vector of two numeric, limits of temperature.
 #'
 #' @returns a three-panel plot of light, immersion, and temperature.
 #' @export
@@ -32,7 +33,8 @@ chamber.check <- function(design,
                           dttm.limits = c(NA, NA),
                           dttm.breaks = waiver(),
                           dttm.labels = waiver(),
-                          ambient.label = c("Ambient", "Room")
+                          ambient.label = c("Ambient", "Room"),
+                          temp.limits = NULL
                           ){
 
   ambient.label <- match.arg(ambient.label)
@@ -64,7 +66,9 @@ chamber.check <- function(design,
                               chamber.data$ambient.temp,
                               robo.data$temp,
                               na.rm = TRUE))
-  temp.limits <- range(temp.breaks)
+  if (is.null(temp.limits)) {
+    temp.limits <- range(temp.breaks)
+  }
 
   fig3.values <- c("Designed" = 1, "Actual" = 2, "Body" = 8)
   fig3.values[ambient.label] <- 3
