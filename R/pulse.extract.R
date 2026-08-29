@@ -27,7 +27,7 @@ pulse.extract <- function(pulse.data,
                           score.parameter = 0.5,
                           cor.min = 0.5,
                           display = "none",
-                          ppg.zoom = FALSE,
+                          ppg.zoom = TRUE,
                           time.window = "1 minute",
                           agg.res = NULL
                           ){
