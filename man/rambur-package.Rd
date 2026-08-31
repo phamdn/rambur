@@ -8,6 +8,13 @@
 \description{
 A toolkit for your intertidal experiments, supporting ElectricBlue Intertidal Chamber, Pulse, and EnvLogger.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item Report bugs at \url{https://github.com/phamdn/rambur/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Duy Nghia Pham \email{nghiapham@yandex.com} (\href{https://orcid.org/0000-0003-1349-1710}{ORCID})
 
