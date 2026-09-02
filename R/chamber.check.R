@@ -24,7 +24,10 @@
 #' folder <- system.file("extdata/chamber", package = "rambur")
 #' chamber.data <- chamber.read(folder)
 #'
-#' chamber.check(acc$design, chamber.data$enhanced.data,
+#' robo.folder <- system.file("extdata/robo", package = "rambur")
+#' robo.data <- robos.read(robo.folder)
+#'
+#' chamber.check(acc$design, chamber.data$enhanced.data, robo.data$synchronized.data,
 #' dttm.limits = c("2025-05-21", "2025-05-24"), ambient.label = "Room")
 #'
 chamber.check <- function(design,
@@ -72,7 +75,7 @@ chamber.check <- function(design,
 
   fig3.values <- c("Designed" = 1, "Actual" = 2, "Body" = 8)
   fig3.values[ambient.label] <- 3
-  fig3.breaks <- c("Designed", "Actual", "Body", ambient.label)
+  fig3.breaks <- c("Designed", "Actual", ambient.label, "Body")
 
   fig3 <- ggplot(data = design, aes(x = .data$datetime, y = .data$temp, color = "Designed")) +
     geom_line(data = chamber.data, aes(y = .data$ambient.temp, color = .env$ambient.label), alpha = 0.8) + # plot ambient temp first as background

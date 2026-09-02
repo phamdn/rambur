@@ -48,7 +48,10 @@ acc <- chamber.design(acc.daily.settings,
 folder <- system.file("extdata/chamber", package = "rambur")
 chamber.data <- chamber.read(folder)
 
-chamber.check(acc$design, chamber.data$enhanced.data,
+robo.folder <- system.file("extdata/robo", package = "rambur")
+robo.data <- robos.read(robo.folder)
+
+chamber.check(acc$design, chamber.data$enhanced.data, robo.data$synchronized.data,
 dttm.limits = c("2025-05-21", "2025-05-24"), ambient.label = "Room")
 
 }
