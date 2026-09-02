@@ -49,6 +49,6 @@ folder <- system.file("extdata/chamber", package = "rambur")
 chamber.data <- chamber.read(folder)
 
 chamber.check(acc$design, chamber.data$enhanced.data,
-dttm.limits = c("2025-05-16", "2025-05-19"), ambient.label = "Room")
+dttm.limits = c("2025-05-21", "2025-05-24"), ambient.label = "Room")
 
 }
