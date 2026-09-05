@@ -26,6 +26,12 @@ chamber.read <- function(folder.path = NULL,
   # notice about time zone
   message("reminder: chamber log files were in local time")
 
+  # notice about time zone
+  if (timezone == "")
+    message("assuming ", Sys.timezone(), " as local time zone")
+  else
+    message("using ", timezone, " as local time zone")
+
   if (is.null(folder.path)) {
     folder.path <- getwd()
     message("reading from the current working directory")
@@ -40,9 +46,6 @@ chamber.read <- function(folder.path = NULL,
                           file.size(chamber.files) < size.limits[2])
 
   message("importing ", length(chamber.files), " files")
-
-  # notice about time zone
-  message("assuming ", ifelse(timezone == "", Sys.timezone(), timezone), " as local time zone")
 
   # read and merge to a single original dataframe
   original.data <- read_csv(chamber.files, skip = metadata.lines,

@@ -23,6 +23,12 @@ robos.read <- function(folder.path = NULL,
   # notice about time zone
   message("reminder: robo log files were in UTC")
 
+  # notice about time zone
+  if (timezone == "")
+    message("assuming ", Sys.timezone(), " as local time zone")
+  else
+    message("using ", timezone, " as local time zone")
+
   if (is.null(folder.path)) {
     folder.path <- getwd()
     message("reading from the current working directory")

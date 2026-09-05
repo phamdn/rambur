@@ -40,7 +40,6 @@ pulse.extract <- function(pulse.data,
   }
 
   settings <- data.frame(
-    # sampling.rate = sampling.rate,
     search.scope = search.scope,
     score.parameter = score.parameter,
     cor.min = cor.min

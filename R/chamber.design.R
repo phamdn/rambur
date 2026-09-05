@@ -39,7 +39,11 @@ chamber.design <- function(daily.settings,
   ### e.g., 1747267200 is "2025-05-15 UTC" but will be interpreted as "2025-05-15 CEST"
   ### this is to allow a team in Germany and a team in China to run the same experimental profile at their local time
 
-  message("assuming ", ifelse(timezone == "", Sys.timezone(), timezone), " as local time zone")
+  # notice about time zone
+  if (timezone == "")
+    message("assuming ", Sys.timezone(), " as local time zone")
+  else
+    message("using ", timezone, " as local time zone")
 
   # essentially, apply diurnal expansion to daily.settings to get expanded design
   multiday.list <- do.call(mapply, c(chamber.diurnal, daily.settings, SIMPLIFY = FALSE))
