@@ -4,7 +4,7 @@
 \alias{robo.read}
 \title{Robomussel: Reading a Log File}
 \usage{
-robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
+robo.read(file.path, metadata.lines = 21, timezone = "", agg.res = NULL)
 }
 \arguments{
 \item{file.path}{a character string, path to the file.}
@@ -13,16 +13,15 @@ robo.read(file.path, metadata.lines = 21, timezone = "", summary.period = NULL)
 
 \item{timezone}{a character string, time zone.}
 
-\item{summary.period}{a character string, duration to summarize the mean of the records. Optional.}
+\item{agg.res}{a character string, duration to summarize the mean of the records. Optional.}
 }
 \value{
-a list of two data frames, \code{enhanced.data} and \code{summarized.data} for enhanced and summarized records, respectively.
+a list of two data frames, \code{enhanced.data} and \code{aggregated.data} for enhanced and summarized records, respectively.
 }
 \description{
 A function to read the CSV log file of a single robomussel or temperature EnvLogger.
 }
 \examples{
 robo.file <- system.file("extdata/robo/RM1.csv", package = "rambur")
-robo.read(robo.file)
-robo.read(robo.file, summary.period = "hour")
+robo.read(robo.file, agg.res = "1 hour")
 }
