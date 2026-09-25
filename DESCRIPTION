@@ -1,19 +1,19 @@
 Package: rambur
 Title: Design and Analysis of Intertidal Chamber Experiments
-Version: 0.5.3
+Version: 0.5.4
 Authors@R: c(
     person("Duy Nghia", "Pham", email = "nghiapham@yandex.com",
     role = c("aut", "cre"), comment = c(ORCID = "0000-0003-1349-1710")),
     person("Inna M.", "Sokolova", role = "ctb",
     comment = c(ORCID = "0000-0002-2068-4302"))
     )
-Description: Facilitates the design and analysis of intertidal chamber 
-    experiments. It supports generating experimental profiles for 
-    'ElectricBlue' intertidal chambers, reading log files, and checking 
-    actual chamber conditions against designed profiles. It also helps 
-    read log files from 'EnvLogger' robomussels (or temperature loggers) 
-    and 'Pulse V2' heart rate loggers, and provides an algorithm to extract 
-    heart rates from 'Pulse V2' records. The acronym stands for Research 
+Description: Facilitates the design and analysis of intertidal chamber
+    experiments. It supports generating experimental profiles for
+    'ElectricBlue' intertidal chambers, reading log files, and checking
+    actual chamber conditions against designed profiles. It also helps
+    read log files from 'EnvLogger' robomussels (or temperature loggers)
+    and 'Pulse V2' heart rate loggers, and provides an algorithm to extract
+    heart rates from 'Pulse V2' records. The acronym stands for Research
     Assistant in Marine Biology at the University of Rostock.
 License: GPL (>= 3)
 Encoding: UTF-8
