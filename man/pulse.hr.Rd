@@ -40,10 +40,6 @@ folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
 ex1 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:01:00" &
 datetime <= "2025-05-21 00:02:00", channel.1, drop = TRUE))
-ex2 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:09:00" &
-datetime <= "2025-05-21 00:10:00", channel.3, drop = TRUE), display = "none")
-ex3 <- pulse.hr(subset(pulse.data, datetime >= "2025-05-21 00:30:00" &
-datetime <= "2025-05-21 00:31:00", channel.10, drop = TRUE), display = "ppg")
 }
 \seealso{
 \code{\link[=pulse.extract]{pulse.extract()}}

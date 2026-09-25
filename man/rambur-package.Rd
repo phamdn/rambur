@@ -4,9 +4,9 @@
 \name{rambur-package}
 \alias{rambur}
 \alias{rambur-package}
-\title{rambur: Research Assistant in Marine Biology at the University of Rostock}
+\title{rambur: Design and Analysis of Intertidal Chamber Experiments}
 \description{
-A toolkit for your intertidal experiments, supporting ElectricBlue Intertidal Chamber, Pulse, and EnvLogger.
+Facilitates the design and analysis of intertidal chamber experiments. It supports generating experimental profiles for 'ElectricBlue' intertidal chambers, reading log files, and checking actual chamber conditions against designed profiles. It also helps read log files from 'EnvLogger' robomussels (or temperature loggers) and 'Pulse V2' heart rate loggers, and provides an algorithm to extract heart rates from 'Pulse V2' records. The acronym stands for Research Assistant in Marine Biology at the University of Rostock.
 }
 \seealso{
 Useful links:

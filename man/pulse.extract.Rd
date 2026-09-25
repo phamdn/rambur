@@ -44,7 +44,7 @@ A function to extract heart rate from records of pulse devices.
 \examples{
 folder <- system.file("extdata/pulse", package = "rambur")
 pulse.data <- pulse.read(folder)
-pulse.extract(pulse.data, agg.res = "15 minutes")
+pulse.extract(pulse.data)
 }
 \seealso{
 \code{\link[=pulse.hr]{pulse.hr()}}

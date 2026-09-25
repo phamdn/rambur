@@ -1,4 +1,8 @@
-# New submission
+# Resubmission
+In this version, I have:
+* Reduced the example dataset for pulse.* functions to lower execution times
+* Generalized the Title
+* Expanded the Description to detail the package functions and supported hardware
 
 # Test environments
 * R-release 4.6.1 on Debian GNU/Linux 13 (trixie)
